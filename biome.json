@@ -30,8 +30,7 @@
 				"noUnusedVariables": "error",
 				"noUnusedImports": "error",
 				"useExhaustiveDependencies": "error"
-			},
-			"nursery": { "useSortedClasses": "warn" }
+			}
 		}
 	},
 	"javascript": {
