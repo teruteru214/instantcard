@@ -14,26 +14,53 @@ const Menu = () => {
 
 	return (
 		<div className="animate-fade border fixed bottom-0 left-0 right-0 bg-white z-50">
-			<ul className="mx-auto max-w-screen-lg px-5 py-2 sm:px-10">
-				<li className="flex justify-between">
-					<Link href="/search" className={linkClass("/search")}>
-						<Search className="w-8 h-8" />
-						<p className="text-xs">検索</p>
-					</Link>
-					<Link href="/cards" className={linkClass("/cards")}>
-						<Layers className="w-8 h-8" />
-						<p className="text-xs">単語カード</p>
-					</Link>
-					<Link href="/quiz" className={linkClass("/quiz")}>
-						<GraduationCap className="w-8 h-8" />
-						<p className="text-xs">クイズ</p>
-					</Link>
-					<Link href="/slide" className={linkClass("/slide")}>
-						<GalleryThumbnails className="w-8 h-8" />
-						<p className="text-xs">スライド</p>
-					</Link>
-				</li>
-			</ul>
+			<nav
+				className="mx-auto max-w-screen-lg px-5 py-2 sm:px-10"
+				aria-label="メインナビゲーション"
+			>
+				<ul className="flex justify-between">
+					<li>
+						<Link
+							href="/search"
+							className={linkClass("/search")}
+							aria-label="検索"
+						>
+							<Search className="w-8 h-8" />
+							<p className="text-xs">検索</p>
+						</Link>
+					</li>
+					<li>
+						<Link
+							href="/cards"
+							className={linkClass("/cards")}
+							aria-label="単語カード"
+						>
+							<Layers className="w-8 h-8" />
+							<p className="text-xs">単語カード</p>
+						</Link>
+					</li>
+					<li>
+						<Link
+							href="/quiz"
+							className={linkClass("/quiz")}
+							aria-label="クイズ"
+						>
+							<GraduationCap className="w-8 h-8" />
+							<p className="text-xs">クイズ</p>
+						</Link>
+					</li>
+					<li>
+						<Link
+							href="/slide"
+							className={linkClass("/slide")}
+							aria-label="スライド"
+						>
+							<GalleryThumbnails className="w-8 h-8" />
+							<p className="text-xs">スライド</p>
+						</Link>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	);
 };
