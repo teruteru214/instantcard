@@ -24,8 +24,8 @@ export default function Home() {
 			</div>
 			<h2 className="pb-12 text-3xl text-center">利用手順</h2>
 			<div className="space-y-12">
-				<div className="flex justify-between">
-					<div className="max-w-lg">
+				<div className="flex flex-col-reverse sm:flex-row sm:justify-between">
+					<div className="max-w-lg text-center sm:text-left">
 						<h3 className="text-2xl">英単語を検索/作成</h3>
 						<p className="text-xl">
 							英単語のサジェスト機能を使って簡単に単語を検索。AIが英単語の詳細情報を自動生成し、カードを楽々作成できます。
@@ -36,26 +36,26 @@ export default function Home() {
 						alt="robot"
 						width={300}
 						height={300}
-						className="animate-fade-right"
+						className="mx-auto sm:mx-0 sm:animate-fade-right"
 					/>
 				</div>
-				<div className="flex justify-between">
+				<div className="flex flex-col sm:flex-row sm:justify-between">
 					<Image
 						src="/tablet.webp"
 						alt="tablet"
 						width={300}
 						height={300}
-						className="animate-fade-left"
+						className="mx-auto sm:mx-0 sm:animate-fade-left"
 					/>
-					<div className="max-w-lg">
+					<div className="max-w-lg text-center sm:text-left">
 						<h3 className="text-2xl">英単語を覚える</h3>
 						<p className="text-xl">
 							AIが生成した単語の情報を見ながら覚えたり、単語クイズやスライドを利用して楽しく単語を覚えましょう。
 						</p>
 					</div>
 				</div>
-				<div className="flex justify-between">
-					<div className="max-w-lg">
+				<div className="flex flex-col-reverse sm:flex-row sm:justify-between">
+					<div className="max-w-lg text-center sm:text-left">
 						<h3 className="text-2xl">英単語カードを捨てる</h3>
 						<p className="text-xl">
 							覚えた英単語はカードから削除して整理しましょう。
@@ -66,7 +66,7 @@ export default function Home() {
 						alt="trash"
 						width={300}
 						height={300}
-						className="animate-fade-right"
+						className="mx-auto sm:mx-0 sm:animate-fade-right"
 					/>
 				</div>
 			</div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Footer from "@/components/ui/footer";
 import { roboto } from "./ui/fonts";
 
 export const metadata: Metadata = {
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="ja">
-			<body className={`${roboto.className} antialiased`}>{children}</body>
+			<body className={`${roboto.className} antialiased`}>
+				<div className="mx-auto max-w-screen-lg px-5 sm:px-10">{children}</div>
+				<Footer />
+			</body>
 		</html>
 	);
 }
