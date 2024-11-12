@@ -9,11 +9,19 @@ const Footer = () => {
 						ログアウト
 					</span>
 					<Link to="/" className="flex items-center">
-						<img src="/icon.webp" alt="title" width={40} height={40} />
+						<img
+							src="/icon.webp"
+							alt="InstantCardのロゴ"
+							width={40}
+							height={40}
+						/>
 						<h1 className="text-4xl">InstantCard</h1>
 					</Link>
 				</div>
-				<nav className="mt-5 sm:mt-0 text-gray-600">
+				<nav
+					className="mt-5 sm:mt-0 text-gray-600"
+					aria-label="footer navigation"
+				>
 					<ul className="space-y-2">
 						<li>
 							<Link to="/#" aria-label="使い方">

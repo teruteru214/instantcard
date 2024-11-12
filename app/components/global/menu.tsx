@@ -10,7 +10,7 @@ const Menu = () => {
 		}`;
 
 	return (
-		<div className="border fixed bottom-0 left-0 right-0 bg-white z-50">
+		<div className="border sticky bottom-0 left-0 right-0 bg-white z-50">
 			<nav
 				className="mx-auto max-w-screen-lg"
 				aria-label="メインナビゲーション"
