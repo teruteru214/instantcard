@@ -8,6 +8,7 @@ import {
 } from "@remix-run/react";
 
 import "./tailwind.css";
+import Footer from "./components/global/footer";
 
 export const links: LinksFunction = () => [
 	{ rel: "icon", href: "/icon.webp", type: "image/x-icon" },
@@ -43,8 +44,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
 	return (
-		<div className="mx-auto max-w-screen-lg px-5 sm:px-10">
-			<Outlet />
-		</div>
+		<>
+			<div className="mx-auto max-w-screen-lg px-5 sm:px-10">
+				<Outlet />
+			</div>
+			<Footer />
+		</>
 	);
 }
