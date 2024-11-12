@@ -4,7 +4,7 @@ const LoginPage = () => {
 	return (
 		<div className="my-80 space-y-6">
 			<h1 className="text-3xl text-center">ログイン</h1>
-			<div className="space-y-10 flex flex-col justify-center">
+			<div className="space-y-10 flex flex-col justify-center" role="banner">
 				<div className="flex items-center justify-center">
 					<img
 						src="/icon.webp"

@@ -11,16 +11,21 @@ import {
 import { Button } from "../ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 
+type ViewState = "default" | "email" | "otp";
+
 const LoginModal = ({ label }: { label: string }) => {
-	const [view, setView] = useState("default");
+	const [view, setView] = useState<ViewState>("default");
+
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button size="giant">{label}</Button>
+				<Button size="giant" aria-label="ログインモーダルを開く">
+					{label}
+				</Button>
 			</DialogTrigger>
-			<DialogContent>
+			<DialogContent aria-labelledby="login-modal-title">
 				<DialogHeader>
-					<DialogTitle>
+					<DialogTitle aria-labelledby="login-modal-title">
 						{view === "email"
 							? "Emailでログイン"
 							: view === "otp"
