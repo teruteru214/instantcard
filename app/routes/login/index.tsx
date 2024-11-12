@@ -1,8 +1,8 @@
-import { Button } from "~/components/ui/button";
+import LoginModal from "~/components/global/LoginModal";
 
 const LoginPage = () => {
 	return (
-		<div className="my-64 space-y-6">
+		<div className="my-80 space-y-6">
 			<h1 className="text-3xl text-center">ログイン</h1>
 			<div className="space-y-10 flex flex-col justify-center">
 				<div className="flex items-center justify-center">
@@ -20,14 +20,7 @@ const LoginPage = () => {
 				</p>
 			</div>
 			<div className="flex justify-center">
-				<Button size="giant" className="w-96">
-					Googleでログイン
-				</Button>
-			</div>
-			<div className="flex justify-center">
-				<Button size="giant" className="w-96">
-					メールアドレスでログイン
-				</Button>
+				<LoginModal label="ログイン" />
 			</div>
 		</div>
 	);
