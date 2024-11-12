@@ -9,6 +9,7 @@ import {
 
 import "./tailwind.css";
 import Footer from "./components/global/footer";
+import Menu from "./components/global/menu";
 
 export const links: LinksFunction = () => [
 	{ rel: "icon", href: "/icon.webp", type: "image/x-icon" },
@@ -49,6 +50,7 @@ export default function App() {
 				<Outlet />
 			</div>
 			<Footer />
+			<Menu />
 		</>
 	);
 }
