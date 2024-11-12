@@ -42,5 +42,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	return <Outlet />;
+	return (
+		<div className="mx-auto max-w-screen-lg px-5 sm:px-10">
+			<Outlet />
+		</div>
+	);
 }
