@@ -1,5 +1,5 @@
 import { NavLink } from "@remix-run/react";
-import { GalleryThumbnails, GraduationCap, Layers, Search } from "lucide-react";
+import { GraduationCap, Layers, Search, TvMinimal } from "lucide-react";
 
 const Menu = () => {
 	const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -10,7 +10,7 @@ const Menu = () => {
 		}`;
 
 	return (
-		<div className="border sticky bottom-0 left-0 right-0 bg-white z-50">
+		<div className="sticky border-t bottom-0 left-0 right-0 bg-white z-50">
 			<nav
 				className="mx-auto max-w-screen-lg"
 				aria-label="メインナビゲーション"
@@ -36,7 +36,7 @@ const Menu = () => {
 					</li>
 					<li className="flex-1">
 						<NavLink to="/slide" className={linkClass} aria-label="スライド">
-							<GalleryThumbnails className="w-8 h-8" />
+							<TvMinimal className="w-8 h-8" />
 							<p className="text-xs">スライド</p>
 						</NavLink>
 					</li>
