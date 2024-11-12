@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Button } from "~/components/ui/button";
+import LoginModal from "~/components/global/LoginModal";
 
 export const meta: MetaFunction = () => {
 	return [
@@ -45,7 +45,7 @@ export default function Index() {
 			<p className="text-center text-sm">煩雑な英単語学習、もっと手軽に</p>
 			<h1 className="text-center text-6xl">InstantCard</h1>
 			<div className="mt-2 flex flex-col items-center">
-				<Button size="giant">カードを作る</Button>
+				<LoginModal label="カードを作る" />
 				<p className="mt-4 text-gray-400 pb-10 hover:cursor-pointer hover:underline hover:text-gray-500">
 					サービスをもっと詳しく→
 				</p>
@@ -65,7 +65,7 @@ export default function Index() {
 				</p>
 			</div>
 			<div className="py-5 flex justify-center">
-				<Button size="giant">カードを作る</Button>
+				<LoginModal label="カードを作る" />
 			</div>
 		</>
 	);

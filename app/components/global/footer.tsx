@@ -3,7 +3,7 @@ import { Link } from "@remix-run/react";
 const Footer = () => {
 	return (
 		<footer className="bg-gray-100">
-			<div className="mx-auto max-w-screen-lg px-5 pt-10 pb-28 sm:px-10 sm:flex sm:items-center sm:justify-between">
+			<div className="mx-auto max-w-screen-lg px-5 py-10 sm:px-10 sm:flex sm:items-center sm:justify-between">
 				<div className="space-y-5">
 					<span className="cursor-pointer text-gray-600 hover:text-gray-700 hover:underline">
 						ログアウト
