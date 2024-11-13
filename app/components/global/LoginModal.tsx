@@ -83,6 +83,7 @@ const LoginModal = ({ label }: { label: string }) => {
 								</Button>
 							</form>
 							<Button
+								variant="secondary"
 								size="giant"
 								className="w-full"
 								onClick={() => setView("default")}
