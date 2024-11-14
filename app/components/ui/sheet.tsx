@@ -23,7 +23,7 @@ const SheetOverlay = React.forwardRef<
 		ref={ref}
 	>
 		<div className="absolute top-4 left-4 cursor-pointer circle bg-gray-400 hover:bg-gray-500 rounded-full p-1">
-			<X className="h-8 w-8 text-white" />
+			<X className="h-8 w-8 text-white" aria-label="ダイアログを閉じる" />
 		</div>
 	</SheetPrimitive.Overlay>
 ));

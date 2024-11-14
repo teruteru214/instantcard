@@ -1,4 +1,3 @@
-import { Filter } from "lucide-react"; // Filterアイコンをインポート
 import * as React from "react";
 import { cn } from "~/lib/utils";
 
@@ -10,7 +9,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	({ className, type, icon, ...props }, ref) => {
 		return (
 			<div className="relative flex items-center">
-				<Filter className="absolute left-3 h-4 w-4 text-muted-foreground" />{" "}
+				{icon && <div className="absolute left-3">{icon}</div>}
 				<input
 					type={type}
 					className={cn(

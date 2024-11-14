@@ -20,7 +20,7 @@ const WordDetails = ({ triggerElement, word }: WordDetailsProps) => {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>{triggerElement}</SheetTrigger>
-			<SheetContent className="flex flex-col h-full">
+			<SheetContent className="flex flex-col h-full" aria-label="単語の詳細">
 				<SheetHeader>
 					<div className="flex justify-between">
 						<Button variant="ghost" size="sm">
@@ -36,7 +36,7 @@ const WordDetails = ({ triggerElement, word }: WordDetailsProps) => {
 					</div>
 					<div className="ml-3 flex">
 						<SheetTitle>{word}</SheetTitle>
-						<Speech word={word} size={24} />
+						<Speech word={word} size={24} aria-label="クリックして発音を聞く" />
 					</div>
 				</SheetHeader>
 				<WordAccordions />
