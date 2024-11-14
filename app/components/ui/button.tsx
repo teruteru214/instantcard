@@ -25,7 +25,7 @@ const buttonVariants = cva(
 				lg: "h-11 rounded-full px-8",
 				xl: "h-12 rounded-full px-10",
 				giant: "h-12 rounded-full px-24",
-				icon: "h-10 w-10 rounded-full",
+				icon: "h-10 w-10",
 			},
 		},
 		defaultVariants: {
