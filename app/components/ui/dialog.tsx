@@ -23,7 +23,11 @@ const DialogOverlay = React.forwardRef<
 			className,
 		)}
 		{...props}
-	/>
+	>
+		<div className="absolute top-4 left-4 cursor-pointer circle bg-gray-400 hover:bg-gray-500 rounded-full p-1">
+			<X className="h-8 w-8 text-white" aria-label="ダイアログを閉じる" />
+		</div>
+	</DialogPrimitive.Overlay>
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
@@ -42,10 +46,6 @@ const DialogContent = React.forwardRef<
 			{...props}
 		>
 			{children}
-			<DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-				<X className="h-6 w-6" />
-				<span className="sr-only">Close</span>
-			</DialogPrimitive.Close>
 		</DialogPrimitive.Content>
 	</DialogPortal>
 ));
@@ -56,10 +56,7 @@ const DialogHeader = ({
 	...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
 	<div
-		className={cn(
-			"flex flex-col space-y-1.5 text-center sm:text-left",
-			className,
-		)}
+		className={cn("flex flex-col space-y-1.5 text-center", className)}
 		{...props}
 	/>
 );
