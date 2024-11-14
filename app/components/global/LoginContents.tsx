@@ -15,18 +15,24 @@ const LoginContents = () => {
 		<>
 			<DialogHeader>
 				{view.state === "default" && (
-					<div className="flex justify-center py-10">
+					<div
+						className="flex justify-center py-10"
+						role="banner"
+						aria-label="InstantCardログイン"
+					>
 						<img
 							src="/icon.webp"
 							alt="InstantCardのロゴ"
 							width={40}
 							height={40}
 						/>
-						<h1 className="text-4xl">InstantCard</h1>
+						<h1 className="text-4xl" aria-label="InstantCard">
+							InstantCard
+						</h1>
 					</div>
 				)}
 			</DialogHeader>
-			<DialogDescription>
+			<DialogDescription className="transition-all duration-300">
 				{view.state === "email"
 					? "入力されたメールアドレスにログイン用リンクが送られます。"
 					: view.state === "otp"
