@@ -1,6 +1,7 @@
 import { Button } from "~/components/ui/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
@@ -26,9 +27,11 @@ const LogoutModal = () => {
 				<Button size="giant" className="w-full">
 					ログアウト
 				</Button>
-				<Button variant="secondary" size="giant" className="w-full">
-					キャンセル
-				</Button>
+				<DialogClose asChild>
+					<Button variant="secondary" size="giant" className="w-full">
+						キャンセル
+					</Button>
+				</DialogClose>
 			</DialogContent>
 		</Dialog>
 	);

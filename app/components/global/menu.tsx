@@ -11,10 +11,7 @@ const Menu = () => {
 
 	return (
 		<div className="sticky border-t bottom-0 left-0 right-0 bg-white z-50">
-			<nav
-				className="mx-auto max-w-screen-lg"
-				aria-label="メインナビゲーション"
-			>
+			<nav className="mx-auto" aria-label="メインナビゲーション">
 				<ul className="flex">
 					<li className="flex-1">
 						<NavLink to="/search" className={linkClass} aria-label="検索">
