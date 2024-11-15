@@ -5,10 +5,17 @@ import { Badge } from "./badge";
 interface InputProps extends React.ComponentProps<"input"> {
 	icon?: React.ReactNode;
 	search?: boolean;
+	handleSearch: () => void; // 検索トリガー関数を直接受け取る
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-	({ className, type, icon, search, onChange, ...props }, ref) => {
+	({ className, type, icon, search, handleSearch, ...props }, ref) => {
+		const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+			if (event.key === "Enter") {
+				handleSearch(); // Enterキーが押されたときに検索を実行
+			}
+		};
+
 		return (
 			<div className="relative flex items-center">
 				{icon && <div className="absolute left-3">{icon}</div>}
@@ -20,11 +27,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 						className,
 					)}
 					ref={ref}
-					onChange={onChange}
-					{...props} // props内のvalueを使用
+					onKeyDown={handleKeyDown} // Enterキーの検知
+					{...props} // props内のvalueとonChangeを使用
 				/>
 				{search && props.value && (
-					<Badge className="absolute right-3 top-5 animate-fade">
+					<Badge
+						className="absolute right-3 top-5 animate-fade cursor-pointer"
+						onClick={handleSearch} // Badgeのクリックで検索をトリガー
+					>
 						<span className="sm:hidden">click</span>
 						<span className="hidden sm:inline">Enter or click</span>
 					</Badge>
