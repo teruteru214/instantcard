@@ -39,17 +39,27 @@ const ImageSetting = () => {
 	const handleSearch = () => {
 		if (searchWord.trim() === "") return;
 		setCurrentPage(1);
-		fetcher.load(
-			`/api/unsplash?query=${encodeURIComponent(searchWord)}&page=1`,
-		);
+		try {
+			fetcher.load(
+				`/api/unsplash?query=${encodeURIComponent(searchWord)}&page=1`,
+			);
+		} catch (_error) {
+			alert("画像の検索中にエラーが発生しました。もう一度お試しください。");
+		}
 	};
 
 	const loadMore = () => {
 		const nextPage = currentPage + 1;
 		setCurrentPage(nextPage);
-		fetcher.load(
-			`/api/unsplash?query=${encodeURIComponent(searchWord)}&page=${nextPage}`,
-		);
+		try {
+			fetcher.load(
+				`/api/unsplash?query=${encodeURIComponent(searchWord)}&page=${nextPage}`,
+			);
+		} catch (_error) {
+			alert(
+				"画像をさらに読み込む際にエラーが発生しました。もう一度お試しください。",
+			);
+		}
 	};
 
 	const skeletons = Array.from({ length: 12 }, (_, index) => ({
