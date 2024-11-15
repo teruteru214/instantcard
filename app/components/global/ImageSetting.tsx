@@ -58,6 +58,17 @@ const ImageSetting = () => {
 
 	return (
 		<div>
+			<div className="flex flex-col items-center">
+				<div
+					aria-label="画像設定"
+					className="w-48 h-48 sm:h-96 sm:w-96 flex flex-col items-center justify-center border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-100"
+				>
+					<div className="text-gray-400 flex flex-col items-center justify-center">
+						<Image size={72} />
+						<span className="text-sm text-center">No image</span>
+					</div>
+				</div>
+			</div>
 			<Input
 				type="text"
 				placeholder="Search images..."
