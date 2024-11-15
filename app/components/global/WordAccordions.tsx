@@ -1,9 +1,11 @@
+import type { WordProps } from "~/types/word";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
+import ImageSetting from "./ImageSetting";
 import Speech from "./Speech";
 import WordAccordion from "./WordAccordion";
 
-const WordAccordions = () => {
+const WordAccordions = ({ word }: WordProps) => {
 	return (
 		<ScrollArea className="p-3 flex-grow">
 			<WordAccordion
@@ -130,6 +132,7 @@ const WordAccordions = () => {
 					</p>
 				}
 			/>
+			<WordAccordion title="イメージ" content={<ImageSetting word={word} />} />
 		</ScrollArea>
 	);
 };

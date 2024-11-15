@@ -39,7 +39,7 @@ const WordDetails = ({ triggerElement, word }: WordDetailsProps) => {
 						<Speech word={word} size={24} aria-label="クリックして発音を聞く" />
 					</div>
 				</SheetHeader>
-				<WordAccordions />
+				<WordAccordions word={word} />
 			</SheetContent>
 		</Sheet>
 	);
