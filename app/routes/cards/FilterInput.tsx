@@ -16,7 +16,7 @@ const FilterInput = ({ words, children }: FilterInputProps) => {
 		<div className="mt-10">
 			<Input
 				placeholder="英単語を絞り込めます"
-				icon={<Filter />}
+				icon={<Filter className="h-4 w-4 text-gray-400" />}
 				onChange={(e) => setFilterText(e.target.value)}
 			/>
 			<div className="flex my-4 space-x-2">
