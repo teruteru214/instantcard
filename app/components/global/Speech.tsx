@@ -1,4 +1,4 @@
-import { Pause, Volume2 } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import { useCallback, useState } from "react";
 
 interface SpeechProps {
@@ -15,23 +15,25 @@ const Speech = ({ word, size }: SpeechProps) => {
 			return;
 		}
 
+		if (!word || word.trim() === "") {
+			alert("再生する単語がありません");
+			return;
+		}
+
 		if (window.speechSynthesis.speaking) {
 			window.speechSynthesis.cancel();
 		}
 
 		const utterance = new SpeechSynthesisUtterance(word);
 		utterance.lang = "en-US";
-		utterance.pitch = 1.5;
 
 		try {
-			utterance.voice =
-				speechSynthesis
-					.getVoices()
-					.find((voice) => voice.name.includes("Google UK English")) || null;
+			const voices = speechSynthesis.getVoices();
+			utterance.voice = voices.find((voice) => voice.lang === "en-US") || null;
 
 			utterance.onstart = () => setIsSpeaking(true);
 			utterance.onend = () => setIsSpeaking(false);
-			utterance.onerror = (_event: SpeechSynthesisErrorEvent) => {
+			utterance.onerror = (_event) => {
 				alert("音声合成エラーが発生しました");
 				setIsSpeaking(false);
 			};
@@ -43,25 +45,16 @@ const Speech = ({ word, size }: SpeechProps) => {
 		}
 	}, [word]);
 
-	const stopSpeaking = useCallback(() => {
-		speechSynthesis.cancel();
-		setIsSpeaking(false);
-	}, []);
-
 	return (
 		<div
-			className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 cursor-pointer"
-			onClick={isSpeaking ? stopSpeaking : speak}
-			onKeyUp={(e) =>
-				e.key === "Enter" && (isSpeaking ? stopSpeaking() : speak())
-			}
+			className={`flex items-center justify-center p-2 rounded-full cursor-pointer ${
+				isSpeaking ? "opacity-50 pointer-events-none" : "hover:bg-gray-100"
+			}`}
+			onClick={!isSpeaking ? speak : undefined}
+			onKeyUp={(e) => !isSpeaking && e.key === "Enter" && speak()}
 			aria-label={`Play pronunciation for ${word}`}
 		>
-			{isSpeaking ? (
-				<Pause width={size} height={size} />
-			) : (
-				<Volume2 width={size} height={size} />
-			)}
+			<Volume2 width={size} height={size} />
 		</div>
 	);
 };
