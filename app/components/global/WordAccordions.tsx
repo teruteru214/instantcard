@@ -1,5 +1,6 @@
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
+import ImageSetting from "./ImageSetting";
 import Speech from "./Speech";
 import WordAccordion from "./WordAccordion";
 
@@ -7,6 +8,7 @@ const WordAccordions = () => {
 	return (
 		<ScrollArea className="p-3 flex-grow">
 			<WordAccordion
+				id="frequency"
 				title="頻出度"
 				content={
 					<Badge variant="alert" className="text-sm">
@@ -15,6 +17,7 @@ const WordAccordions = () => {
 				}
 			/>
 			<WordAccordion
+				id="syllables"
 				title="音節"
 				content={
 					<p>
@@ -23,6 +26,7 @@ const WordAccordions = () => {
 				}
 			/>
 			<WordAccordion
+				id="meaning"
 				title="意味"
 				content={
 					<p>
@@ -31,14 +35,16 @@ const WordAccordions = () => {
 				}
 			/>
 			<WordAccordion
+				id="etymology"
 				title="語源"
 				content={
 					<p>
-						古英語の"mann"に由来し、もともとは「人」を意味しましたが、時とともに「男性」を特に指す言葉として使われるようになりました。ゲルマン語派の他の言語にも類似の形が見られます。
+						古英語の"mann"に由来し、もともとは「人」を意味しましたが、時とともに「男性」を特に指す言葉として使われるようになりました。
 					</p>
 				}
 			/>
 			<WordAccordion
+				id="collocations"
 				title="コロケーション"
 				content={
 					<>
@@ -81,6 +87,7 @@ const WordAccordions = () => {
 				}
 			/>
 			<WordAccordion
+				id="examples"
 				title="例文"
 				content={
 					<>
@@ -129,6 +136,11 @@ const WordAccordions = () => {
 						warning.」（彼は警告だけで済んだ。）のように使われることもあります。このように、文脈によって意味が変わるため、柔軟に理解することが重要です。
 					</p>
 				}
+			/>
+			<WordAccordion
+				id="image-section"
+				title="イメージ"
+				content={<ImageSetting />}
 			/>
 		</ScrollArea>
 	);

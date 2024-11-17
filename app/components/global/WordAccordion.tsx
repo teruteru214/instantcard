@@ -6,11 +6,12 @@ import {
 } from "~/components/ui/accordion";
 
 interface WordAccordionProps {
+	id?: string;
 	title: string;
 	content: React.ReactNode;
 }
 
-const WordAccordion = ({ title, content }: WordAccordionProps) => {
+const WordAccordion = ({ id, title, content }: WordAccordionProps) => {
 	return (
 		<Accordion
 			type="single"
@@ -18,7 +19,7 @@ const WordAccordion = ({ title, content }: WordAccordionProps) => {
 			className="w-full"
 			defaultValue={title}
 		>
-			<AccordionItem value={title}>
+			<AccordionItem value={title} id={id}>
 				<AccordionTrigger>{title}</AccordionTrigger>
 				<AccordionContent>{content}</AccordionContent>
 			</AccordionItem>

@@ -1,11 +1,8 @@
 import WordDetails from "~/components/global/WordDetails";
 import { Card } from "~/components/ui/card";
+import type { WordProps } from "~/types/word";
 
-interface WordCardProps {
-	word: string;
-}
-
-const WordCard = ({ word }: WordCardProps) => {
+const WordCard = ({ word }: WordProps) => {
 	return (
 		<Card>
 			<div className="p-2">
