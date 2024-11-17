@@ -47,8 +47,8 @@ const Speech = ({ word, size }: SpeechProps) => {
 
 	return (
 		<div
-			className={`flex items-center justify-center p-2 rounded-full cursor-pointer ${
-				isSpeaking ? "opacity-50 pointer-events-none" : "hover:bg-gray-100"
+			className={`flex items-center justify-center p-2 rounded-full ${
+				isSpeaking ? "opacity-50" : "hover:bg-gray-100"
 			}`}
 			onClick={!isSpeaking ? speak : undefined}
 			onKeyUp={(e) => !isSpeaking && e.key === "Enter" && speak()}
