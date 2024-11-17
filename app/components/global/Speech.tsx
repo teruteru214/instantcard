@@ -1,4 +1,4 @@
-import { Pause, Volume2 } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import { useCallback, useState } from "react";
 
 interface SpeechProps {
@@ -9,9 +9,14 @@ interface SpeechProps {
 const Speech = ({ word, size }: SpeechProps) => {
 	const [isSpeaking, setIsSpeaking] = useState(false);
 
-	const speak = useCallback(() => {
+	const speak = useCallback(async () => {
 		if (!window.speechSynthesis) {
 			alert("音声合成APIがサポートされていません");
+			return;
+		}
+
+		if (!word || word.trim() === "") {
+			alert("再生する単語がありません");
 			return;
 		}
 
@@ -21,17 +26,43 @@ const Speech = ({ word, size }: SpeechProps) => {
 
 		const utterance = new SpeechSynthesisUtterance(word);
 		utterance.lang = "en-US";
-		utterance.pitch = 1.5;
 
 		try {
-			utterance.voice =
-				speechSynthesis
-					.getVoices()
-					.find((voice) => voice.name.includes("Google UK English")) || null;
+			const loadVoices = () => {
+				return new Promise<SpeechSynthesisVoice[]>((resolve) => {
+					const voices = speechSynthesis.getVoices();
+					if (voices.length > 0) {
+						resolve(voices);
+					} else {
+						speechSynthesis.addEventListener(
+							"voiceschanged",
+							() => {
+								resolve(speechSynthesis.getVoices());
+							},
+							{ once: true },
+						);
+					}
+				});
+			};
+
+			try {
+				const voices = await loadVoices();
+				const voice = voices.find((v) => v.lang === "en-US");
+				if (!voice) {
+					throw new Error("英語の音声が見つかりません");
+				}
+				utterance.voice = voice;
+			} catch (error) {
+				console.error("音声の初期化エラー:", error);
+				alert(
+					error instanceof Error ? error.message : "音声の初期化に失敗しました",
+				);
+				return;
+			}
 
 			utterance.onstart = () => setIsSpeaking(true);
 			utterance.onend = () => setIsSpeaking(false);
-			utterance.onerror = (_event: SpeechSynthesisErrorEvent) => {
+			utterance.onerror = (_event) => {
 				alert("音声合成エラーが発生しました");
 				setIsSpeaking(false);
 			};
@@ -43,25 +74,16 @@ const Speech = ({ word, size }: SpeechProps) => {
 		}
 	}, [word]);
 
-	const stopSpeaking = useCallback(() => {
-		speechSynthesis.cancel();
-		setIsSpeaking(false);
-	}, []);
-
 	return (
 		<div
-			className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 cursor-pointer"
-			onClick={isSpeaking ? stopSpeaking : speak}
-			onKeyUp={(e) =>
-				e.key === "Enter" && (isSpeaking ? stopSpeaking() : speak())
-			}
+			className={`flex items-center justify-center p-2 rounded-full cursor-pointer ${
+				isSpeaking ? "opacity-50" : "hover:bg-gray-100"
+			}`}
+			onClick={!isSpeaking ? speak : undefined}
+			onKeyUp={(e) => !isSpeaking && e.key === "Enter" && speak()}
 			aria-label={`Play pronunciation for ${word}`}
 		>
-			{isSpeaking ? (
-				<Pause width={size} height={size} />
-			) : (
-				<Volume2 width={size} height={size} />
-			)}
+			<Volume2 width={size} height={size} />
 		</div>
 	);
 };
