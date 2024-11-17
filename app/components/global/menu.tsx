@@ -16,7 +16,7 @@ const Menu = () => {
 					<li className="flex-1">
 						<NavLink to="/search" className={linkClass} aria-label="検索">
 							<Search className="w-8 h-8" />
-							<p className="text-xs">検索</p>
+							<p className="text-xs">検索/作成</p>
 						</NavLink>
 					</li>
 					<li className="flex-1">
