@@ -9,7 +9,7 @@ interface SpeechProps {
 const Speech = ({ word, size }: SpeechProps) => {
 	const [isSpeaking, setIsSpeaking] = useState(false);
 
-	const speak = useCallback(() => {
+	const speak = useCallback(async () => {
 		if (!window.speechSynthesis) {
 			alert("音声合成APIがサポートされていません");
 			return;
@@ -28,8 +28,37 @@ const Speech = ({ word, size }: SpeechProps) => {
 		utterance.lang = "en-US";
 
 		try {
-			const voices = speechSynthesis.getVoices();
-			utterance.voice = voices.find((voice) => voice.lang === "en-US") || null;
+			const loadVoices = () => {
+				return new Promise<SpeechSynthesisVoice[]>((resolve) => {
+					const voices = speechSynthesis.getVoices();
+					if (voices.length > 0) {
+						resolve(voices);
+					} else {
+						speechSynthesis.addEventListener(
+							"voiceschanged",
+							() => {
+								resolve(speechSynthesis.getVoices());
+							},
+							{ once: true },
+						);
+					}
+				});
+			};
+
+			try {
+				const voices = await loadVoices();
+				const voice = voices.find((v) => v.lang === "en-US");
+				if (!voice) {
+					throw new Error("英語の音声が見つかりません");
+				}
+				utterance.voice = voice;
+			} catch (error) {
+				console.error("音声の初期化エラー:", error);
+				alert(
+					error instanceof Error ? error.message : "音声の初期化に失敗しました",
+				);
+				return;
+			}
 
 			utterance.onstart = () => setIsSpeaking(true);
 			utterance.onend = () => setIsSpeaking(false);
@@ -47,7 +76,7 @@ const Speech = ({ word, size }: SpeechProps) => {
 
 	return (
 		<div
-			className={`flex items-center justify-center p-2 rounded-full ${
+			className={`flex items-center justify-center p-2 rounded-full cursor-pointer ${
 				isSpeaking ? "opacity-50" : "hover:bg-gray-100"
 			}`}
 			onClick={!isSpeaking ? speak : undefined}
