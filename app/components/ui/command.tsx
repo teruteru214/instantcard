@@ -58,6 +58,8 @@ const CommandInput = React.forwardRef<HTMLInputElement, CommandInputProps>(
 				)}
 				<input
 					type={type}
+					role="searchbox"
+					aria-label="検索"
 					className={cn(
 						"w-full h-12 pl-6 pr-4 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
 						className,
