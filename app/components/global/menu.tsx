@@ -14,9 +14,9 @@ const Menu = () => {
 			<nav className="mx-auto" aria-label="メインナビゲーション">
 				<ul className="flex">
 					<li className="flex-1">
-						<NavLink to="/search" className={linkClass} aria-label="検索">
+						<NavLink to="/search" className={linkClass} aria-label="検索/作成">
 							<Search className="w-8 h-8" />
-							<p className="text-xs">検索</p>
+							<p className="text-xs">検索/作成</p>
 						</NavLink>
 					</li>
 					<li className="flex-1">
