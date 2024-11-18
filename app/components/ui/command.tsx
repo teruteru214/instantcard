@@ -19,35 +19,68 @@ const Command = React.forwardRef<
 ));
 Command.displayName = CommandPrimitive.displayName;
 
-const CommandInput = React.forwardRef<
-	React.ElementRef<typeof CommandPrimitive.Input>,
-	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => {
-	const [inputValue, setInputValue] = React.useState<string>("");
+interface CommandInputProps extends React.ComponentProps<"input"> {
+	icon?: React.ReactNode;
+	search?: boolean;
+	handleSearch?: () => void;
+}
 
-	return (
-		<div
-			className="flex items-center border-b px-3 relative"
-			cmdk-input-wrapper=""
-		>
-			<Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-			<CommandPrimitive.Input
-				ref={ref}
+const CommandInput = React.forwardRef<HTMLInputElement, CommandInputProps>(
+	(
+		{
+			className,
+			type = "text",
+			icon = <Search className="h-4 w-4" />,
+			search,
+			handleSearch,
+			...props
+		},
+		ref,
+	) => {
+		const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+			if (event.key === "Enter" && handleSearch) {
+				handleSearch(); // Enterキーが押されたときに検索を実行
+			}
+		};
+
+		return (
+			<div
 				className={cn(
-					"flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+					"relative flex items-center border px-3 rounded-md bg-transparent",
+					search,
 					className,
 				)}
-				onInput={(e) => setInputValue(e.currentTarget.value)}
-				{...props}
-			/>
-			{inputValue && (
-				<Badge className="absolute right-3 top-3 animate-fade">
-					Enter or click
-				</Badge>
-			)}
-		</div>
-	);
-});
+			>
+				{icon && (
+					<div className="absolute left-3 flex items-center justify-center">
+						{icon}
+					</div>
+				)}
+				<input
+					type={type}
+					role="searchbox"
+					aria-label="検索"
+					className={cn(
+						"w-full h-12 pl-6 pr-4 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+						className,
+					)}
+					ref={ref}
+					onKeyDown={handleKeyDown}
+					{...props}
+				/>
+				{search && props.value && (
+					<Badge
+						className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+						onClick={handleSearch}
+					>
+						<span className="sm:hidden">clickで検索</span>
+						<span className="hidden sm:inline">Enter or clickで検索</span>
+					</Badge>
+				)}
+			</div>
+		);
+	},
+);
 
 const CommandList = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.List>,
