@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export const useDebounce = (timeout: number) => {
 	const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -14,6 +14,14 @@ export const useDebounce = (timeout: number) => {
 		},
 		[timeout],
 	);
+
+	useEffect(() => {
+		return () => {
+			if (timer.current) {
+				clearTimeout(timer.current);
+			}
+		};
+	}, []);
 
 	return debouncedFetch;
 };
