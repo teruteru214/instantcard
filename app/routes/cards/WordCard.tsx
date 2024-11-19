@@ -4,6 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 import WordDetails from "~/components/global/WordDetails";
 import { Card } from "~/components/ui/card";
+import DeleteModal from "./DeleteModal";
 
 interface WordCardProps {
 	word: UniqueIdentifier;
@@ -50,13 +51,18 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 						word={word}
 					/>
 				</div>
-				<div
-					className="cursor-grab ml-2 flex-shrink-0"
-					{...listeners}
-					{...attributes}
-					aria-label="ドラッグハンドル"
-				>
-					<GripVertical className="h-7 w-7 text-gray-400 hover:text-gray-500" />
+				<div className="flex items-center space-x-1">
+					<div className="block sm:hidden">
+						<DeleteModal word={word} />
+					</div>
+					<div
+						className="cursor-grab flex-shrink-0"
+						{...listeners}
+						{...attributes}
+						aria-label="ドラッグハンドル"
+					>
+						<GripVertical className="h-7 w-7 text-gray-400 hover:text-gray-500" />
+					</div>
 				</div>
 			</div>
 		</Card>
