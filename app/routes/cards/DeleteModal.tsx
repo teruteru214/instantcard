@@ -14,7 +14,7 @@ const DeleteModal = ({ word }: { word: string }) => {
 			<DialogTrigger asChild>
 				<Trash2
 					aria-label="削除"
-					className="h-7 w-7 text-gray-400 hover:text-gray-500 cursor-pointer"
+					className="h-7 w-7 text-gray-400 hover:text-gray-500 cursor-pointer p-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded"
 				/>
 			</DialogTrigger>
 			<DialogContent aria-labelledby="login-modal-title">

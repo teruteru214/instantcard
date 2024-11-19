@@ -71,7 +71,9 @@ const CardsPage = () => {
 		} else if (active.id !== over.id) {
 			const oldIndex = words.indexOf(active.id);
 			const newIndex = words.indexOf(over.id);
-			setWords(arrayMove(words, oldIndex, newIndex));
+			if (oldIndex !== -1 && newIndex !== -1) {
+				setWords(arrayMove(words, oldIndex, newIndex));
+			}
 		}
 	};
 
