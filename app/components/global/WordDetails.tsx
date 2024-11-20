@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { Image, Pencil } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
@@ -30,18 +31,18 @@ const WordDetails = ({ triggerElement, word }: WordDetailsProps) => {
 				<SheetHeader>
 					<div className="flex justify-between">
 						<Button variant="ghost" size="sm">
-							<Pencil className="-mr-1" />
-							<span className="ml-1 hidden sm:inline">カードを編集する</span>
-							<span className="ml-1 sm:hidden">編集する</span>
+							<Link to={`/card/${word}`} className="flex items-center">
+								<Pencil className="sm:-mr-1" />
+								<span className="ml-1 hidden sm:inline">カードを編集する</span>
+							</Link>
 						</Button>
 						<Button
 							variant="ghost"
 							size="sm"
 							onClick={() => scrollToSection("image-section")}
 						>
-							<Image className="-mr-1" />
-							<span className="ml-1 hidden sm:inline">画像を編集する</span>
-							<span className="ml-1 sm:hidden">編集する</span>
+							<Image className="sm:-mr-1.5" />
+							<span className="hidden sm:inline">画像を編集する</span>
 						</Button>
 					</div>
 					<div className="ml-3 flex">
