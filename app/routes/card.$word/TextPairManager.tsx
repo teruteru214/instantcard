@@ -56,9 +56,7 @@ const TextPairManager = ({
 			{value.map((item, index) => (
 				<div key={item.id}>
 					<div className="flex items-start gap-2 w-full">
-						{/* 入力フィールド */}
 						<div className="flex-1 space-y-2">
-							{/* 英文 */}
 							<div className="flex items-center gap-1">
 								<span className="text-sm font-medium whitespace-nowrap">
 									英文:
@@ -74,7 +72,6 @@ const TextPairManager = ({
 								</div>
 							</div>
 
-							{/* 意味 */}
 							<div className="flex items-center gap-1">
 								<span className="text-sm font-medium whitespace-nowrap">
 									意味:
@@ -91,7 +88,6 @@ const TextPairManager = ({
 							</div>
 						</div>
 
-						{/* 削除ボタン */}
 						<Button
 							type="button"
 							variant="destructive"
@@ -103,12 +99,10 @@ const TextPairManager = ({
 						</Button>
 					</div>
 
-					{/* 区切り線 */}
 					{index < value.length - 1 && <hr className="my-3 border-gray-300" />}
 				</div>
 			))}
 
-			{/* 追加ボタン */}
 			<div className="flex justify-center">
 				<Button
 					type="button"

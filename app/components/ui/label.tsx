@@ -18,11 +18,15 @@ const Label = React.forwardRef<
 	<LabelPrimitive.Root
 		ref={ref}
 		className={cn(labelVariants(), className, "flex items-center")}
+		aria-required={indispensable}
 		{...props}
 	>
 		<span className="text-xl font-semibold text-gray-900">{children}</span>
 		{indispensable && (
-			<Asterisk className="text-red-500 inline-block align-middle" />
+			<Asterisk
+				className="text-red-500 inline-block align-middle"
+				aria-hidden="true"
+			/>
 		)}
 	</LabelPrimitive.Root>
 ));

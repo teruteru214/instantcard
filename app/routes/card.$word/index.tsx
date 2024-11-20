@@ -158,6 +158,7 @@ const CardEditPage = () => {
 									<FormControl>
 										<Textarea
 											{...field}
+											aria-label="発音の入力"
 											className="border rounded p-2 w-full"
 											placeholder="例: æpl (æ は「ア」に近い短い音で、p と l を続けて『アプル』と発音します。)"
 										/>
