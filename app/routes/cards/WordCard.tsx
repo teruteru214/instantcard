@@ -1,10 +1,10 @@
 import type { UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical } from "lucide-react";
+import { GripVertical, Trash2 } from "lucide-react";
+import DeleteModal from "~/components/global/DeleteModal";
 import WordDetails from "~/components/global/WordDetails";
 import { Card } from "~/components/ui/card";
-import DeleteModal from "./DeleteModal";
 
 interface WordCardProps {
 	word: UniqueIdentifier;
@@ -53,7 +53,15 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 				</div>
 				<div className="flex items-center space-x-1">
 					<div className="block sm:hidden">
-						<DeleteModal word={word} />
+						<DeleteModal
+							word={word}
+							triggerElement={
+								<Trash2
+									aria-label="削除"
+									className="h-7 w-7 text-gray-400 hover:text-gray-500 cursor-pointer p-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded"
+								/>
+							}
+						/>
 					</div>
 					<div
 						className="cursor-grab flex-shrink-0"
