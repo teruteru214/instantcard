@@ -1,5 +1,10 @@
 const shuffleArray = (array: string[]) => {
-	return array.sort(() => Math.random() - 0.5);
+	const newArray = [...array];
+	for (let i = newArray.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+	}
+	return newArray;
 };
 
 export const generateEnhancedQuizData = (
@@ -17,39 +22,59 @@ export const generateEnhancedQuizData = (
 	});
 };
 
-export const scrollToNext = (index: number) => {
-	const nextCard = document.getElementById(`quiz-card-${index + 1}`);
-	if (nextCard) {
-		const offsetTop = nextCard.getBoundingClientRect().top + window.pageYOffset;
+const HEADER_OFFSET = 64;
 
-		window.scrollTo({
-			top: offsetTop - 64,
-			behavior: "smooth",
-		});
-	} else {
-		const footer = document.getElementById("quiz-footer");
-		if (footer) {
-			const footerOffsetTop =
-				footer.getBoundingClientRect().top + window.pageYOffset;
+const isClient = typeof window !== "undefined";
+
+const smoothScrollSupported = isClient
+	? "scrollBehavior" in document.documentElement.style
+	: false;
+
+const scrollToElement = (elementId: string) => {
+	if (!isClient) return;
+
+	try {
+		const element = document.getElementById(elementId);
+		if (element) {
+			const elementPosition =
+				element.getBoundingClientRect().top + window.scrollY;
+			const offsetPosition = elementPosition - HEADER_OFFSET;
+
 			window.scrollTo({
-				top: footerOffsetTop - 64,
-				behavior: "smooth",
+				top: offsetPosition,
+				behavior: smoothScrollSupported ? "smooth" : "auto",
 			});
 		}
+	} catch (error) {
+		console.error("スクロール処理中にエラーが発生しました:", error);
+	}
+};
+
+export const scrollToNext = (index: number) => {
+	if (!isClient) return;
+
+	const nextCardId = `quiz-card-${index + 1}`;
+	const footerId = "quiz-footer";
+
+	try {
+		const nextCard = document.getElementById(nextCardId);
+		if (nextCard) {
+			scrollToElement(nextCardId);
+			return;
+		}
+
+		const footer = document.getElementById(footerId);
+		if (footer) {
+			scrollToElement(footerId);
+		}
+	} catch (error) {
+		console.error(
+			"次のカードへのスクロール処理中にエラーが発生しました:",
+			error,
+		);
 	}
 };
 
 export const scrollToResult = () => {
-	const resultElement = document.getElementById("result");
-	if (resultElement) {
-		const offset = 64;
-		const elementPosition =
-			resultElement.getBoundingClientRect().top + window.scrollY;
-		const offsetPosition = elementPosition - offset;
-
-		window.scrollTo({
-			top: offsetPosition,
-			behavior: "smooth",
-		});
-	}
+	if (isClient) scrollToElement("result");
 };
