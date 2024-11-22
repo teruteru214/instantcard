@@ -51,6 +51,7 @@ export function ErrorBoundary() {
 		<html lang="ja">
 			<head>
 				<title>エラーが発生しました</title>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<Meta />
 				<Links />
 			</head>
@@ -67,6 +68,7 @@ export function ErrorBoundary() {
 					<a href="/">ホームに戻る</a>
 				</p>
 				<Scripts />
+				<ScrollRestoration />
 			</body>
 		</html>
 	);

@@ -1,6 +1,8 @@
 import { json } from "@remix-run/node";
-import { useNavigate } from "@remix-run/react";
+import { type MetaFunction, useNavigate } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
+
+export const meta: MetaFunction = () => [{ title: "見つかりませんでした" }];
 
 export const loader = () => {
 	return json(null, { status: 404 });
@@ -11,7 +13,12 @@ const NotFound = () => {
 
 	return (
 		<div className="h-screen space-y-4 flex flex-col items-center justify-center">
-			<img src="/404.webp" alt="not-found" width={200} height={200} />
+			<img
+				src="/404.webp"
+				alt="ページが見つかりません"
+				width={200}
+				height={200}
+			/>
 			<p>ページが見つかりませんでした</p>
 			<Button size="giant" onClick={() => navigate("/")}>
 				ホームへ戻る
