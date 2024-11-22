@@ -11,7 +11,7 @@ const WordAccordions = () => {
 				id="frequency"
 				title="頻出度"
 				content={
-					<Badge variant="alert" className="text-sm">
+					<Badge variant="destructive" className="text-sm">
 						🥇目から鱗
 					</Badge>
 				}
