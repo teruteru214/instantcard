@@ -35,10 +35,7 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<div
 		ref={ref}
-		className={cn(
-			"p-2 text-xl cursor-pointer hover:underline tracking-tight",
-			className,
-		)}
+		className={cn("text-2xl tracking-tight", className)}
 		{...props}
 	/>
 ));
