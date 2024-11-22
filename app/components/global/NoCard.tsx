@@ -16,7 +16,12 @@ const NoCard = ({ type }: { type: "quiz" | "slide" }) => {
 
 	return (
 		<div className="h-screen space-y-4 flex flex-col items-center justify-center">
-			<img src="/card.webp" alt="confirmation" width={200} height={200} />
+			<img
+				src="/card.webp"
+				alt={type === "quiz" ? "no-quiz-card" : "no-slide-card"}
+				width={200}
+				height={200}
+			/>
 			<p>{getMessage()}</p>
 			<Button size="giant" onClick={() => navigate("/search")}>
 				カードを作成する

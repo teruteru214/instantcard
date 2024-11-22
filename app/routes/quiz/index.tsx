@@ -119,7 +119,9 @@ const QuizPage = () => {
 						word: quiz.word,
 						correctAnswer: quiz.translation,
 						userAnswer: answers[index],
-						isCorrect: quiz.translation === answers[index],
+						isCorrect:
+							quiz.translation.trim().toLowerCase() ===
+							answers[index].trim().toLowerCase(),
 					}))}
 				/>
 			)}

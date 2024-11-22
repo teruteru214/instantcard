@@ -43,6 +43,8 @@ const QuizCard = ({ quiz, options, index, scrollToNext }: QuizProps) => {
 											variant={field.value === option ? "black" : "white"}
 											size="giant"
 											onClick={() => field.onChange(option)}
+											aria-label={`選択肢: ${option}`}
+											aria-pressed={field.value === option}
 										>
 											{option}
 										</Button>
@@ -64,8 +66,13 @@ const QuizCard = ({ quiz, options, index, scrollToNext }: QuizProps) => {
 					</div>
 					<span
 						className="text-xs sm:text-base text-gray-400 hover:text-gray-500 hover:underline cursor-pointer"
-						onClick={scrollToNext} // 次のカードにスクロール
-						onKeyUp={(e) => e.key === "Enter" && scrollToNext()}
+						onClick={scrollToNext}
+						onKeyUp={(e) => {
+							if (e.key === "Enter" || e.key === "Space") {
+								e.preventDefault();
+								scrollToNext();
+							}
+						}}
 					>
 						スキップする？
 					</span>

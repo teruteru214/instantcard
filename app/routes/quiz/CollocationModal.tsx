@@ -22,8 +22,10 @@ const CollocationModal = () => {
 					<Link />
 				</Button>
 			</DialogTrigger>
-			<DialogContent aria-labelledby="delete-modal-title">
-				<h1 className="text-xl text-center">"example"コロケーション</h1>
+			<DialogContent aria-labelledby="collocation-modal-title">
+				<h1 id="collocation-modal-title" className="text-xl text-center">
+					"example"コロケーション
+				</h1>
 				<div>
 					{collocations.map((collocation) => (
 						<div

@@ -6,7 +6,7 @@ interface QuizHeaderProps {
 	isSaveEnabled: boolean;
 	currentAnswerCount: number;
 	totalQuizCount: number;
-	isFinished: boolean; // 終了状態を受け取る
+	isFinished: boolean;
 }
 
 const QuizHeader = ({
@@ -16,10 +16,12 @@ const QuizHeader = ({
 	isFinished,
 }: QuizHeaderProps) => {
 	return (
-		<div className="sticky top-0 left-0 right-0 z-50 bg-white py-3 flex items-center justify-between">
-			<p>
+		<header className="sticky top-0 left-0 right-0 z-50 bg-white py-3 flex items-center justify-between">
+			<output
+				aria-label={`全${totalQuizCount}問中${currentAnswerCount}問回答済み`}
+			>
 				{currentAnswerCount}/{totalQuizCount}
-			</p>
+			</output>
 			<Button
 				type="submit"
 				variant="black"
@@ -28,6 +30,11 @@ const QuizHeader = ({
 				onClick={() => {
 					scrollToResult();
 				}}
+				aria-label={
+					isFinished
+						? "クイズは既に完了しています"
+						: "クイズを終了して結果を確認する"
+				}
 			>
 				{isFinished ? (
 					<>
@@ -38,7 +45,7 @@ const QuizHeader = ({
 					"クイズを終了する"
 				)}
 			</Button>
-		</div>
+		</header>
 	);
 };
 

@@ -15,8 +15,10 @@ const ImageModal = () => {
 					<Image />
 				</Button>
 			</DialogTrigger>
-			<DialogContent aria-labelledby="delete-modal-title">
-				<h1 className="text-xl text-center">"example"のイメージ</h1>
+			<DialogContent aria-labelledby="image-modal-title">
+				<h1 id="image-modal-title" className="text-xl text-center">
+					"example"のイメージ
+				</h1>
 				<div className="flex justify-center">
 					<div
 						aria-label="画像設定"

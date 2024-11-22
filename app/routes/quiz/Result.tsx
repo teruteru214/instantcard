@@ -26,6 +26,14 @@ const Result = ({ result }: ResultProps) => {
 	const correctCount = result.filter((item) => item.isCorrect).length;
 	const totalCount = result.length;
 
+	const getBadgeVariant = (correctCount: number, totalCount: number) => {
+		const percentage = Math.round((correctCount / totalCount) * 100);
+		if (percentage >= 90) return "excellent";
+		if (percentage >= 70) return "good";
+		if (percentage >= 50) return "average";
+		return "outline";
+	};
+
 	return (
 		<div className="my-20 space-y-4">
 			<h2 id="result" className="text-2xl text-center">
@@ -35,17 +43,7 @@ const Result = ({ result }: ResultProps) => {
 			<div className="flex items-center gap-2">
 				<p className="text-lg font-semibold">正答率:</p>
 				{""}
-				<Badge
-					variant={
-						Math.round((correctCount / totalCount) * 100) >= 90
-							? "excellent"
-							: Math.round((correctCount / totalCount) * 100) >= 70
-								? "good"
-								: Math.round((correctCount / totalCount) * 100) >= 50
-									? "average"
-									: "outline"
-					}
-				>
+				<Badge variant={getBadgeVariant(correctCount, totalCount)}>
 					{Math.round((correctCount / totalCount) * 100)}%
 				</Badge>
 			</div>
