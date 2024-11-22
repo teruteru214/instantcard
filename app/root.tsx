@@ -5,11 +5,13 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
+	isRouteErrorResponse,
+	useRouteError,
 } from "@remix-run/react";
 
-import "./tailwind.css";
 import Footer from "./components/global/footer";
 import Menu from "./components/global/menu";
+import "./tailwind.css";
 
 export const links: LinksFunction = () => [
 	{ rel: "icon", href: "/icon.webp", type: "image/x-icon" },
@@ -37,6 +39,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			<body>
 				{children}
 				<ScrollRestoration />
+				<Scripts />
+			</body>
+		</html>
+	);
+}
+
+export function ErrorBoundary() {
+	const error = useRouteError();
+	return (
+		<html lang="ja">
+			<head>
+				<title>エラーが発生しました</title>
+				<Meta />
+				<Links />
+			</head>
+			<body>
+				<h1>エラーが発生しました</h1>
+				<p>
+					{isRouteErrorResponse(error)
+						? `${error.status} ${error.statusText}`
+						: error instanceof Error
+							? error.message
+							: "不明なエラーが発生しました"}
+				</p>
+				<p>
+					<a href="/">ホームに戻る</a>
+				</p>
 				<Scripts />
 			</body>
 		</html>
