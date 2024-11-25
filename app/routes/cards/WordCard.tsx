@@ -24,21 +24,65 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 		id: word,
 	});
 
-	const sortableStyle = {
-		transform: CSS.Transform.toString(transform),
-		transition,
-	};
-
+	// エラーハンドリング
 	if (typeof word !== "string") {
-		console.error("WordDetails requires a string, but received:", word);
 		return null;
 	}
 
+	// isDraggingの時は`hr`のデザインをレンダリング
+	if (isDragging) {
+		return (
+			<div
+				ref={setNodeRef}
+				style={{
+					...style,
+					transform: CSS.Transform.toString(transform),
+					transition,
+				}}
+				className="my-0 py-0"
+			>
+				<hr className="border-t-4 border-[#54A2C0] my-0" />
+			</div>
+		);
+	}
+
+	// isOverlayの時は通常カードを背景色変更してレンダリング
+	if (isOverlay) {
+		return (
+			<Card
+				style={{ ...style }}
+				className="relative w-full bg-gray-100 opacity-50 border border-gray-300"
+			>
+				<div className="flex justify-between items-center p-2">
+					<p className="text-xl truncate overflow-hidden whitespace-nowrap">
+						{word}
+					</p>
+					<div className="flex items-center space-x-1">
+						<div className="block sm:hidden">
+							<Trash2
+								aria-label="削除"
+								className="h-7 w-7 text-gray-400 p-1 rounded"
+							/>
+						</div>
+						<div className="cursor-default flex-shrink-0">
+							<GripVertical className="h-7 w-7 text-gray-400" />
+						</div>
+					</div>
+				</div>
+			</Card>
+		);
+	}
+
+	// 通常状態のデザインをレンダリング
 	return (
 		<Card
 			ref={setNodeRef}
-			style={{ ...sortableStyle, ...style }}
-			className={`relative ${isDragging || isOverlay ? "bg-gray-100" : ""} w-full`}
+			style={{
+				...style,
+				transform: CSS.Transform.toString(transform),
+				transition,
+			}}
+			className="relative w-full"
 		>
 			<div className="flex justify-between items-center p-2">
 				<div className="flex-1 overflow-hidden">
@@ -64,7 +108,7 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 						/>
 					</div>
 					<div
-						className="cursor-grab flex-shrink-0"
+						className="cursor-grab flex-shrink-0 touch-none"
 						{...listeners}
 						{...attributes}
 						aria-label="ドラッグハンドル"
