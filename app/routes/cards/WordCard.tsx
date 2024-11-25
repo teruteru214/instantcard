@@ -108,7 +108,7 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 						/>
 					</div>
 					<div
-						className="cursor-grab flex-shrink-0"
+						className="cursor-grab flex-shrink-0 touch-none"
 						{...listeners}
 						{...attributes}
 						aria-label="ドラッグハンドル"

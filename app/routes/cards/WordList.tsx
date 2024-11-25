@@ -27,8 +27,8 @@ const WordList = ({ words, filterText }: WordListProps) => {
 	return (
 		<>
 			{filteredWords.length > 0 ? (
-				<ScrollArea className="sm:h-[78vh] h-[73vh] w-full sm:w-2/3 rounded-md border overflow-hidden">
-					<div className="m-4 space-y-2">
+				<ScrollArea className="sm:h-[78vh] w-full sm:w-2/3 rounded-md sm:border overflow-hidden">
+					<div className="sm:m-4 space-y-2">
 						{filteredWords.map((word) => (
 							<WordCard key={word} word={word} />
 						))}
