@@ -1,5 +1,6 @@
 import { Volume2 } from "lucide-react";
 import { useCallback, useState } from "react";
+import { Button } from "~/components/ui/button";
 
 interface SpeechProps {
 	word: string;
@@ -45,46 +46,42 @@ const Speech = ({ word, size }: SpeechProps) => {
 				});
 			};
 
-			try {
-				const voices = await loadVoices();
-				const voice = voices.find((v) => v.lang === "en-US");
-				if (!voice) {
-					throw new Error("英語の音声が見つかりません");
-				}
-				utterance.voice = voice;
-			} catch (error) {
-				console.error("音声の初期化エラー:", error);
-				alert(
-					error instanceof Error ? error.message : "音声の初期化に失敗しました",
-				);
-				return;
+			const voices = await loadVoices();
+			const voice = voices.find((v) => v.lang === "en-US");
+			if (!voice) {
+				throw new Error("英語の音声が見つかりません");
 			}
+			utterance.voice = voice;
 
 			utterance.onstart = () => setIsSpeaking(true);
 			utterance.onend = () => setIsSpeaking(false);
-			utterance.onerror = (_event) => {
+			utterance.onerror = () => {
 				alert("音声合成エラーが発生しました");
 				setIsSpeaking(false);
 			};
 
 			window.speechSynthesis.speak(utterance);
-		} catch (_error: unknown) {
-			alert("音声合成の初期化でエラーが発生しました");
+		} catch (error) {
+			console.error("音声の初期化エラー:", error);
+			alert(
+				error instanceof Error ? error.message : "音声の初期化に失敗しました",
+			);
 			setIsSpeaking(false);
 		}
 	}, [word]);
 
 	return (
-		<div
-			className={`flex items-center justify-center p-2 rounded-full cursor-pointer ${
-				isSpeaking ? "opacity-50" : "hover:bg-gray-100"
-			}`}
+		<Button
+			variant="ghost"
+			size="icon"
+			className="p-2 rounded-full"
 			onClick={!isSpeaking ? speak : undefined}
-			onKeyUp={(e) => !isSpeaking && e.key === "Enter" && speak()}
 			aria-label={`Play pronunciation for ${word}`}
+			disabled={isSpeaking}
+			type="button"
 		>
-			<Volume2 width={size} height={size} />
-		</div>
+			<Volume2 className={`h-${size} w-${size}`} />
+		</Button>
 	);
 };
 
