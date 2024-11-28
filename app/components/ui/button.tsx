@@ -21,6 +21,8 @@ const buttonVariants = cva(
 				highlight:
 					"bg-yellow-100 text-yellow-800 hover:bg-yellow-200 hover:text-yellow-900",
 				white: "border bg-white text-black hover:bg-gray-100",
+				outline:
+					"border border-input bg-transparent text-gray-700 hover:bg-gray-100 hover:text-gray-900",
 			},
 			size: {
 				default: "h-10 px-4 py-2",
