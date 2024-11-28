@@ -90,10 +90,14 @@ const WordsSlide = () => {
 					opts={{ loop: slide.isLooping }}
 					plugins={plugins}
 					className="w-full"
+					aria-label="単語学習スライド"
 				>
 					<CarouselContent>
 						{slide.data.map((item) => (
-							<CarouselItem key={item.id}>
+							<CarouselItem
+								key={item.id}
+								aria-label={`スライド: ${item.word || item.translation}`}
+							>
 								<div className="p-1">
 									<Card>
 										<CardContent className="flex flex-col items-center aspect-square justify-center p-6">

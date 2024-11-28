@@ -204,6 +204,7 @@ const isValidVariant = (
 		"link",
 		"highlight",
 		"white",
+		"outline",
 	].includes(value as string);
 };
 
@@ -212,40 +213,30 @@ const CarouselPrevious = React.forwardRef<
 	Omit<React.ComponentProps<typeof Button>, "variant"> & {
 		variant?: VariantProps<typeof buttonVariants>["variant"];
 	}
->(
-	(
-		{
-			className,
-			variant = "outline", // デフォルト値も buttonVariants に合わせる必要があります
-			size = "icon",
-			...props
-		},
-		ref,
-	) => {
-		const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+>(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+	const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
-		return (
-			<Button
-				ref={ref}
-				variant={isValidVariant(variant) ? variant : "default"} // 型ガードでチェック
-				size={size}
-				className={cn(
-					"absolute h-8 w-8 md:h-16 md:w-16 rounded-full",
-					orientation === "horizontal"
-						? "-left-10 md:-left-20 top-1/2 -translate-y-1/2"
-						: "-top-12 left-1/2 -translate-x-1/2 rotate-90",
-					className,
-				)}
-				disabled={!canScrollPrev}
-				onClick={scrollPrev}
-				{...props}
-			>
-				<ArrowLeft className="h-4 w-4" />
-				<span className="sr-only">Previous slide</span>
-			</Button>
-		);
-	},
-);
+	return (
+		<Button
+			ref={ref}
+			variant={isValidVariant(variant) ? variant : "default"} // 型ガードでチェック
+			size={size}
+			className={cn(
+				"absolute h-8 w-8 md:h-16 md:w-16 rounded-full",
+				orientation === "horizontal"
+					? "-left-10 md:-left-20 top-1/2 -translate-y-1/2"
+					: "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+				className,
+			)}
+			disabled={!canScrollPrev}
+			onClick={scrollPrev}
+			{...props}
+		>
+			<ArrowLeft className="h-4 w-4" />
+			<span className="sr-only">Previous slide</span>
+		</Button>
+	);
+});
 CarouselPrevious.displayName = "CarouselPrevious";
 
 const CarouselNext = React.forwardRef<
