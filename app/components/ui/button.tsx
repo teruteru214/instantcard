@@ -31,6 +31,7 @@ const buttonVariants = cva(
 				xl: "h-12 rounded-full px-10",
 				giant: "h-12 rounded-full px-24",
 				icon: "h-10 w-10",
+				option: "h-auto px-6 py-3 text-center",
 			},
 		},
 		defaultVariants: {
