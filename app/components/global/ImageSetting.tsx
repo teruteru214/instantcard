@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { Image } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
@@ -35,6 +35,7 @@ const ImageSetting = () => {
 	const [searchWord, setSearchWord] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 	const fetcher = useFetcher<UnsplashResponse>();
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleSearch = () => {
 		if (searchWord.trim() === "") return;
@@ -67,12 +68,7 @@ const ImageSetting = () => {
 	}));
 
 	const focusInput = () => {
-		const inputElement = document.getElementById(
-			"image-search",
-		) as HTMLInputElement;
-		if (inputElement) {
-			inputElement.focus();
-		}
+		inputRef.current?.focus();
 	};
 
 	return (
@@ -103,7 +99,7 @@ const ImageSetting = () => {
 				handleSearch={handleSearch}
 				search
 				className="mx-1 my-3"
-				id="image-search"
+				ref={inputRef}
 			/>
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 justify-items-center">
 				{fetcher.state === "loading" ? (
