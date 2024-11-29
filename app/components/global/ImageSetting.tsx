@@ -66,12 +66,28 @@ const ImageSetting = () => {
 		id: `skeleton-${index}`,
 	}));
 
+	const focusInput = () => {
+		const inputElement = document.getElementById(
+			"image-search",
+		) as HTMLInputElement;
+		if (inputElement) {
+			inputElement.focus();
+		}
+	};
+
 	return (
 		<div>
 			<div className="flex flex-col items-center">
 				<div
 					aria-label="画像設定"
 					className="w-48 h-48 sm:h-96 sm:w-96 flex flex-col items-center justify-center border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-100"
+					onClick={focusInput}
+					onKeyDown={(e) => {
+						if (e.key === "Enter" || e.key === " ") {
+							e.preventDefault();
+							focusInput();
+						}
+					}}
 				>
 					<div className="text-gray-400 flex flex-col items-center justify-center">
 						<Image size={72} />
@@ -87,6 +103,7 @@ const ImageSetting = () => {
 				handleSearch={handleSearch}
 				search
 				className="mx-1 my-3"
+				id="image-search"
 			/>
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 justify-items-center">
 				{fetcher.state === "loading" ? (
