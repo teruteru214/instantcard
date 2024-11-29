@@ -45,7 +45,7 @@ export default function Index() {
 				/>
 			</div>
 			<p className="text-center text-sm">煩雑な英単語学習、もっと手軽に</p>
-			<h1 className="text-center text-6xl">InstantCard</h1>
+			<h1 className="text-center text-5xl">InstantCard</h1>
 			<div className="mt-2 flex flex-col items-center">
 				<div className="hidden sm:block">
 					<LoginModal
