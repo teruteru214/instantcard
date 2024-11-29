@@ -1,5 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import LoginModal from "~/components/global/LoginModal";
+import LoginSheet from "~/components/global/LoginSheet";
+import { Button } from "~/components/ui/button";
 
 export const meta: MetaFunction = () => {
 	return [
@@ -45,7 +47,24 @@ export default function Index() {
 			<p className="text-center text-sm">煩雑な英単語学習、もっと手軽に</p>
 			<h1 className="text-center text-6xl">InstantCard</h1>
 			<div className="mt-2 flex flex-col items-center">
-				<LoginModal label="カードを作る" />
+				<div className="hidden sm:block">
+					<LoginModal
+						trigger={
+							<Button size="giant" aria-label="ログインモーダルを開く">
+								カードを作る
+							</Button>
+						}
+					/>
+				</div>
+				<div className="block sm:hidden">
+					<LoginSheet
+						trigger={
+							<Button size="giant" aria-label="ログインモーダルを開く">
+								カードを作る
+							</Button>
+						}
+					/>
+				</div>
 				<p className="mt-4 text-gray-400 pb-10 hover:cursor-pointer hover:underline hover:text-gray-500">
 					サービスをもっと詳しく→
 				</p>
@@ -65,7 +84,24 @@ export default function Index() {
 				</p>
 			</div>
 			<div className="py-5 flex justify-center">
-				<LoginModal label="カードを作る" />
+				<div className="hidden sm:block">
+					<LoginModal
+						trigger={
+							<Button size="giant" aria-label="ログインモーダルを開く">
+								カードを作る
+							</Button>
+						}
+					/>
+				</div>
+				<div className="block sm:hidden">
+					<LoginSheet
+						trigger={
+							<Button size="giant" aria-label="ログインモーダルを開く">
+								カードを作る
+							</Button>
+						}
+					/>
+				</div>
 			</div>
 		</>
 	);

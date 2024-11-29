@@ -1,9 +1,10 @@
 import LoginModal from "~/components/global/LoginModal";
+import LoginSheet from "~/components/global/LoginSheet";
+import { Button } from "~/components/ui/button";
 
 const LoginPage = () => {
 	return (
-		<div className="my-80 space-y-6">
-			<h1 className="text-3xl text-center">ログイン</h1>
+		<div className="my-80 space-y-4">
 			<div className="space-y-10 flex flex-col justify-center" role="banner">
 				<div className="flex items-center justify-center">
 					<img
@@ -20,7 +21,26 @@ const LoginPage = () => {
 				</p>
 			</div>
 			<div className="flex justify-center">
-				<LoginModal label="ログイン" />
+				<div className="py-5 flex justify-center">
+					<div className="hidden sm:block">
+						<LoginModal
+							trigger={
+								<Button size="giant" aria-label="ログインモーダルを開く">
+									カードを作る
+								</Button>
+							}
+						/>
+					</div>
+					<div className="block sm:hidden">
+						<LoginSheet
+							trigger={
+								<Button size="giant" aria-label="ログインモーダルを開く">
+									カードを作る
+								</Button>
+							}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

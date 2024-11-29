@@ -6,7 +6,15 @@ const Footer = () => {
 		<footer className="bg-gray-100">
 			<div className="mx-auto max-w-screen-lg px-5 py-10 sm:px-10 sm:flex sm:items-center sm:justify-between">
 				<div className="space-y-5">
-					<LogoutModal />
+					<div className="py-5 flex space-x-1">
+						<p>@teru214</p>
+						<p>-</p>
+						<LogoutModal
+							trigger={
+								<p className="hover:underline cursor-pointer">ログアウト</p>
+							}
+						/>
+					</div>
 					<Link to="/" className="flex items-center">
 						<img
 							src="/icon.webp"
