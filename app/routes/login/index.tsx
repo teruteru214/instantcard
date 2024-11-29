@@ -1,6 +1,4 @@
-import LoginModal from "~/components/global/LoginModal";
-import LoginSheet from "~/components/global/LoginSheet";
-import { Button } from "~/components/ui/button";
+import ResponsiveLoginButton from "~/components/global/ResponsiveLoginButton";
 
 const LoginPage = () => {
 	return (
@@ -22,24 +20,7 @@ const LoginPage = () => {
 			</div>
 			<div className="flex justify-center">
 				<div className="py-5 flex justify-center">
-					<div className="hidden sm:block">
-						<LoginModal
-							trigger={
-								<Button size="giant" aria-label="ログインモーダルを開く">
-									カードを作る
-								</Button>
-							}
-						/>
-					</div>
-					<div className="block sm:hidden">
-						<LoginSheet
-							trigger={
-								<Button size="giant" aria-label="ログインモーダルを開く">
-									カードを作る
-								</Button>
-							}
-						/>
-					</div>
+					<ResponsiveLoginButton />
 				</div>
 			</div>
 		</div>
