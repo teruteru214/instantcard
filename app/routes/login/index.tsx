@@ -1,9 +1,8 @@
-import LoginModal from "~/components/global/LoginModal";
+import ResponsiveLoginButton from "~/components/global/ResponsiveLoginButton";
 
 const LoginPage = () => {
 	return (
-		<div className="my-80 space-y-6">
-			<h1 className="text-3xl text-center">ログイン</h1>
+		<div className="my-80 space-y-4">
 			<div className="space-y-10 flex flex-col justify-center" role="banner">
 				<div className="flex items-center justify-center">
 					<img
@@ -20,7 +19,9 @@ const LoginPage = () => {
 				</p>
 			</div>
 			<div className="flex justify-center">
-				<LoginModal label="ログイン" />
+				<div className="py-5 flex justify-center">
+					<ResponsiveLoginButton />
+				</div>
 			</div>
 		</div>
 	);

@@ -9,6 +9,7 @@ import {
 	Shuffle,
 } from "lucide-react";
 import { useState } from "react";
+import NoCard from "~/components/global/NoCard";
 import Speech from "~/components/global/Speech";
 import WordDetails from "~/components/global/WordDetails";
 import { Button } from "~/components/ui/button";
@@ -83,7 +84,9 @@ const WordsSlide = () => {
 		? [Autoplay({ delay: slide.playbackSpeed * 1000 })]
 		: [];
 
-	return (
+	return mockData.length === 0 ? (
+		<NoCard type="slide" />
+	) : (
 		<div className="flex flex-col justify-center items-center">
 			<div className={slide.isSizing ? "w-10/12" : "w-8/12"}>
 				<Carousel
@@ -101,6 +104,7 @@ const WordsSlide = () => {
 								<div className="p-1">
 									<Card>
 										<CardContent className="flex flex-col items-center aspect-square justify-center p-6">
+											{/* 単語データ */}
 											{item.word && (
 												<div className="relative w-full h-full flex items-center justify-center">
 													<p className="text-2xl sm:text-4xl font-semibold text-center">
@@ -121,6 +125,7 @@ const WordsSlide = () => {
 													</div>
 												</div>
 											)}
+											{/* 翻訳データ */}
 											{item.translation && (
 												<div>
 													{item.img ? (
@@ -185,7 +190,10 @@ const WordsSlide = () => {
 					<Button
 						size="icon"
 						onClick={() =>
-							setSlide((prev) => ({ ...prev, data: shuffleSlides(prev.data) }))
+							setSlide((prev) => ({
+								...prev,
+								data: shuffleSlides(prev.data),
+							}))
 						}
 					>
 						<Shuffle className="w-6 h-6" />

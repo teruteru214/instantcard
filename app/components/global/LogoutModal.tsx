@@ -9,14 +9,14 @@ import {
 	DialogTrigger,
 } from "~/components/ui/dialog";
 
-const LogoutModal = () => {
+const LogoutModal = ({
+	trigger,
+}: {
+	trigger: React.ReactNode;
+}) => {
 	return (
 		<Dialog>
-			<DialogTrigger asChild>
-				<span className="cursor-pointer text-gray-600 hover:text-gray-700 hover:underline">
-					ログアウト
-				</span>
-			</DialogTrigger>
+			<DialogTrigger asChild>{trigger}</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle>ログアウトしますか？</DialogTitle>
