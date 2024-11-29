@@ -7,12 +7,12 @@ import {
 	DialogTrigger,
 } from "~/components/ui/dialog";
 
-interface DeleteModalProps {
+interface DeleteProps {
 	word: string;
 	triggerElement: React.ReactNode;
 }
 
-const DeleteModal = ({ word, triggerElement }: DeleteModalProps) => {
+const DeleteModal = ({ word, triggerElement }: DeleteProps) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>{triggerElement}</DialogTrigger>

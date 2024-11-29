@@ -1,10 +1,13 @@
 import { useNavigate } from "@remix-run/react";
 import { Button } from "../ui/button";
 
-const NoCard = ({ type }: { type: "quiz" | "slide" }) => {
+const NoCard = ({ type }: { type: "edit" | "quiz" | "slide" }) => {
 	const navigate = useNavigate();
 
 	const getMessage = () => {
+		if (type === "edit") {
+			return "カードがありません。カードを作ると編集できます";
+		}
 		if (type === "quiz") {
 			return "カードを作成すると、クイズが表示されます";
 		}

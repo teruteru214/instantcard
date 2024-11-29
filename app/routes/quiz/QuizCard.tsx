@@ -41,10 +41,11 @@ const QuizCard = ({ quiz, options, index, scrollToNext }: QuizProps) => {
 										<Button
 											type="button"
 											variant={field.value === option ? "black" : "white"}
-											size="giant"
+											size="option"
 											onClick={() => field.onChange(option)}
 											aria-label={`選択肢: ${option}`}
 											aria-pressed={field.value === option}
+											className="break-words whitespace-normal"
 										>
 											{option}
 										</Button>
@@ -55,12 +56,16 @@ const QuizCard = ({ quiz, options, index, scrollToNext }: QuizProps) => {
 						</FormItem>
 					)}
 				/>
+				<div className="flex justify-center block sm:hidden">
+					<ImageModal />
+					<CollocationModal />
+				</div>
 				<div className="flex justify-between items-center">
 					<div className="space-x-2 flex items-center">
 						<p className="text-xs sm:text-base">頻度:</p>
 						<Badge variant="destructive">🥇目から鱗</Badge>
 					</div>
-					<div>
+					<div className="hidden sm:block">
 						<ImageModal />
 						<CollocationModal />
 					</div>
