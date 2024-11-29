@@ -16,13 +16,9 @@ const ResponsiveLoginButton = () => (
 		<div className="block sm:hidden">
 			<LoginSheet
 				trigger={
-					<LoginSheet
-						trigger={
-							<Button size="giant" aria-label="ログインモーダルを開く">
-								カードを作る
-							</Button>
-						}
-					/>
+					<Button size="giant" aria-label="ログインモーダルを開く">
+						カードを作る
+					</Button>
 				}
 			/>
 		</div>
