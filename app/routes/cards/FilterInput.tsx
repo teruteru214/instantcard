@@ -15,7 +15,7 @@ const FilterInput = ({ words, children }: FilterInputProps) => {
 	return (
 		<div className="mt-10">
 			<Input
-				placeholder="英単語を絞り込めます"
+				placeholder="英単語で絞り込めます"
 				icon={<Filter className="h-4 w-4 text-gray-400" />}
 				onChange={(e) => setFilterText(e.target.value)}
 			/>
