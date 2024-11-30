@@ -10,9 +10,10 @@ interface WordCardProps {
 	word: UniqueIdentifier;
 	style?: React.CSSProperties;
 	isOverlay?: boolean;
+	filterText?: string;
 }
 
-const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
+const WordCard = ({ word, style, isOverlay, filterText }: WordCardProps) => {
 	const {
 		attributes,
 		listeners,
@@ -24,12 +25,10 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 		id: word,
 	});
 
-	// エラーハンドリング
 	if (typeof word !== "string") {
 		return null;
 	}
 
-	// isDraggingの時は`hr`のデザインをレンダリング
 	if (isDragging) {
 		return (
 			<div
@@ -46,7 +45,6 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 		);
 	}
 
-	// isOverlayの時は通常カードを背景色変更してレンダリング
 	if (isOverlay) {
 		return (
 			<Card
@@ -73,7 +71,6 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 		);
 	}
 
-	// 通常状態のデザインをレンダリング
 	return (
 		<Card
 			ref={setNodeRef}
@@ -107,14 +104,16 @@ const WordCard = ({ word, style, isOverlay }: WordCardProps) => {
 							}
 						/>
 					</div>
-					<div
-						className="cursor-grab flex-shrink-0 touch-none"
-						{...listeners}
-						{...attributes}
-						aria-label="ドラッグハンドル"
-					>
-						<GripVertical className="h-7 w-7 text-gray-400 hover:text-gray-500" />
-					</div>
+					{!filterText && (
+						<div
+							className="cursor-grab flex-shrink-0 touch-none"
+							{...listeners}
+							{...attributes}
+							aria-label="ドラッグハンドル"
+						>
+							<GripVertical className="h-7 w-7 text-gray-400 hover:text-gray-500" />
+						</div>
+					)}
 				</div>
 			</div>
 		</Card>
