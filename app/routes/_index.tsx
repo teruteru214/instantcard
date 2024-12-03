@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/cloudflare";
 import LoginModal from "~/components/global/LoginModal";
 import LoginSheet from "~/components/global/LoginSheet";
 import ResponsiveLoginButton from "~/components/global/ResponsiveLoginButton";
