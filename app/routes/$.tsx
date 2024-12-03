@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node";
+import { json } from "@remix-run/cloudflare";
 import { type MetaFunction, useNavigate } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 
