@@ -1,0 +1,13 @@
+{
+	"version": "7",
+	"dialect": "mysql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "5",
+			"when": 1733370105828,
+			"tag": "20241205034145_odd_warstar",
+			"breakpoints": true
+		}
+	]
+}
