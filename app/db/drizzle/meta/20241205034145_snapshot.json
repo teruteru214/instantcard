@@ -1,0 +1,267 @@
+{
+	"version": "5",
+	"dialect": "mysql",
+	"id": "59298bd8-0ced-40a5-986c-74d7c60c725f",
+	"prevId": "00000000-0000-0000-0000-000000000000",
+	"tables": {
+		"users": {
+			"name": "users",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(200)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"email": {
+					"name": "email",
+					"type": "varchar(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {
+				"users_id": {
+					"name": "users_id",
+					"columns": ["id"]
+				}
+			},
+			"uniqueConstraints": {
+				"users_email_unique": {
+					"name": "users_email_unique",
+					"columns": ["email"]
+				}
+			},
+			"checkConstraint": {}
+		},
+		"collocations": {
+			"name": "collocations",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"word_id": {
+					"name": "word_id",
+					"type": "bigint unsigned",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"text": {
+					"name": "text",
+					"type": "varchar(100)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"translation": {
+					"name": "translation",
+					"type": "varchar(200)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"collocations_word_id_words_id_fk": {
+					"name": "collocations_word_id_words_id_fk",
+					"tableFrom": "collocations",
+					"tableTo": "words",
+					"columnsFrom": ["word_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"collocations_id": {
+					"name": "collocations_id",
+					"columns": ["id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"checkConstraint": {}
+		},
+		"examples": {
+			"name": "examples",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"word_id": {
+					"name": "word_id",
+					"type": "bigint unsigned",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"text": {
+					"name": "text",
+					"type": "varchar(200)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"translation": {
+					"name": "translation",
+					"type": "varchar(300)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"examples_word_id_words_id_fk": {
+					"name": "examples_word_id_words_id_fk",
+					"tableFrom": "examples",
+					"tableTo": "words",
+					"columnsFrom": ["word_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"examples_id": {
+					"name": "examples_id",
+					"columns": ["id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"checkConstraint": {}
+		},
+		"words": {
+			"name": "words",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"user_id": {
+					"name": "user_id",
+					"type": "bigint unsigned",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"word": {
+					"name": "word",
+					"type": "varchar(50)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"position": {
+					"name": "position",
+					"type": "double unsigned",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"translation": {
+					"name": "translation",
+					"type": "varchar(100)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"frequency": {
+					"name": "frequency",
+					"type": "tinyint unsigned",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"pronunciation": {
+					"name": "pronunciation",
+					"type": "varchar(200)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"meaning": {
+					"name": "meaning",
+					"type": "varchar(300)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"etymology": {
+					"name": "etymology",
+					"type": "varchar(200)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"other": {
+					"name": "other",
+					"type": "varchar(500)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"img": {
+					"name": "img",
+					"type": "varchar(250)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"words_user_id_users_id_fk": {
+					"name": "words_user_id_users_id_fk",
+					"tableFrom": "words",
+					"tableTo": "users",
+					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"words_id": {
+					"name": "words_id",
+					"columns": ["id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"checkConstraint": {}
+		}
+	},
+	"views": {},
+	"_meta": {
+		"schemas": {},
+		"tables": {},
+		"columns": {}
+	},
+	"internal": {
+		"tables": {},
+		"indexes": {}
+	}
+}
