@@ -7,4 +7,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
 	plugins: [cloudflareDevProxyVitePlugin(), remix(), tsconfigPaths()],
+	test: {
+		globals: true,
+		environment: "happy-dom",
+	},
 });

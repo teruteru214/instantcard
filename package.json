@@ -13,6 +13,8 @@
 		"lint:fix": "biome lint --apply ./app --write",
 		"format:fix": "biome format ./app --write",
 		"check:fix": "biome check --apply ./app --write",
+		"preview": "vite preview",
+		"test": "vitest",
 		"start": "wrangler pages dev build/client",
 		"typecheck": "tsc"
 	},
@@ -30,6 +32,7 @@
 		"@remix-run/cloudflare": "^2.15.0",
 		"@remix-run/cloudflare-pages": "^2.15.0",
 		"@remix-run/react": "^2.14.0",
+		"@remix-run/testing": "^2.15.0",
 		"@tidbcloud/serverless": "^0.2.0",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
@@ -50,7 +53,11 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@cloudflare/workers-types": "^4.20241202.0",
+		"@happy-dom/global-registrator": "^15.11.7",
 		"@remix-run/dev": "^2.14.0",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/react": "^16.1.0",
+		"@testing-library/user-event": "^14.5.2",
 		"@types/react": "^18.2.20",
 		"@types/react-dom": "^18.2.7",
 		"autoprefixer": "^10.4.19",
@@ -60,6 +67,7 @@
 		"typescript": "^5.1.6",
 		"vite": "^5.1.0",
 		"vite-tsconfig-paths": "^4.2.1",
+		"vitest": "^2.1.8",
 		"wrangler": "^3.91.0"
 	},
 	"engines": {
