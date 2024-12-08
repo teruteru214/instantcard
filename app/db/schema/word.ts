@@ -18,6 +18,7 @@ export const words = mysqlTable("words", {
 	translation: varchar("translation", { length: 100 }),
 	frequency: tinyint("frequency", { unsigned: true }).notNull(),
 	pronunciation: varchar("pronunciation", { length: 200 }),
+	roles: varchar("roles", { length: 100 }),
 	meaning: varchar("meaning", { length: 300 }),
 	etymology: varchar("etymology", { length: 200 }),
 	other: varchar("other", { length: 500 }),
