@@ -1,18 +1,22 @@
 {
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/.server/**/*.ts",
-    "**/.server/**/*.tsx",
-    "**/.client/**/*.ts",
-    "**/.client/**/*.tsx"
-  ],
+			"**/*.ts",
+			"**/*.tsx",
+			"**/.server/**/*.ts",
+			"**/.server/**/*.tsx",
+			"**/.client/**/*.ts",
+			"**/.client/**/*.tsx",
+			"vite.config.ts",
+			"./tests/vitest-setup.ts"
+		],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": [
       "@remix-run/cloudflare",
       "vite/client",
-      "@cloudflare/workers-types/2023-07-01"
+      "@cloudflare/workers-types/2023-07-01",
+      "vitest/globals",
+      "@testing-library/jest-dom"
     ],
     "isolatedModules": true,
     "esModuleInterop": true,
