@@ -1,7 +1,7 @@
 {
 	"version": "5",
 	"dialect": "mysql",
-	"id": "7df2c2ac-c200-4b7c-b17f-03be154dd31b",
+	"id": "5ca9e0eb-2ada-4ae2-828c-f6b0d443f993",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"tables": {
 		"users": {
@@ -77,7 +77,13 @@
 					"autoincrement": false
 				}
 			},
-			"indexes": {},
+			"indexes": {
+				"idx_collocations_word": {
+					"name": "idx_collocations_word",
+					"columns": ["word_id"],
+					"isUnique": false
+				}
+			},
 			"foreignKeys": {
 				"collocations_word_id_words_id_fk": {
 					"name": "collocations_word_id_words_id_fk",
@@ -130,7 +136,13 @@
 					"autoincrement": false
 				}
 			},
-			"indexes": {},
+			"indexes": {
+				"idx_examples_word_id": {
+					"name": "idx_examples_word_id",
+					"columns": ["word_id"],
+					"isUnique": false
+				}
+			},
 			"foreignKeys": {
 				"examples_word_id_words_id_fk": {
 					"name": "examples_word_id_words_id_fk",
@@ -145,6 +157,101 @@
 			"compositePrimaryKeys": {
 				"examples_id": {
 					"name": "examples_id",
+					"columns": ["id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"checkConstraint": {}
+		},
+		"roles": {
+			"name": "roles",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(50)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {
+				"roles_id": {
+					"name": "roles_id",
+					"columns": ["id"]
+				}
+			},
+			"uniqueConstraints": {
+				"roles_name_unique": {
+					"name": "roles_name_unique",
+					"columns": ["name"]
+				}
+			},
+			"checkConstraint": {}
+		},
+		"word_roles": {
+			"name": "word_roles",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"word_id": {
+					"name": "word_id",
+					"type": "bigint unsigned",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"role_id": {
+					"name": "role_id",
+					"type": "bigint unsigned",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {
+				"idx_word_roles": {
+					"name": "idx_word_roles",
+					"columns": ["word_id", "role_id"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {
+				"word_roles_word_id_words_id_fk": {
+					"name": "word_roles_word_id_words_id_fk",
+					"tableFrom": "word_roles",
+					"tableTo": "words",
+					"columnsFrom": ["word_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"word_roles_role_id_roles_id_fk": {
+					"name": "word_roles_role_id_roles_id_fk",
+					"tableFrom": "word_roles",
+					"tableTo": "roles",
+					"columnsFrom": ["role_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"word_roles_id": {
+					"name": "word_roles_id",
 					"columns": ["id"]
 				}
 			},
@@ -203,13 +310,6 @@
 					"notNull": false,
 					"autoincrement": false
 				},
-				"roles": {
-					"name": "roles",
-					"type": "varchar(100)",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
 				"meaning": {
 					"name": "meaning",
 					"type": "varchar(300)",
@@ -239,7 +339,13 @@
 					"autoincrement": false
 				}
 			},
-			"indexes": {},
+			"indexes": {
+				"idx_words_user_word": {
+					"name": "idx_words_user_word",
+					"columns": ["user_id", "word"],
+					"isUnique": false
+				}
+			},
 			"foreignKeys": {
 				"words_user_id_users_id_fk": {
 					"name": "words_user_id_users_id_fk",
