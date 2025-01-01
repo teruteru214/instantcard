@@ -1,12 +1,7 @@
-import { json } from "@remix-run/cloudflare";
 import { type MetaFunction, useNavigate } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 
 export const meta: MetaFunction = () => [{ title: "見つかりませんでした" }];
-
-export const loader = () => {
-	return json(null, { status: 404 });
-};
 
 const NotFound = () => {
 	const navigate = useNavigate();
