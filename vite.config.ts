@@ -6,7 +6,16 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-	plugins: [cloudflareDevProxyVitePlugin(), remix(), tsconfigPaths()],
+	plugins: [
+		cloudflareDevProxyVitePlugin(),
+		remix({
+			ssr: false,
+		}),
+		tsconfigPaths(),
+	],
+	ssr: {
+		noExternal: ["problematic-dependency"],
+	},
 	test: {
 		globals: true,
 		environment: "happy-dom",

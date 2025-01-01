@@ -62,7 +62,7 @@ const mockData: WordData[] = [
 const WordsSlide = () => {
 	const [slide, setSlide] = useState({
 		isPlaying: false,
-		playbackSpeed: 5, // 秒単位で管理
+		playbackSpeed: 5,
 		isLooping: true,
 		isSizing: false,
 		data: mockData,

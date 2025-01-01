@@ -1,4 +1,3 @@
-import { useFetcher } from "@remix-run/react";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 
@@ -15,30 +14,41 @@ interface Suggestion {
 	word: string;
 }
 
-interface FetcherData {
-	suggestions: Suggestion[];
-}
-
 const SuggestInput = () => {
 	const [inputValue, setInputValue] = useState("");
-	const fetcher = useFetcher<FetcherData>();
+	const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
 	const debouncedFetch = useDebounce(600);
 
 	const handleInputChange = (value: string) => {
 		setInputValue(value);
-		debouncedFetch(() => {
+		debouncedFetch(async () => {
 			if (value.trim()) {
+				setIsLoading(true);
 				try {
-					fetcher.load(`/api/datamuse?query=${encodeURIComponent(value)}`);
-				} catch (_err) {
-					Error("検索中にエラーが発生しました。");
+					const response = await fetch(
+						`/api/datamuse?query=${encodeURIComponent(value)}`,
+					);
+					if (!response.ok) {
+						throw new Error(`サジェスト取得に失敗しました: ${response.status}`);
+					}
+					const data: Suggestion[] = await response.json();
+					setSuggestions(data);
+				} catch (error) {
+					alert(
+						error instanceof Error
+							? error.message
+							: "不明なエラーが発生しました。",
+					);
+					setSuggestions([]);
+				} finally {
+					setIsLoading(false);
 				}
+			} else {
+				setSuggestions([]);
 			}
 		});
 	};
-
-	const suggestions: Suggestion[] = fetcher.data?.suggestions || [];
-	const isLoading = fetcher.state === "loading";
 
 	return (
 		<Command

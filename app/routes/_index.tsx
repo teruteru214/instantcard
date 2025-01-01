@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
+import { useState } from "react";
 import LoginModal from "~/components/global/LoginModal";
 import LoginSheet from "~/components/global/LoginSheet";
 import ResponsiveLoginButton from "~/components/global/ResponsiveLoginButton";
@@ -87,6 +88,43 @@ export default function Index() {
 					/>
 				</div>
 			</div>
+			<HelloWorldButton />
 		</>
 	);
 }
+
+const HelloWorldButton = () => {
+	const [message, setMessage] = useState<string | null>(null);
+	const [loading, setLoading] = useState(false);
+
+	const fetchHelloWorld = async () => {
+		setLoading(true);
+		try {
+			const response = await fetch("/api/hello");
+			if (!response.ok) {
+				throw new Error("Failed to fetch");
+			}
+			const text = await response.text();
+			setMessage(text);
+		} catch (error) {
+			console.error("Error fetching Hello World:", error);
+			setMessage("エラーが発生しました");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<div className="flex flex-col items-center">
+			<Button
+				onClick={fetchHelloWorld}
+				disabled={loading}
+				size="giant"
+				variant={loading ? "outline" : "default"}
+			>
+				{loading ? "読み込み中..." : "Hello World を取得"}
+			</Button>
+			{message && <p className="mt-4 text-gray-500">{message}</p>}
+		</div>
+	);
+};
