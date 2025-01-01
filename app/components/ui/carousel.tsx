@@ -219,7 +219,7 @@ const CarouselPrevious = React.forwardRef<
 	return (
 		<Button
 			ref={ref}
-			variant={isValidVariant(variant) ? variant : "default"} // 型ガードでチェック
+			variant={isValidVariant(variant) ? variant : "default"}
 			size={size}
 			className={cn(
 				"absolute h-8 w-8 md:h-16 md:w-16 rounded-full",
@@ -244,40 +244,30 @@ const CarouselNext = React.forwardRef<
 	Omit<React.ComponentProps<typeof Button>, "variant"> & {
 		variant?: VariantProps<typeof buttonVariants>["variant"];
 	}
->(
-	(
-		{
-			className,
-			variant = "outline", // デフォルト値も buttonVariants に合わせる必要があります
-			size = "icon",
-			...props
-		},
-		ref,
-	) => {
-		const { orientation, scrollNext, canScrollNext } = useCarousel();
+>(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+	const { orientation, scrollNext, canScrollNext } = useCarousel();
 
-		return (
-			<Button
-				ref={ref}
-				variant={isValidVariant(variant) ? variant : "default"} // 型ガードでチェック
-				size={size}
-				className={cn(
-					"absolute h-8 w-8 md:h-16 md:w-16 rounded-full",
-					orientation === "horizontal"
-						? "-right-10 md:-right-20 top-1/2 -translate-y-1/2"
-						: "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-					className,
-				)}
-				disabled={!canScrollNext}
-				onClick={scrollNext}
-				{...props}
-			>
-				<ArrowRight className="h-4 w-4" />
-				<span className="sr-only">Next slide</span>
-			</Button>
-		);
-	},
-);
+	return (
+		<Button
+			ref={ref}
+			variant={isValidVariant(variant) ? variant : "default"}
+			size={size}
+			className={cn(
+				"absolute h-8 w-8 md:h-16 md:w-16 rounded-full",
+				orientation === "horizontal"
+					? "-right-10 md:-right-20 top-1/2 -translate-y-1/2"
+					: "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+				className,
+			)}
+			disabled={!canScrollNext}
+			onClick={scrollNext}
+			{...props}
+		>
+			<ArrowRight className="h-4 w-4" />
+			<span className="sr-only">Next slide</span>
+		</Button>
+	);
+});
 CarouselNext.displayName = "CarouselNext";
 
 export {
