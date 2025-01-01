@@ -1,4 +1,3 @@
-import { useFetcher } from "@remix-run/react";
 import { Image } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "../ui/button";
@@ -34,33 +33,49 @@ interface UnsplashResponse {
 const ImageSetting = () => {
 	const [searchWord, setSearchWord] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
-	const fetcher = useFetcher<UnsplashResponse>();
+	const [images, setImages] = useState<UnsplashImage[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
+
+	const fetchImages = async (query: string, page: number) => {
+		setIsLoading(true);
+		try {
+			const response = await fetch(
+				`/api/unsplash?query=${encodeURIComponent(query)}&page=${page}`,
+			);
+
+			if (!response.ok) {
+				throw new Error("画像の取得に失敗しました。");
+			}
+
+			const data: UnsplashResponse = await response.json();
+
+			if (page === 1) {
+				setImages(data.results);
+			} else {
+				setImages((prevImages) => [...prevImages, ...data.results]);
+			}
+		} catch (error) {
+			alert(
+				error instanceof Error
+					? error.message
+					: "不明なエラーが発生しました。もう一度お試しください。",
+			);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	const handleSearch = () => {
 		if (searchWord.trim() === "") return;
 		setCurrentPage(1);
-		try {
-			fetcher.load(
-				`/api/unsplash?query=${encodeURIComponent(searchWord)}&page=1`,
-			);
-		} catch (_error) {
-			alert("画像の検索中にエラーが発生しました。もう一度お試しください。");
-		}
+		fetchImages(searchWord, 1);
 	};
 
 	const loadMore = () => {
 		const nextPage = currentPage + 1;
 		setCurrentPage(nextPage);
-		try {
-			fetcher.load(
-				`/api/unsplash?query=${encodeURIComponent(searchWord)}&page=${nextPage}`,
-			);
-		} catch (_error) {
-			alert(
-				"画像をさらに読み込む際にエラーが発生しました。もう一度お試しください。",
-			);
-		}
+		fetchImages(searchWord, nextPage);
 	};
 
 	const skeletons = Array.from({ length: 12 }, (_, index) => ({
@@ -102,38 +117,34 @@ const ImageSetting = () => {
 				ref={inputRef}
 			/>
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 justify-items-center">
-				{fetcher.state === "loading" ? (
-					<>
-						{skeletons.map((skeleton) => (
+				{isLoading && images.length === 0
+					? skeletons.map((skeleton) => (
 							<Skeleton key={skeleton.id} className="w-full max-w-xs h-48" />
-						))}
-					</>
-				) : (
-					fetcher.data?.results?.map((image) => (
-						<div
-							key={image.id}
-							className="relative w-full max-w-xs rounded-md overflow-hidden cursor-pointer group"
-						>
-							<img
-								src={image.urls.small}
-								alt={image.alt_description || "Image"}
-								className="w-full h-full object-cover"
-							/>
-							<div className="absolute bottom-0 w-full bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 flex items-center justify-center p-2 transition-opacity duration-300">
-								<a
-									href={image.links.html}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="text-white text-sm underline"
-								>
-									{image.user.name}
-								</a>
+						))
+					: images.map((image) => (
+							<div
+								key={image.id}
+								className="relative w-full max-w-xs rounded-md overflow-hidden cursor-pointer group"
+							>
+								<img
+									src={image.urls.small}
+									alt={image.alt_description || "Image"}
+									className="w-full h-full object-cover"
+								/>
+								<div className="absolute bottom-0 w-full bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 flex items-center justify-center p-2 transition-opacity duration-300">
+									<a
+										href={image.links.html}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="text-white text-sm underline"
+									>
+										{image.user.name}
+									</a>
+								</div>
 							</div>
-						</div>
-					))
-				)}
+						))}
 			</div>
-			{fetcher.data?.results?.length && fetcher.data.results.length > 0 && (
+			{images.length > 0 && (
 				<div className="flex justify-center">
 					<Button variant="ghost" className="mt-3" onClick={loadMore}>
 						<Image size={20} className="mr-1" />

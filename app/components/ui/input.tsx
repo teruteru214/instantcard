@@ -5,14 +5,14 @@ import { Badge } from "./badge";
 interface InputProps extends React.ComponentProps<"input"> {
 	icon?: React.ReactNode;
 	search?: boolean;
-	handleSearch?: () => void; // 検索トリガー関数をオプションに変更
+	handleSearch?: () => void;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	({ className, type, icon, search, handleSearch, ...props }, ref) => {
 		const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
 			if (event.key === "Enter" && handleSearch) {
-				handleSearch(); // Enterキーが押されたときに検索を実行
+				handleSearch();
 			}
 		};
 
