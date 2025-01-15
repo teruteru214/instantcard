@@ -1,6 +1,7 @@
 import { Volume2 } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "~/components/ui/button";
+import { isWordValid } from "~/utils/isWordValid";
 
 interface SpeechProps {
 	word: string;
@@ -11,61 +12,49 @@ const Speech = ({ word, size }: SpeechProps) => {
 	const [isSpeaking, setIsSpeaking] = useState(false);
 
 	const speak = useCallback(async () => {
-		if (!window.speechSynthesis) {
-			alert("音声合成APIがサポートされていません");
-			return;
-		}
-
 		if (!word || word.trim() === "") {
 			alert("再生する単語がありません");
 			return;
 		}
 
-		if (window.speechSynthesis.speaking) {
-			window.speechSynthesis.cancel();
-		}
-
-		const utterance = new SpeechSynthesisUtterance(word);
-		utterance.lang = "en-US";
-
 		try {
-			const loadVoices = () => {
-				return new Promise<SpeechSynthesisVoice[]>((resolve) => {
-					const voices = speechSynthesis.getVoices();
-					if (voices.length > 0) {
-						resolve(voices);
-					} else {
-						speechSynthesis.addEventListener(
-							"voiceschanged",
-							() => {
-								resolve(speechSynthesis.getVoices());
-							},
-							{ once: true },
-						);
-					}
-				});
-			};
+			setIsSpeaking(true);
 
-			const voices = await loadVoices();
-			const voice = voices.find((v) => v.lang === "en-US");
-			if (!voice) {
-				throw new Error("英語の音声が見つかりません");
+			const endpoint = isWordValid(word)
+				? "/api/word-audio"
+				: "/api/text-audio";
+
+			const response = await fetch(endpoint, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ text: word }),
+			});
+
+			if (!response.ok) {
+				throw new Error("音声ファイルの取得に失敗しました");
 			}
-			utterance.voice = voice;
 
-			utterance.onstart = () => setIsSpeaking(true);
-			utterance.onend = () => setIsSpeaking(false);
-			utterance.onerror = () => {
-				alert("音声合成エラーが発生しました");
+			const blob = await response.blob();
+			const audioUrl = URL.createObjectURL(blob);
+
+			const audio = new Audio(audioUrl);
+			audio.play();
+
+			audio.onended = () => {
+				URL.revokeObjectURL(audioUrl);
 				setIsSpeaking(false);
 			};
 
-			window.speechSynthesis.speak(utterance);
+			audio.onerror = () => {
+				alert("音声再生エラーが発生しました");
+				URL.revokeObjectURL(audioUrl);
+				setIsSpeaking(false);
+			};
 		} catch (error) {
-			console.error("音声の初期化エラー:", error);
-			alert(
-				error instanceof Error ? error.message : "音声の初期化に失敗しました",
-			);
+			console.error("音声処理エラー:", error);
+			alert(error instanceof Error ? error.message : "音声処理に失敗しました");
 			setIsSpeaking(false);
 		}
 	}, [word]);
