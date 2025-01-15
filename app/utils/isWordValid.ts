@@ -1,3 +1,6 @@
 export const isWordValid = (word: string): boolean => {
-	return word.trim() !== "" && word.length <= 10 && !word.includes(" ");
+	const actualWord = word.trim(); // 本来の文字列を表す変数
+	return (
+		actualWord !== "" && actualWord.length <= 10 && !actualWord.includes(" ")
+	);
 };
