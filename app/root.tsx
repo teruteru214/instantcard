@@ -1,12 +1,16 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/cloudflare";
 import {
 	Links,
 	Meta,
 	Outlet,
 	Scripts,
 	ScrollRestoration,
+	isRouteErrorResponse,
+	useRouteError,
 } from "@remix-run/react";
 
+import Footer from "./components/global/footer";
+import Menu from "./components/global/menu";
 import "./tailwind.css";
 
 export const links: LinksFunction = () => [
@@ -41,6 +45,43 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	);
 }
 
+export function ErrorBoundary() {
+	const error = useRouteError();
+	return (
+		<html lang="ja">
+			<head>
+				<title>エラーが発生しました</title>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<Meta />
+				<Links />
+			</head>
+			<body>
+				<h1>エラーが発生しました</h1>
+				<p>
+					{isRouteErrorResponse(error)
+						? `${error.status} ${error.statusText}`
+						: error instanceof Error
+							? error.message
+							: "不明なエラーが発生しました"}
+				</p>
+				<p>
+					<a href="/">ホームに戻る</a>
+				</p>
+				<Scripts />
+				<ScrollRestoration />
+			</body>
+		</html>
+	);
+}
+
 export default function App() {
-	return <Outlet />;
+	return (
+		<>
+			<div className="mx-auto max-w-screen-lg px-5 sm:px-10">
+				<Outlet />
+			</div>
+			<Footer />
+			<Menu />
+		</>
+	);
 }
