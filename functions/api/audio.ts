@@ -24,7 +24,10 @@ export async function onRequest(context: {
 		);
 
 		if (!response.ok) {
-			throw new Error(`API Error: "不明なエラーが発生しました"}`);
+			const errorBody: { error?: { message?: string } } = await response.json();
+			throw new Error(
+				`API Error: ${response.status} - ${errorBody.error?.message || "不明なエラーが発生しました"}`,
+			);
 		}
 
 		return new Response(response.body, {
