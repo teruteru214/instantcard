@@ -15,7 +15,7 @@ export async function onRequest(context: {
 					input: { text },
 					voice: {
 						languageCode: "en-US",
-						name: "en-US-Wavenet-A",
+						name: "en-US-Standard-F",
 						ssmlGender: "NEUTRAL",
 					},
 					audioConfig: { audioEncoding: "LINEAR16" },
@@ -23,17 +23,33 @@ export async function onRequest(context: {
 			},
 		);
 
+		if (!response.ok) {
+			throw new Error(`API Error: "不明なエラーが発生しました"}`);
+		}
+
 		return new Response(response.body, {
 			status: response.status,
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
-	} catch (_error) {
-		console.error("Error:", _error);
-		return new Response(JSON.stringify({ error: "Internal server error" }), {
-			status: 500,
-			headers: { "Content-Type": "application/json" },
-		});
+	} catch (error) {
+		console.error("Error:", error);
+		const statusCode =
+			error instanceof Error && error.message.includes("API Error") ? 400 : 500;
+		const errorMessage =
+			error instanceof Error ? error.message : "Internal server error";
+
+		return new Response(
+			JSON.stringify({
+				error: errorMessage,
+				timestamp: new Date().toISOString(),
+				requestId: context.request.headers.get("x-request-id"),
+			}),
+			{
+				status: statusCode,
+				headers: { "Content-Type": "application/json" },
+			},
+		);
 	}
 }
