@@ -1,3 +1,26 @@
+/**
+ * Handles text-to-speech conversion by calling the Google Cloud Text-to-Speech API.
+ *
+ * @remarks
+ * This function processes an incoming request with text and generates an audio response
+ * using the Google Cloud Text-to-Speech service.
+ *
+ * @param context - The request context containing the HTTP request and API key
+ * @param context.request - The incoming HTTP request with JSON payload
+ * @param context.env.GC_API_KEY - The Google Cloud API key for authentication
+ *
+ * @returns A Response object containing the synthesized audio or an error response
+ *
+ * @throws {Error} Throws an error if the API request fails or request processing encounters issues
+ *
+ * @example
+ * // Example request payload
+ * {
+ *   "text": "Hello, world!"
+ * }
+ *
+ * @beta
+ */
 export async function onRequest(context: {
 	request: Request;
 	env: { GC_API_KEY: string };
