@@ -195,6 +195,10 @@ const WordsSlide = ({ data, children }: WordsSlideProps) => {
 							setSlide((prev) => ({ ...prev, playbackSpeed: value[0] }))
 						}
 						className="w-60 my-2"
+						aria-label="スライド表示速度の調整"
+						aria-valuemin={1}
+						aria-valuemax={20}
+						aria-valuenow={slide.playbackSpeed}
 					/>
 				</div>
 				<p className="text-sm text-center text-gray-400">
