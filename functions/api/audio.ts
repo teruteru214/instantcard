@@ -1,11 +1,28 @@
 export async function onRequest(context: {
 	request: Request;
-	env: { GC_API_KEY: string };
+	env: { GC_API_KEY: string; AUDIO_CACHE: KVNamespace };
 }) {
 	try {
 		const requestData: { text: string } = await context.request.json();
 		const { text } = requestData;
 
+		const cacheKey = `audio_${encodeURIComponent(text.trim())}`;
+		const cachedAudio = await context.env.AUDIO_CACHE.get(
+			cacheKey,
+			"arrayBuffer",
+		);
+
+		if (cachedAudio) {
+			// キャッシュが存在する場合
+			return new Response(cachedAudio, {
+				status: 200,
+				headers: {
+					"Content-Type": "audio/wav",
+				},
+			});
+		}
+
+		// キャッシュが存在しない場合、音声データを生成
 		const response = await fetch(
 			`https://texttospeech.googleapis.com/v1/text:synthesize?key=${context.env.GC_API_KEY}`,
 			{
@@ -30,10 +47,17 @@ export async function onRequest(context: {
 			);
 		}
 
-		return new Response(response.body, {
-			status: response.status,
+		const audioBuffer = await response.arrayBuffer();
+
+		// 生成した音声データをキャッシュに保存（TTLを設定して自動削除）
+		await context.env.AUDIO_CACHE.put(cacheKey, audioBuffer, {
+			expirationTtl: 86400,
+		}); // 24時間（86400秒）
+
+		return new Response(audioBuffer, {
+			status: 200,
 			headers: {
-				"Content-Type": "application/json",
+				"Content-Type": "audio/wav",
 			},
 		});
 	} catch (error) {
