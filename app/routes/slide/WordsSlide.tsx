@@ -1,14 +1,16 @@
 import Autoplay from "embla-carousel-autoplay";
 import {
+	Expand,
+	Image,
+	ImageOff,
 	Infinity as InfinityIcon,
 	Info,
-	Maximize,
-	Minimize,
+	Minimize2,
 	Pause,
 	Play,
 	Shuffle,
 } from "lucide-react";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import NoCard from "~/components/global/NoCard";
 import Speech from "~/components/global/Speech";
 import WordDetails from "~/components/global/WordDetails";
@@ -22,54 +24,25 @@ import {
 	CarouselPrevious,
 } from "~/components/ui/carousel";
 import { Slider } from "~/components/ui/slider";
+import type { SlideWord } from "~/types/word";
 
-export type WordData = {
-	id: string;
-	word?: string;
-	translation?: string;
-	img?: string;
-};
+interface WordsSlideProps {
+	data: SlideWord[];
+	children?: ReactNode;
+}
 
-const mockData: WordData[] = [
-	{ id: "1-question", word: "apple" },
-	{
-		id: "1-answer",
-		translation: "りんご",
-		img: "https://images.unsplash.com/photo-1623815242959-fb20354f9b8d?q=80&w=987&auto=format&fit=crop",
-	},
-	{ id: "2-question", word: "banana" },
-	{
-		id: "2-answer",
-		translation: "バナナ",
-		img: "https://images.unsplash.com/photo-1623227774108-7ab4478f50cf?q=80&w=987&auto=format&fit=crop",
-	},
-	{ id: "3-question", word: "cat" },
-	{ id: "3-answer", translation: "猫" },
-	{ id: "4-question", word: "dog" },
-	{
-		id: "4-answer",
-		translation: "犬",
-		img: "https://images.unsplash.com/photo-1601758063541-d2f50b4aafb2?q=80&w=1105&auto=format&fit=crop",
-	},
-	{ id: "5-question", word: "elephant" },
-	{
-		id: "5-answer",
-		translation: "象",
-		img: "https://images.unsplash.com/photo-1509587837663-52b8687980c5?q=80&w=1102&auto=format&fit=crop",
-	},
-];
-
-const WordsSlide = () => {
+const WordsSlide = ({ data, children }: WordsSlideProps) => {
 	const [slide, setSlide] = useState({
 		isPlaying: false,
 		playbackSpeed: 5,
 		isLooping: true,
 		isSizing: false,
-		data: mockData,
+		showImages: true,
+		data: data,
 	});
 
-	const shuffleSlides = (data: WordData[]) => {
-		const grouped = data.reduce<Record<string, WordData[]>>((acc, item) => {
+	const shuffleSlides = (data: SlideWord[]) => {
+		const grouped = data.reduce<Record<string, SlideWord[]>>((acc, item) => {
 			const pairId = item.id.split("-")[0];
 			if (!acc[pairId]) acc[pairId] = [];
 			acc[pairId].push(item);
@@ -84,16 +57,25 @@ const WordsSlide = () => {
 		? [Autoplay({ delay: slide.playbackSpeed * 1000 })]
 		: [];
 
-	return mockData.length === 0 ? (
-		<NoCard type="slide" />
+	const handleSlideTouch = () => {
+		setSlide((prev) => ({ ...prev, isPlaying: false }));
+	};
+
+	return data.length === 0 ? (
+		<>
+			{children}
+			<NoCard type="slide" />
+		</>
 	) : (
 		<div className="flex flex-col justify-center items-center">
+			{!slide.isSizing && children}
 			<div className={slide.isSizing ? "w-10/12" : "w-8/12"}>
 				<Carousel
 					opts={{ loop: slide.isLooping }}
 					plugins={plugins}
 					className="w-full"
 					aria-label="単語学習スライド"
+					onPointerDown={handleSlideTouch}
 				>
 					<CarouselContent>
 						{slide.data.map((item) => (
@@ -127,23 +109,19 @@ const WordsSlide = () => {
 											)}
 											{/* 翻訳データ */}
 											{item.translation && (
-												<div>
-													{item.img ? (
-														<div>
-															<img
-																src={item.img}
-																alt={item.translation}
-																className="w-28 h-28 sm:w-48 sm:h-48 object-cover rounded-md mb-2"
-															/>
-															<p className="text-xl sm:text-2xl text-center">
-																{item.translation}
-															</p>
-														</div>
-													) : (
-														<p className="text-2xl sm:text-4xl text-center">
-															{item.translation}
-														</p>
+												<div className="relative flex items-center justify-center w-full h-full">
+													{/* 背景画像 */}
+													{slide.showImages && item.img && (
+														<img
+															src={item.img}
+															alt={item.translation}
+															className="absolute inset-0 w-full h-full rounded-md object-cover opacity-30"
+														/>
 													)}
+													{/* 翻訳テキスト */}
+													<p className="relative z-10 text-2xl sm:text-4xl font-semibold text-center text-gray-800">
+														{item.translation}
+													</p>
 												</div>
 											)}
 										</CardContent>
@@ -155,19 +133,6 @@ const WordsSlide = () => {
 					<CarouselPrevious />
 					<CarouselNext />
 				</Carousel>
-				<Slider
-					value={[slide.playbackSpeed]}
-					max={20}
-					min={1}
-					step={1}
-					onValueChange={(value) =>
-						setSlide((prev) => ({ ...prev, playbackSpeed: value[0] }))
-					}
-					className="w-full my-2"
-				/>
-				<p className="text-xs text-center text-gray-400">
-					スライド速度: {slide.playbackSpeed}秒
-				</p>
 				<div className="my-2 flex justify-center space-x-4">
 					<Button
 						size="icon"
@@ -200,13 +165,41 @@ const WordsSlide = () => {
 					</Button>
 					<Button
 						size="icon"
+						variant={slide.showImages ? "black" : "default"}
+						onClick={() =>
+							setSlide((prev) => ({ ...prev, showImages: !prev.showImages }))
+						}
+					>
+						{slide.showImages ? (
+							<Image className="w-6 h-6" />
+						) : (
+							<ImageOff className="w-6 h-6" />
+						)}
+					</Button>
+					<Button
+						size="icon"
 						onClick={() =>
 							setSlide((prev) => ({ ...prev, isSizing: !prev.isSizing }))
 						}
 					>
-						{slide.isSizing ? <Minimize /> : <Maximize />}
+						{slide.isSizing ? <Minimize2 /> : <Expand />}
 					</Button>
 				</div>
+				<div className="flex justify-center items-center">
+					<Slider
+						value={[slide.playbackSpeed]}
+						max={20}
+						min={1}
+						step={1}
+						onValueChange={(value) =>
+							setSlide((prev) => ({ ...prev, playbackSpeed: value[0] }))
+						}
+						className="w-60 my-2"
+					/>
+				</div>
+				<p className="text-sm text-center text-gray-400">
+					スライド速度: {slide.playbackSpeed}秒
+				</p>
 			</div>
 		</div>
 	);
