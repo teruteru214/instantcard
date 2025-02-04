@@ -5,8 +5,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "~/components/ui/select";
-import type { SlideWord } from "~/types/word";
-import WordsSlide from "./WordsSlide";
+
+import WordsSlide from "./components/WordsSlide";
+import type { SlideWord } from "./types";
 
 const mockData: SlideWord[] = [
 	{ id: "1-question", word: "apple" },

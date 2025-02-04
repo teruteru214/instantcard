@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import Index from "~/routes/_index";
+import Index from "~/features/_index";
 
 describe("Index page", () => {
 	it("renders the page title", () => {

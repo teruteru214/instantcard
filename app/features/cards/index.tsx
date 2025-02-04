@@ -13,9 +13,9 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import DropZone from "./DropZone";
-import FilterInput from "./FilterInput";
-import WordCard from "./WordCard";
+import DropZone from "./components/DropZone";
+import FilterInput from "./components/FilterInput";
+import WordCard from "./components/WordCard";
 
 const CardsPage = () => {
 	const [words, setWords] = useState<UniqueIdentifier[]>([

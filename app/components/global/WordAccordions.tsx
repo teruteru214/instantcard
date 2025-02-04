@@ -2,7 +2,7 @@ import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
 import ImageSetting from "./ImageSetting";
 import Speech from "./Speech";
-import WordAccordion from "./WordAccordion";
+import WordAccordion from "./parts/WordAccordion";
 
 const WordAccordions = () => {
 	return (

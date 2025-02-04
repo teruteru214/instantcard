@@ -12,8 +12,8 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import EditHeader from "./EditHeader";
-import TextPairManager from "./TextPairManager";
+import EditHeader from "./components/EditHeader";
+import TextPairManager from "./components/TextPairManager";
 
 const formSchema = z.object({
 	word: z.string().nonempty("英単語は必須項目です").max(45, {
@@ -78,7 +78,7 @@ const formSchema = z.object({
 
 interface FormData extends z.infer<typeof formSchema> {}
 
-const CardEditPage = () => {
+const WordPage = () => {
 	const form = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -238,4 +238,4 @@ const CardEditPage = () => {
 	);
 };
 
-export default CardEditPage;
+export default WordPage;
