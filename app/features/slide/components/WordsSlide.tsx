@@ -24,7 +24,7 @@ import {
 	CarouselPrevious,
 } from "~/components/ui/carousel";
 import { Slider } from "~/components/ui/slider";
-import type { SlideWord } from "~/types/word";
+import type { SlideWord } from "../types";
 
 interface WordsSlideProps {
 	data: SlideWord[];

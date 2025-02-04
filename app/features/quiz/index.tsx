@@ -5,14 +5,15 @@ import { z } from "zod";
 import NoCard from "~/components/global/NoCard";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
+
+import QuizCard from "./components/QuizCard";
+import QuizHeader from "./components/QuizHeader";
+import Result from "./components/Result";
 import {
 	generateEnhancedQuizData,
 	scrollToNext,
 	scrollToResult,
-} from "~/utils/quiz";
-import QuizCard from "./QuizCard";
-import QuizHeader from "./QuizHeader";
-import Result from "./Result";
+} from "./utils";
 
 const quizData = [
 	{

@@ -1,7 +1,7 @@
 import { NavLink } from "@remix-run/react";
 import { GraduationCap, Layers, Search, TvMinimal } from "lucide-react";
 
-const Menu = () => {
+const LoginMenu = () => {
 	const linkClass = ({ isActive }: { isActive: boolean }) =>
 		`flex flex-col items-center space-y-1 w-full py-2 transition ${
 			isActive
@@ -43,4 +43,4 @@ const Menu = () => {
 	);
 };
 
-export default Menu;
+export default LoginMenu;

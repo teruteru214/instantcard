@@ -8,10 +8,8 @@ import {
 	isRouteErrorResponse,
 	useRouteError,
 } from "@remix-run/react";
-
-import Footer from "./components/global/footer";
-import Menu from "./components/global/menu";
 import "./tailwind.css";
+import LayoutView from "./components/layout/LayoutView";
 
 export const links: LinksFunction = () => [
 	{ rel: "icon", href: "/icon.webp", type: "image/x-icon" },
@@ -76,12 +74,8 @@ export function ErrorBoundary() {
 
 export default function App() {
 	return (
-		<>
-			<div className="mx-auto max-w-screen-lg px-5 sm:px-10">
-				<Outlet />
-			</div>
-			<Footer />
-			<Menu />
-		</>
+		<LayoutView>
+			<Outlet />
+		</LayoutView>
 	);
 }

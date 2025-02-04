@@ -1,4 +1,4 @@
-import SuggestInput from "./SuggestInput";
+import SuggestInput from "./components/SuggestInput";
 
 const SearchPage = () => {
 	return (

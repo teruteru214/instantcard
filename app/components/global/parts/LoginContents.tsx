@@ -1,8 +1,12 @@
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { DialogDescription, DialogHeader } from "../ui/dialog";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
+import { Button } from "~/components/ui/button";
+import { DialogDescription, DialogHeader } from "~/components/ui/dialog";
+import {
+	InputOTP,
+	InputOTPGroup,
+	InputOTPSlot,
+} from "~/components/ui/input-otp";
 
 interface ViewState {
 	state: "default" | "email" | "otp";
