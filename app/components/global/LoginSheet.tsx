@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
-import LoginContents from "./LoginContents";
+import LoginContents from "./parts/LoginContents";
 
 const LoginSheet = ({
 	trigger,

@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { scrollToResult } from "~/utils/quiz";
+import { scrollToResult } from "../utils";
 
 interface QuizHeaderProps {
 	isSaveEnabled: boolean;

@@ -31,7 +31,7 @@ const WordDetails = ({ triggerElement, word }: WordDetailsProps) => {
 				<SheetHeader>
 					<div className="flex justify-between">
 						<Button variant="ghost" size="sm">
-							<Link to={`/card/${word}`} className="flex items-center">
+							<Link to={`/cards/${word}`} className="flex items-center">
 								<Pencil className="sm:-mr-1" />
 								<span className="ml-1 hidden sm:inline">カードを編集する</span>
 							</Link>
