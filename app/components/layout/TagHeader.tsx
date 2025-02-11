@@ -1,5 +1,5 @@
 import { Tag, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -17,10 +17,7 @@ interface TagHeaderProps {
 const TagHeader = ({ onTagChange, isHidden }: TagHeaderProps) => {
 	const [isTagActive, setIsTagActive] = useState(false);
 
-	const isListening = useRef(false);
-
-	// キーボードショートカット処理
-	const handleKeyDown = (event: KeyboardEvent) => {
+	const handleKeyDown = useCallback((event: KeyboardEvent) => {
 		switch (event.key) {
 			case "t":
 				setIsTagActive(true);
@@ -31,13 +28,15 @@ const TagHeader = ({ onTagChange, isHidden }: TagHeaderProps) => {
 			default:
 				break;
 		}
-	};
+	}, []);
 
-	if (!isListening.current) {
-		// 初回レンダリング時にイベントリスナーを登録
+	// `keydown` イベントの追加とクリーンアップ
+	useEffect(() => {
 		document.addEventListener("keydown", handleKeyDown);
-		isListening.current = true;
-	}
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [handleKeyDown]);
 
 	// タグの変更処理
 	const handleTagClick = (tag: string) => {

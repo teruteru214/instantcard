@@ -11,7 +11,7 @@ import {
 	Play,
 	Shuffle,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import NoCard from "~/components/global/NoCard";
 import Speech from "~/components/global/Speech";
 import WordDetails from "~/components/global/WordDetails";
@@ -54,33 +54,36 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 		data: data, // data を state に保持
 	});
 
-	const isListening = useRef(false);
-
 	// キーバインドの処理
-	const handleKeyDown = (event: KeyboardEvent) => {
-		switch (event.key) {
-			case "f":
-				setSlide((prev) => ({ ...prev, isSizing: true }));
-				event.preventDefault();
-				break;
-			case "-":
-				setSlide((prev) => ({ ...prev, isSizing: false }));
-				event.preventDefault();
-				break;
-			case " ":
-			case "k":
-				setSlide((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
-				event.preventDefault();
-				break;
-			default:
-				break;
-		}
-	};
+	const handleKeyDown = useCallback(
+		(event: KeyboardEvent) => {
+			switch (event.key) {
+				case "f":
+					setIsSizing(true);
+					event.preventDefault();
+					break;
+				case "-":
+					setIsSizing(false);
+					event.preventDefault();
+					break;
+				case " ":
+				case "k":
+					setSlide((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
+					event.preventDefault();
+					break;
+				default:
+					break;
+			}
+		},
+		[setIsSizing],
+	);
 
-	if (!isListening.current) {
+	useEffect(() => {
 		document.addEventListener("keydown", handleKeyDown);
-		isListening.current = true;
-	}
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [handleKeyDown]);
 
 	// シャッフル関数
 	const shuffleSlides = (data: SlideWord[]) => {
