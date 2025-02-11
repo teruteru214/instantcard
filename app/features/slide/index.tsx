@@ -1,11 +1,5 @@
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "~/components/ui/select";
-
+import { useRef, useState } from "react";
+import TagHeader from "~/components/layout/TagHeader";
 import WordsSlide from "./components/WordsSlide";
 import type { SlideWord } from "./types";
 
@@ -39,19 +33,46 @@ const mockData: SlideWord[] = [
 ];
 
 const SlidePage = () => {
+	const isListening = useRef(false);
+	const [selectedTag, setSelectedTag] = useState<string | null>(null);
+	const [isSizing, setIsSizing] = useState(false);
+
+	// キーイベントを処理する関数
+	const handleKeyDown = (event: KeyboardEvent) => {
+		switch (event.key) {
+			case "+":
+				setIsSizing(true); // 拡大
+				break;
+			case "-":
+				setIsSizing(false); // 縮小
+				break;
+			default:
+				break;
+		}
+	};
+
+	// 初回レンダリング時にイベントリスナーを登録
+	if (!isListening.current) {
+		document.addEventListener("keydown", handleKeyDown);
+		isListening.current = true;
+	}
+
+	const fetchSlidesByTag = (tag: string | null): SlideWord[] => {
+		console.log(`Fetching slides for tag: ${tag}`);
+		return mockData;
+	};
+
 	return (
 		<div className="my-2 min-h-[95vh]">
-			<WordsSlide data={mockData}>
-				<Select>
-					<SelectTrigger className="w-[180px]">
-						<SelectValue placeholder="タグを選択する" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="プログラミング">プログラミング</SelectItem>
-						<SelectItem value="TOIEC">TOIEC</SelectItem>
-					</SelectContent>
-				</Select>
-			</WordsSlide>
+			{/* 拡大中はヘッダーを非表示にする */}
+			<TagHeader onTagChange={setSelectedTag} isHidden={isSizing} />
+
+			{/* WordsSlide に isSizing の状態を渡す */}
+			<WordsSlide
+				data={fetchSlidesByTag(selectedTag)}
+				isSizing={isSizing}
+				setIsSizing={setIsSizing}
+			/>
 		</div>
 	);
 };
