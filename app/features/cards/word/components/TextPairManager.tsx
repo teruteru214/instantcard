@@ -3,9 +3,9 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
 interface TextPair {
-	id: string;
+	id: number;
 	text: string;
-	meaning: string;
+	translation: string;
 }
 
 interface TextPairManagerProps {
@@ -14,7 +14,7 @@ interface TextPairManagerProps {
 	onChange: (newValue: TextPair[]) => void;
 	maxItems?: number;
 	textPlaceholder?: string;
-	meaningPlaceholder?: string;
+	translationPlaceholder?: string;
 }
 
 const TextPairManager = ({
@@ -23,26 +23,30 @@ const TextPairManager = ({
 	onChange,
 	maxItems = 5,
 	textPlaceholder = "英文",
-	meaningPlaceholder = "意味",
+	translationPlaceholder = "直訳",
 }: TextPairManagerProps) => {
 	const handleAdd = () => {
 		if (value.length < maxItems) {
 			const newItems = [
 				...value,
-				{ id: Math.random().toString(36).substr(2, 9), text: "", meaning: "" },
+				{
+					id: Date.now(), //idについては保存する際に渡さないようにする
+					text: "",
+					translation: "",
+				},
 			];
 			onChange(newItems);
 		}
 	};
 
-	const handleRemove = (id: string) => {
+	const handleRemove = (id: number) => {
 		const newItems = value.filter((item) => item.id !== id);
 		onChange(newItems);
 	};
 
 	const handleUpdate = (
-		id: string,
-		field: "text" | "meaning",
+		id: number,
+		field: "text" | "translation",
 		newValue: string,
 	) => {
 		const newItems = value.map((item) =>
@@ -78,11 +82,11 @@ const TextPairManager = ({
 								</span>
 								<div className="w-full">
 									<Input
-										value={item.meaning}
+										value={item.translation}
 										onChange={(e) =>
-											handleUpdate(item.id, "meaning", e.target.value)
+											handleUpdate(item.id, "translation", e.target.value)
 										}
-										placeholder={meaningPlaceholder}
+										placeholder={translationPlaceholder}
 									/>
 								</div>
 							</div>
