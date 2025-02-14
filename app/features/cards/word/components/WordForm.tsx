@@ -126,7 +126,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 		<>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<EditHeader tags={wordDetail.tags || []} />
+					<EditHeader tags={wordDetail.tags || []} word={wordDetail.word} />
 					<div className="mt-3 space-y-3">
 						<FormField
 							name="word"
