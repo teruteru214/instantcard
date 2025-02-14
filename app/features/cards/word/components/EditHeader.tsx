@@ -6,34 +6,23 @@ import { Button } from "~/components/ui/button";
 import type { Tag } from "~/types/word";
 
 interface EditHeaderProps {
-	isSaveEnabled: boolean;
 	tags: Tag[];
 }
 
-const EditHeader = ({ isSaveEnabled, tags }: EditHeaderProps) => {
+const EditHeader = ({ tags }: EditHeaderProps) => {
 	const navigate = useNavigate();
 
 	return (
 		<div className="sticky top-0 left-0 right-0 z-50 bg-white py-3 flex items-center justify-between">
-			<div className="space-x-2 flex items-center">
-				<Button
-					type="button"
-					variant="ghost"
-					size="icon"
-					onClick={() => navigate(-1)}
-				>
-					<ArrowLeft className="text-gray-400 hover:text-gray-500" />
-				</Button>
-				<Button
-					type="submit"
-					variant="black"
-					size="default"
-					disabled={!isSaveEnabled}
-					className="text-sm"
-				>
-					保存する
-				</Button>
-			</div>
+			<Button
+				type="button"
+				variant="ghost"
+				size="icon"
+				onClick={() => navigate(-1)}
+			>
+				<ArrowLeft className="text-gray-400 hover:text-gray-500" />
+			</Button>
+
 			<div className="space-x-2">
 				<TagsDropdownMenu
 					tags={tags}

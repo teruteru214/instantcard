@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ImageSetting from "~/components/global/ImageSetting";
+import { Button } from "~/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -125,10 +126,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 		<>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<EditHeader
-						isSaveEnabled={form.formState.isDirty}
-						tags={wordDetail.tags || []}
-					/>
+					<EditHeader tags={wordDetail.tags || []} />
 					<div className="mt-3 space-y-3">
 						<FormField
 							name="word"
@@ -185,78 +183,35 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 								</FormItem>
 							)}
 						/>
+						<div>
+							<Label className="mb-2">類義語</Label>
+							<TextPairManager
+								type="synonyms"
+								initialData={wordDetail.synonyms || []}
+							/>
+						</div>
+						<div>
+							<Label className="mb-2">対義語</Label>
+							<TextPairManager
+								type="antonyms"
+								initialData={wordDetail.antonyms || []}
+							/>
+						</div>
+						<div>
+							<Label className="mb-2">コロケーション</Label>
+							<TextPairManager
+								type="collocations"
+								initialData={wordDetail.collocations || []}
+							/>
+						</div>
 
-						<FormField
-							name="synonyms"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label>類義語</Label>
-									<FormControl>
-										<TextPairManager
-											addButtonLabel="類義語を追加"
-											value={field.value ?? []}
-											onChange={field.onChange}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							name="antonyms"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label>対義語</Label>
-									<FormControl>
-										<TextPairManager
-											addButtonLabel="対義語を追加"
-											value={field.value ?? []}
-											onChange={field.onChange}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							name="collocations"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label>コロケーション</Label>
-									<FormControl>
-										<TextPairManager
-											addButtonLabel="コロケーションを追加"
-											value={field.value ?? []}
-											onChange={field.onChange}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							name="examples"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label>例文</Label>
-									<FormControl>
-										<TextPairManager
-											addButtonLabel="例文を追加"
-											value={field.value ?? []}
-											onChange={field.onChange}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+						<div>
+							<Label className="mb-2">例文</Label>
+							<TextPairManager
+								type="examples"
+								initialData={wordDetail.examples || []}
+							/>
+						</div>
 
 						<FormField
 							name="other"
@@ -274,10 +229,19 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 					</div>
 				</form>
 			</Form>
-			<div className="my-3">
+			<div className="mt-3">
 				<Label>イメージ</Label>
 				<ImageSetting />
 			</div>
+			<Button
+				variant="black"
+				type="submit"
+				onClick={form.handleSubmit(onSubmit)}
+				disabled={!form.formState.isValid}
+				className="mb-3 ml-auto block"
+			>
+				更新する
+			</Button>
 		</>
 	);
 };
