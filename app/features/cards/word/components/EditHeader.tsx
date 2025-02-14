@@ -7,9 +7,10 @@ import type { Tag } from "~/types/word";
 
 interface EditHeaderProps {
 	tags: Tag[];
+	word: string;
 }
 
-const EditHeader = ({ tags }: EditHeaderProps) => {
+const EditHeader = ({ tags, word }: EditHeaderProps) => {
 	const navigate = useNavigate();
 
 	return (
@@ -37,7 +38,7 @@ const EditHeader = ({ tags }: EditHeaderProps) => {
 					}
 				/>
 				<DeleteModal
-					word="word"
+					word={word}
 					triggerElement={
 						<Button
 							type="button"
