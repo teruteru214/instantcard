@@ -16,7 +16,7 @@ export default defineConfig({
 					route("/login", "features/login/index.tsx");
 					route("/search", "features/search/index.tsx");
 					route("cards", "features/cards/index.tsx");
-					route("cards/:word", "features/cards/word.tsx");
+					route("cards/:word", "features/cards/word/index.tsx");
 					route("/quiz", "features/quiz/index.tsx");
 					route("/slide", "features/slide/index.tsx");
 					route("*", "features/not-found.tsx");
