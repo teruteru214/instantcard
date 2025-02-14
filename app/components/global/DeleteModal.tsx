@@ -17,10 +17,10 @@ const DeleteModal = ({ word, triggerElement }: DeleteProps) => {
 		<Dialog>
 			<DialogTrigger asChild>{triggerElement}</DialogTrigger>
 			<DialogContent aria-labelledby="delete-modal-title">
-				<DialogHeader>カードを削除しますか？</DialogHeader>
+				<DialogHeader>カードをゴミ箱に入れますか？</DialogHeader>
 				<p className="text-gray-400 text-center">"{word}"のカードを選択中</p>
 				<Button size="giant" variant="destructive" aria-label="削除">
-					削除
+					削除する
 				</Button>
 				<DialogClose>
 					<Button
