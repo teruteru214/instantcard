@@ -2,7 +2,6 @@ import WordForm from "./components/WordForm";
 import type { WordDetail } from "./types";
 
 const mockData: WordDetail = {
-	id: 1,
 	tags: [
 		{ id: 1, name: "果物", check: true },
 		{ id: 2, name: "食べ物", check: false },

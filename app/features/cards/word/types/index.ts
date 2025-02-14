@@ -25,7 +25,6 @@ interface Example {
 }
 
 export interface WordDetail {
-	id: number;
 	tags?: Tag[];
 	word: string;
 	translation: string;
