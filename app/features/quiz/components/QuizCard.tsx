@@ -8,33 +8,52 @@ import {
 	FormItem,
 	FormMessage,
 } from "~/components/ui/form";
-import CollocationModal from "./CollocationModal";
+import { frequencyLabel } from "~/utils/frequencyLabel";
+import AntonymsModal from "./AntonymsModal";
+import ExampleModal from "./ExampleModal";
 import ImageModal from "./ImageModal";
 
 interface QuizProps {
 	quiz: {
-		id: number;
 		word: string;
 		translation: string;
+		frequency: number;
 	};
 	options: string[];
 	index: number;
+	totalCount: number;
 	scrollToNext: () => void;
 }
 
-const QuizCard = ({ quiz, options, index, scrollToNext }: QuizProps) => {
+const QuizCard = ({
+	quiz,
+	options,
+	index,
+	totalCount,
+	scrollToNext,
+}: QuizProps) => {
+	const { label, variant } = frequencyLabel(quiz.frequency);
+
 	return (
-		<Card id={`quiz-card-${index}`} className="p-5">
-			<div className="flex flex-col space-y-4">
-				<h1 className="text-2xl font-bold">{quiz.word}</h1>
+		<Card id={`quiz-card-${index}`} className="p-4">
+			<div className="flex flex-col">
 				<div className="flex justify-between items-center">
-					<p>正しい答えを選んでください</p>
-					<Speech word={quiz.word} size={20} />
+					<Badge variant={variant} size="sm">
+						{label}
+					</Badge>
+					<p>
+						{index + 1}/{totalCount}
+					</p>
 				</div>
+				<h1 className="my-16 text-center text-2xl font-bold">{quiz.word}</h1>
 				<FormField
 					name={`answers.${index}`}
 					render={({ field }) => (
 						<FormItem>
+							<div className="flex justify-between items-center">
+								<p>正しい答えを選んでください</p>
+								<Speech word={quiz.word} size={20} />
+							</div>
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 								{options.map((option) => (
 									<FormControl key={option}>
@@ -56,21 +75,14 @@ const QuizCard = ({ quiz, options, index, scrollToNext }: QuizProps) => {
 						</FormItem>
 					)}
 				/>
-				<div className="flex justify-center block sm:hidden">
-					<ImageModal />
-					<CollocationModal />
-				</div>
-				<div className="flex justify-between items-center">
-					<div className="space-x-2 flex items-center">
-						<p className="text-xs sm:text-base">頻度:</p>
-						<Badge variant="destructive">🥇目から鱗</Badge>
-					</div>
-					<div className="hidden sm:block">
-						<ImageModal />
-						<CollocationModal />
+				<div className="mt-2 flex justify-between items-center">
+					<div>
+						<ExampleModal word={quiz.word} />
+						<AntonymsModal word={quiz.word} />
+						<ImageModal word={quiz.word} />
 					</div>
 					<span
-						className="text-xs sm:text-base text-gray-400 hover:text-gray-500 hover:underline cursor-pointer"
+						className=" text-gray-400 hover:text-gray-500 hover:underline cursor-pointer"
 						onClick={scrollToNext}
 						onKeyUp={(e) => {
 							if (e.key === "Enter" || e.key === "Space") {
