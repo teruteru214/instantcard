@@ -34,6 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					<Badge
 						className="absolute right-3 top-5 animate-fade cursor-pointer"
 						onClick={handleSearch} // Badgeのクリックで検索をトリガー
+						size="sm"
 					>
 						<span className="sm:hidden">click</span>
 						<span className="hidden sm:inline">Enter or click</span>
