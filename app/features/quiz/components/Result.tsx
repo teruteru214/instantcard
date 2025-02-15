@@ -1,5 +1,6 @@
-import { Link } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { Circle, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import WordDetails from "~/components/global/WordDetails";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -12,6 +13,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "~/components/ui/table";
+import { getBadgeVariant } from "../utils";
 
 interface ResultProps {
 	result: {
@@ -23,28 +25,32 @@ interface ResultProps {
 }
 
 const Result = ({ result }: ResultProps) => {
+	const navigate = useNavigate();
 	const correctCount = result.filter((item) => item.isCorrect).length;
-	const totalCount = result.length;
+	const percentage = Math.round((correctCount / result.length) * 100);
 
-	const getBadgeVariant = (correctCount: number, totalCount: number) => {
-		const percentage = Math.round((correctCount / totalCount) * 100);
-		if (percentage >= 90) return "excellent";
-		if (percentage >= 70) return "good";
-		if (percentage >= 50) return "average";
-		return "outline";
-	};
+	const [animatedValue, setAnimatedValue] = useState(0);
 
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setAnimatedValue(percentage);
+		}, 50);
+
+		return () => clearTimeout(timeout);
+	}, [percentage]);
+
+	const { variant, emoji } = getBadgeVariant(correctCount, result.length);
 	return (
-		<div className="my-20 space-y-4">
+		<div className="mt-20 mb-7 space-y-4">
 			<h2 id="result" className="text-2xl text-center">
 				結果発表
 			</h2>
-			<Progress value={(correctCount / totalCount) * 100} />
+			<Progress value={animatedValue} />
+
 			<div className="flex items-center gap-2">
 				<p className="text-lg font-semibold">正答率:</p>
-				{""}
-				<Badge variant={getBadgeVariant(correctCount, totalCount)}>
-					{Math.round((correctCount / totalCount) * 100)}%
+				<Badge variant={variant} size="sm">
+					{emoji} {percentage} %
 				</Badge>
 			</div>
 			<Table>
@@ -84,14 +90,11 @@ const Result = ({ result }: ResultProps) => {
 				</TableBody>
 			</Table>
 			<div className="flex flex-col items-center space-y-4 mt-4">
-				<Button className="w-64" size="giant">
+				<Button className="w-64" size="giant" onClick={() => navigate(0)}>
 					再チャレンジ
 				</Button>
 				<Button className="w-64" size="giant">
 					正解したカードを捨てる
-				</Button>
-				<Button className="w-64" size="giant">
-					<Link to="/search">カードを整理する</Link>
 				</Button>
 			</div>
 		</div>

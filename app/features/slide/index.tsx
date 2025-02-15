@@ -33,22 +33,16 @@ const mockData: SlideWord[] = [
 ];
 
 const SlidePage = () => {
-	const [selectedTag, setSelectedTag] = useState<string | null>(null);
 	const [isSizing, setIsSizing] = useState(false);
-
-	const fetchSlidesByTag = (tag: string | null): SlideWord[] => {
-		console.log(`Fetching slides for tag: ${tag}`);
-		return mockData;
-	};
 
 	return (
 		<div className="my-2 min-h-[95vh]">
 			{/* 拡大中はヘッダーを非表示にする */}
-			<TagHeader onTagChange={setSelectedTag} isHidden={isSizing} />
+			<TagHeader isHidden={isSizing} totalCount={mockData.length} />
 
 			{/* WordsSlide に isSizing の状態を渡す */}
 			<WordsSlide
-				data={fetchSlidesByTag(selectedTag)}
+				data={mockData}
 				isSizing={isSizing}
 				setIsSizing={setIsSizing}
 			/>
