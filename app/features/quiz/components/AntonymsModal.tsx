@@ -1,4 +1,4 @@
-import { Link } from "lucide-react";
+import { GitCompare } from "lucide-react";
 import Speech from "~/components/global/Speech";
 import { Button } from "~/components/ui/button";
 import {
@@ -8,7 +8,7 @@ import {
 	DialogTrigger,
 } from "~/components/ui/dialog";
 
-const CollocationModal = () => {
+const AntonymsModal = ({ word }: { word: string }) => {
 	const collocations = [
 		{ text: "example 1" },
 		{ text: "example 2" },
@@ -19,12 +19,12 @@ const CollocationModal = () => {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button variant="ghost" size="icon" type="button">
-					<Link />
+					<GitCompare />
 				</Button>
 			</DialogTrigger>
 			<DialogContent aria-labelledby="collocation-modal-title">
 				<h1 id="collocation-modal-title" className="text-xl text-center">
-					"example"コロケーション
+					{word} の対義語
 				</h1>
 				<div>
 					{collocations.map((collocation) => (
@@ -52,4 +52,4 @@ const CollocationModal = () => {
 	);
 };
 
-export default CollocationModal;
+export default AntonymsModal;

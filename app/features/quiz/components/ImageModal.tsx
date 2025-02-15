@@ -7,7 +7,7 @@ import {
 	DialogTrigger,
 } from "~/components/ui/dialog";
 
-const ImageModal = () => {
+const ImageModal = ({ word }: { word: string }) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -17,7 +17,7 @@ const ImageModal = () => {
 			</DialogTrigger>
 			<DialogContent aria-labelledby="image-modal-title">
 				<h1 id="image-modal-title" className="text-xl text-center">
-					"example"のイメージ
+					{word} のイメージ
 				</h1>
 				<div className="flex justify-center">
 					<div

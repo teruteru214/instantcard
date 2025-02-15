@@ -8,17 +8,19 @@ const shuffleArray = (array: string[]) => {
 };
 
 export const generateEnhancedQuizData = (
-	quizData: { id: number; word: string; translation: string }[],
+	quizData: { word: string; translation: string; frequency: number }[],
 ) => {
 	return quizData.map((quiz) => {
 		const otherTranslations = quizData
-			.filter((q) => q.id !== quiz.id)
+			.filter((q) => q.word !== quiz.word)
 			.map((q) => q.translation);
+
 		const options = shuffleArray([
 			quiz.translation,
 			...otherTranslations.slice(0, 3),
 		]);
-		return { ...quiz, options };
+
+		return { ...quiz, options, frequency: quiz.frequency };
 	});
 };
 
@@ -77,4 +79,19 @@ export const scrollToNext = (index: number) => {
 
 export const scrollToResult = () => {
 	if (isClient) scrollToElement("result");
+};
+
+export const getBadgeVariant = (
+	correctCount: number,
+	totalCount: number,
+): {
+	variant: "excellent" | "good" | "info" | "destructive";
+	emoji: string;
+} => {
+	const percentage = Math.round((correctCount / totalCount) * 100);
+
+	if (percentage >= 90) return { variant: "excellent", emoji: "🏆" };
+	if (percentage >= 70) return { variant: "good", emoji: "😃" };
+	if (percentage >= 50) return { variant: "info", emoji: "😐" };
+	return { variant: "destructive", emoji: "😢" }; //
 };

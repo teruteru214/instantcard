@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from "@remix-run/react"; // Remix の useNavigate, useLocation
 import { Tag, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
@@ -9,13 +10,15 @@ import {
 	TooltipTrigger,
 } from "../ui/tooltip";
 
-interface TagHeaderProps {
-	onTagChange?: (selectedTag: string | null) => void;
-	isHidden?: boolean; // 追加: 拡大時に非表示にするため
-}
-
-const TagHeader = ({ onTagChange, isHidden }: TagHeaderProps) => {
+const TagHeader = ({
+	isHidden,
+	totalCount,
+}: { isHidden?: boolean; totalCount: number }) => {
 	const [isTagActive, setIsTagActive] = useState(false);
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const tags: string[] = [];
 
 	const handleKeyDown = useCallback((event: KeyboardEvent) => {
 		switch (event.key) {
@@ -30,7 +33,6 @@ const TagHeader = ({ onTagChange, isHidden }: TagHeaderProps) => {
 		}
 	}, []);
 
-	// `keydown` イベントの追加とクリーンアップ
 	useEffect(() => {
 		document.addEventListener("keydown", handleKeyDown);
 		return () => {
@@ -38,14 +40,11 @@ const TagHeader = ({ onTagChange, isHidden }: TagHeaderProps) => {
 		};
 	}, [handleKeyDown]);
 
-	// タグの変更処理
 	const handleTagClick = (tag: string) => {
-		if (onTagChange) {
-			onTagChange(tag);
-		}
+		const currentPath = location.pathname;
+		navigate(`${currentPath}?tag=${encodeURIComponent(tag)}`);
 	};
 
-	// `isHidden` が true ならヘッダーを非表示にする
 	if (isHidden) return null;
 
 	return (
@@ -53,8 +52,8 @@ const TagHeader = ({ onTagChange, isHidden }: TagHeaderProps) => {
 			<div className="flex items-center justify-between">
 				<Badge>
 					Global
-					<p className="ml-1 flex items-center justify-center h-[16px] aspect-square rounded-full p-[1.5px] text-[10px] text-black bg-white">
-						67
+					<p className="ml-1 flex items-center justify-center h-[16px] aspect-square rounded-full p-[1.5px] text-xs text-black bg-white">
+						{totalCount}
 					</p>
 				</Badge>
 				<TooltipProvider>
@@ -83,25 +82,34 @@ const TagHeader = ({ onTagChange, isHidden }: TagHeaderProps) => {
 				</TooltipProvider>
 			</div>
 
-			{isTagActive && (
+			{isTagActive && tags.length > 0 && (
 				<div className="my-5 flex flex-wrap gap-2">
-					<Badge
-						variant="outline"
-						size="sm"
-						className="animate-fade-up"
-						onClick={() => handleTagClick("TOEIC")}
-					>
-						TOEIC
-					</Badge>
-					<Badge
-						variant="outline"
-						size="sm"
-						className="animate-fade-up"
-						onClick={() => handleTagClick("プログラミング")}
-					>
-						プログラミング
-					</Badge>
+					{tags.map((tag) => (
+						<Badge
+							key={tag}
+							variant="outline"
+							size="sm"
+							className="animate-fade-up cursor-pointer"
+							onClick={() => handleTagClick(tag)}
+						>
+							{tag}
+						</Badge>
+					))}
 				</div>
+			)}
+
+			{isTagActive && tags.length === 0 && (
+				<p className="my-5 text-center text-gray-400 animate-fade-up">
+					タグがありません。{" "}
+					<button
+						type="button"
+						className="underline hover:text-gray-500"
+						onClick={() => navigate("/create")}
+					>
+						英単語カード
+					</button>
+					をタグで分類できます。
+				</p>
 			)}
 		</header>
 	);

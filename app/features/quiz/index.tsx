@@ -1,13 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@remix-run/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import NoCard from "~/components/global/NoCard";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
 
+import TagHeader from "~/components/layout/TagHeader";
 import QuizCard from "./components/QuizCard";
-import QuizHeader from "./components/QuizHeader";
 import Result from "./components/Result";
 import {
 	generateEnhancedQuizData,
@@ -17,24 +16,24 @@ import {
 
 const quizData = [
 	{
-		id: 1,
 		word: "What shall we do?",
 		translation: "私たちは何をしましょうか？",
+		frequency: 7,
 	},
 	{
-		id: 2,
 		word: "Where are you from?",
 		translation: "あなたはどこから来ましたか？",
+		frequency: 8,
 	},
 	{
-		id: 3,
 		word: "How old are you?",
 		translation: "あなたは何歳ですか？",
+		frequency: 6,
 	},
 	{
-		id: 4,
 		word: "What is your name?",
 		translation: "あなたの名前は何ですか？",
+		frequency: 9,
 	},
 ];
 
@@ -49,8 +48,6 @@ const quizSchema = z.object({
 const enhancedQuizData = generateEnhancedQuizData(quizData);
 
 const QuizPage = () => {
-	const navigate = useNavigate();
-
 	const form = useForm({
 		resolver: zodResolver(quizSchema),
 		defaultValues: {
@@ -59,33 +56,26 @@ const QuizPage = () => {
 	});
 
 	const onSubmit = async () => {
-		navigate("#result", { replace: true });
+		console.log(form.getValues());
 	};
 
 	const answers = form.watch("answers");
-	const currentAnswerCount = form
-		.watch("answers")
-		.filter((answer) => answer && answer.trim() !== "").length;
 
 	return (
 		<>
+			<TagHeader totalCount={enhancedQuizData.length} />
 			{enhancedQuizData.length === 0 ? (
 				<NoCard type="quiz" />
 			) : (
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						<QuizHeader
-							isSaveEnabled={form.formState.isDirty && form.formState.isValid}
-							currentAnswerCount={currentAnswerCount}
-							totalQuizCount={enhancedQuizData.length}
-							isFinished={form.formState.isSubmitted}
-						/>
 						{enhancedQuizData.map((quiz, index) => (
 							<QuizCard
-								key={quiz.id}
+								key={quiz.word}
 								quiz={quiz}
 								options={quiz.options}
 								index={index}
+								totalCount={enhancedQuizData.length}
 								scrollToNext={() => scrollToNext(index)}
 							/>
 						))}
