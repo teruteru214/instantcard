@@ -188,7 +188,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 				variant="black"
 				type="submit"
 				onClick={form.handleSubmit(onSubmit)}
-				disabled={!form.formState.isValid}
+				disabled={!form.formState.isValid || !form.formState.isDirty}
 				className="mb-3 ml-auto block"
 			>
 				更新する
