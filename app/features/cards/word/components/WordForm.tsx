@@ -36,62 +36,6 @@ const formSchema = z.object({
 			message: "意味は300文字以内で入力してください",
 		})
 		.optional(),
-	synonyms: z
-		.array(
-			z.object({
-				id: z.number(),
-				text: z.string().max(50, {
-					message: "英文は50文字以内で入力してください",
-				}),
-				translation: z.string().max(200, {
-					message: "翻訳は200文字以内で入力してください",
-				}),
-			}),
-		)
-		.max(5, { message: "類義語は最大5件まで入力できます" })
-		.optional(),
-	antonyms: z
-		.array(
-			z.object({
-				id: z.number(),
-				text: z.string().max(50, {
-					message: "英文は50文字以内で入力してください",
-				}),
-				translation: z.string().max(100, {
-					message: "翻訳は100文字以内で入力してください",
-				}),
-			}),
-		)
-		.max(5, { message: "対義語は最大5件まで入力できます" })
-		.optional(),
-	collocations: z
-		.array(
-			z.object({
-				id: z.number(),
-				text: z.string().max(100, {
-					message: "英文は100文字以内で入力してください",
-				}),
-				translation: z.string().max(200, {
-					message: "翻訳は200文字以内で入力してください",
-				}),
-			}),
-		)
-		.max(5, { message: "コロケーションは最大5件まで入力できます" })
-		.optional(),
-	examples: z
-		.array(
-			z.object({
-				id: z.number(),
-				text: z.string().max(200, {
-					message: "英文は200文字以内で入力してください",
-				}),
-				translation: z.string().max(300, {
-					message: "翻訳は300文字以内で入力してください",
-				}),
-			}),
-		)
-		.max(5, { message: "例文は最大5件まで入力できます" })
-		.optional(),
 	other: z
 		.string()
 		.max(500, {
@@ -110,10 +54,6 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 			translation: wordDetail.translation || "",
 			pronunciation: wordDetail.pronunciation || "",
 			meaning: wordDetail.meaning || "",
-			synonyms: wordDetail.synonyms || [],
-			antonyms: wordDetail.antonyms || [],
-			collocations: wordDetail.collocations || [],
-			examples: wordDetail.examples || [],
 			other: wordDetail.other || "",
 		},
 	});
@@ -183,25 +123,34 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 								</FormItem>
 							)}
 						/>
+
 						<div>
 							<Label className="mb-2">類義語</Label>
 							<TextPairManager
 								type="synonyms"
 								initialData={wordDetail.synonyms || []}
+								maxTextLength={50}
+								maxTranslationLength={1000}
 							/>
 						</div>
+
 						<div>
 							<Label className="mb-2">対義語</Label>
 							<TextPairManager
 								type="antonyms"
 								initialData={wordDetail.antonyms || []}
+								maxTextLength={50}
+								maxTranslationLength={100}
 							/>
 						</div>
+
 						<div>
 							<Label className="mb-2">コロケーション</Label>
 							<TextPairManager
 								type="collocations"
 								initialData={wordDetail.collocations || []}
+								maxTextLength={100}
+								maxTranslationLength={200}
 							/>
 						</div>
 
@@ -210,6 +159,8 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 							<TextPairManager
 								type="examples"
 								initialData={wordDetail.examples || []}
+								maxTextLength={100}
+								maxTranslationLength={200}
 							/>
 						</div>
 

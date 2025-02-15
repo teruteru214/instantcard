@@ -5,30 +5,20 @@ import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
-// 🔥 バリデーションスキーマ
-const textPairSchema = z.object({
-	items: z
-		.array(
-			z.object({
-				id: z.number(),
-				text: z
-					.string()
-					.nonempty({ message: "英文を入力してください" })
-					.max(200, { message: "英文は200文字以内で入力してください" }),
-				translation: z
-					.string()
-					.nonempty({ message: "翻訳を入力してください" })
-					.max(300, { message: "翻訳は300文字以内で入力してください" }),
-			}),
-		)
-		.max(5, { message: "最大5件まで入力できます" }),
-});
-
-type TextPairFormData = z.infer<typeof textPairSchema>;
+// 🔥 型の定義
+type TextPairFormData = {
+	items: {
+		id: number;
+		text: string;
+		translation: string;
+	}[];
+};
 
 interface TextPairManagerProps {
 	type: "synonyms" | "antonyms" | "collocations" | "examples";
 	initialData: { id: number; text: string; translation: string }[];
+	maxTextLength: number;
+	maxTranslationLength: number;
 }
 
 const TYPE_LABELS = {
@@ -38,7 +28,34 @@ const TYPE_LABELS = {
 	examples: "例文",
 };
 
-const TextPairManager = ({ type, initialData }: TextPairManagerProps) => {
+const TextPairManager = ({
+	type,
+	initialData,
+	maxTextLength,
+	maxTranslationLength,
+}: TextPairManagerProps) => {
+	const textPairSchema = z.object({
+		items: z
+			.array(
+				z.object({
+					id: z.number(),
+					text: z
+						.string()
+						.nonempty({ message: "英文を入力してください" })
+						.max(maxTextLength, {
+							message: `英文は${maxTextLength}文字以内で入力してください`,
+						}),
+					translation: z
+						.string()
+						.nonempty({ message: "翻訳を入力してください" })
+						.max(maxTranslationLength, {
+							message: `翻訳は${maxTranslationLength}文字以内で入力してください`,
+						}),
+				}),
+			)
+			.max(5, { message: "最大5件まで入力できます" }),
+	});
+
 	const {
 		control,
 		handleSubmit,
@@ -54,14 +71,12 @@ const TextPairManager = ({ type, initialData }: TextPairManagerProps) => {
 		name: "items",
 	});
 
-	// 🔥 データ追加
 	const handleAdd = () => {
 		if (fields.length < 5) {
 			append({ id: Date.now(), text: "", translation: "" });
 		}
 	};
 
-	// 🔥 送信（仮）
 	const onSubmit = (data: TextPairFormData) => {
 		console.log(`${TYPE_LABELS[type]} を保存:`, data.items);
 	};
