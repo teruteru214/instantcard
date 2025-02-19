@@ -24,7 +24,7 @@ const TagsDropdownMenu = ({ triggerElement, tags }: TagsProps) => {
 				<DropdownMenuSeparator />
 				<Link
 					to="/settings/tags"
-					className="px-2 py-2 text-sm text-gray-500 hover:underline"
+					className="px-1 py-2 text-sm text-gray-500 hover:underline"
 				>
 					タグを編集する →
 				</Link>
