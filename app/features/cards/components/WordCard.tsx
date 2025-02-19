@@ -1,9 +1,10 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Trash2 } from "lucide-react";
-import DeleteModal from "~/components/global/DeleteModal";
+
 import WordDetails from "~/components/global/WordDetails";
 import { Card } from "~/components/ui/card";
+import DeleteModal from "./DeleteModal";
 
 interface WordCardProps {
 	word: string;

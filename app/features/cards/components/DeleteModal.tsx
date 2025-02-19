@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react"; // 🔥 RemixのLinkをインポート
 import { Button } from "~/components/ui/button";
 import {
 	Dialog,
@@ -17,10 +18,18 @@ const DeleteModal = ({ word, triggerElement }: DeleteProps) => {
 		<Dialog>
 			<DialogTrigger asChild>{triggerElement}</DialogTrigger>
 			<DialogContent aria-labelledby="delete-modal-title">
-				<DialogHeader>カードをゴミ箱に入れますか？</DialogHeader>
-				<p className="text-gray-400 text-center">"{word}"のカードを選択中</p>
+				<DialogHeader>このタグからカードを削除しますか？</DialogHeader>
+				<p className="text-gray-400 text-center">
+					"{word}" のカードをこのタグから削除します。
+					<br />
+					削除しても
+					<Link to={`/cards/${word}`} className="underline hover:text-gray-500">
+						編集
+					</Link>
+					でタグを再追加できます。
+				</p>
 				<Button size="giant" variant="destructive" aria-label="削除">
-					削除する
+					タグから削除
 				</Button>
 				<DialogClose>
 					<Button
