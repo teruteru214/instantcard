@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
 import { Trash2 } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
-// 🔥 型の定義
 type TextPairFormData = {
 	items: {
 		id: number;
@@ -15,7 +15,13 @@ type TextPairFormData = {
 };
 
 interface TextPairManagerProps {
-	type: "synonyms" | "antonyms" | "collocations" | "examples";
+	type:
+		| "synonyms"
+		| "antonyms"
+		| "collocations"
+		| "examples"
+		| "derivations"
+		| "phrasal_verbs";
 	initialData: { id: number; text: string; translation: string }[];
 	maxTextLength: number;
 	maxTranslationLength: number;
@@ -26,6 +32,8 @@ const TYPE_LABELS = {
 	antonyms: "対義語",
 	collocations: "コロケーション",
 	examples: "例文",
+	derivations: "派生語",
+	phrasal_verbs: "句動詞",
 };
 
 const TextPairManager = ({
@@ -98,63 +106,79 @@ const TextPairManager = ({
 					variant="black"
 					disabled={!isValid || !isDirty}
 				>
-					{TYPE_LABELS[type]}を更新
+					更新する
 				</Button>
 			</div>
 
-			{fields.map((item, index) => (
-				<div key={item.id}>
-					<div className="flex items-start gap-2 w-full">
-						<div className="flex-1 space-y-2">
-							<div className="flex items-center gap-1">
-								<span className="text-sm font-medium whitespace-nowrap">
-									英文:
-								</span>
-								<div className="w-full">
-									<Input
-										{...control.register(`items.${index}.text`)}
-										placeholder="英文"
-									/>
-								</div>
-							</div>
-							{errors.items?.[index]?.text && (
-								<p className="text-red-500 text-xs">
-									{errors.items[index]?.text?.message}
-								</p>
-							)}
+			{fields.map((item, index) => {
+				const errorCount = [
+					errors.items?.[index]?.text,
+					errors.items?.[index]?.translation,
+				].filter(Boolean).length;
 
-							<div className="flex items-center gap-1">
-								<span className="text-sm font-medium whitespace-nowrap">
-									意味:
-								</span>
-								<div className="w-full">
-									<Input
-										{...control.register(`items.${index}.translation`)}
-										placeholder="意味"
-									/>
+				const minHeightClass =
+					errorCount === 0
+						? "min-h-[88px]"
+						: errorCount === 1
+							? "min-h-[112px]"
+							: "min-h-[136px]";
+
+				return (
+					<div key={item.id}>
+						<div className="flex items-stretch gap-2 w-full">
+							<div className="flex-1 space-y-2">
+								<div className="flex items-center gap-1">
+									<span className="text-sm font-bold whitespace-nowrap">
+										英文:
+									</span>
+									<div className="w-full">
+										<Input
+											{...control.register(`items.${index}.text`)}
+											placeholder="英文を入力してください"
+										/>
+									</div>
 								</div>
+								{errors.items?.[index]?.text && (
+									<p className="text-red-500 text-xs">
+										{errors.items[index]?.text?.message}
+									</p>
+								)}
+
+								<div className="flex items-center gap-1">
+									<span className="text-sm font-bold whitespace-nowrap">
+										翻訳:
+									</span>
+									<div className="w-full">
+										<Input
+											{...control.register(`items.${index}.translation`)}
+											placeholder="翻訳を入力してください"
+										/>
+									</div>
+								</div>
+								{errors.items?.[index]?.translation && (
+									<p className="text-red-500 text-xs">
+										{errors.items[index]?.translation?.message}
+									</p>
+								)}
 							</div>
-							{errors.items?.[index]?.translation && (
-								<p className="text-red-500 text-xs">
-									{errors.items[index]?.translation?.message}
-								</p>
-							)}
+
+							<Button
+								type="button"
+								variant="destructive"
+								size="sm"
+								className={clsx(minHeightClass)}
+								onClick={() => remove(index)}
+							>
+								<Trash2 />
+							</Button>
 						</div>
 
-						<Button
-							type="button"
-							variant="destructive"
-							size="icon"
-							className="h-[88px]"
-							onClick={() => remove(index)}
-						>
-							<Trash2 />
-						</Button>
+						{index < fields.length - 1 && (
+							<hr className="my-3 border-gray-300" />
+						)}
 					</div>
-
-					{index < fields.length - 1 && <hr className="my-3 border-gray-300" />}
-				</div>
-			))}
+				);
+			})}
 		</div>
 	);
 };

@@ -36,12 +36,19 @@ const LabeledCheckbox = ({
 	onCheckedChange: (checked: boolean) => void;
 }) => {
 	const id = React.useId();
+
+	const handleCheckedChange = (checked: boolean | "indeterminate") => {
+		if (typeof checked === "boolean") {
+			onCheckedChange(checked);
+		}
+	};
+
 	return (
 		<label htmlFor={id} className="flex items-center space-x-2 cursor-pointer">
 			<Checkbox
 				id={id}
 				checked={checked}
-				onCheckedChange={onCheckedChange}
+				onCheckedChange={handleCheckedChange}
 				{...props}
 			/>
 			<span>{label}</span>
