@@ -36,7 +36,7 @@ const SlidePage = () => {
 	const [isSizing, setIsSizing] = useState(false);
 
 	return (
-		<div className="my-2 min-h-[95vh]">
+		<div className="min-h-[95vh]">
 			{/* 拡大中はヘッダーを非表示にする */}
 			<TagHeader isHidden={isSizing} totalCount={mockData.length} />
 
