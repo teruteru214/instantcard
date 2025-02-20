@@ -1,102 +1,109 @@
-import {
-	DndContext,
-	type DragEndEvent,
-	type DragOverEvent,
-	DragOverlay,
-	type DragStartEvent,
-	type UniqueIdentifier,
-	pointerWithin,
-} from "@dnd-kit/core";
+import { DndContext, type DragEndEvent, closestCenter } from "@dnd-kit/core";
 import {
 	SortableContext,
 	arrayMove,
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import DropZone from "./components/DropZone";
-import FilterInput from "./components/FilterInput";
-import WordCard from "./components/WordCard";
+import TagHeader from "~/components/layout/TagHeader";
+
+import WordList from "./components/WordList";
+import type { WordData } from "./types";
+import {
+	generateInitialPositions,
+	getFirstPosition,
+	getLastPosition,
+	getMiddlePosition,
+} from "./utils/lexorank";
+
+const wordsList = [
+	"apple",
+	"banana",
+	"cherry",
+	"date",
+	"elderberry",
+	"fig",
+	"grape",
+	"honeydew",
+	"kiwi",
+	"lemon",
+	"mango",
+	"nectarine",
+	"orange",
+	"papaya",
+	"quince",
+	"raspberry",
+	"strawberry",
+	"tangerine",
+	"ugli fruit",
+	"vanilla",
+	"watermelon",
+	"xigua",
+	"yellow passion fruit",
+	"zucchini",
+];
+
+// `position` を `LexoRank` で生成
+const initialWords: WordData[] = generateInitialPositions(wordsList);
 
 const CardsPage = () => {
-	const [words, setWords] = useState<UniqueIdentifier[]>([
-		"apple",
-		"banana",
-		"cherry",
-		"date",
-		"elderberry",
-		"fig",
-		"grape",
-		"honeydew",
-		"kiwi",
-		"lemon",
-		"mango",
-		"nectarine",
-		"orange",
-		"papaya",
-		"quince",
-		"raspberry",
-		"strawberry",
-		"tangerine",
-		"ugli fruit",
-		"vanilla",
-		"watermelon",
-		"xigua",
-		"yellow passion fruit",
-		"zucchini",
-	]);
-
-	const [activeWord, setActiveWord] = useState<UniqueIdentifier | null>(null);
-
-	const handleDragStart = (event: DragStartEvent) => {
-		setActiveWord(event.active.id);
-	};
-
-	const handleDragOver = (event: DragOverEvent) => {
-		const { over } = event;
-
-		if (!over || over.id === "dropzone") {
-			return;
-		}
-	};
+	const [words, setWords] = useState<WordData[]>(initialWords);
 
 	const handleDragEnd = (event: DragEndEvent) => {
 		const { active, over } = event;
+		if (!over || active.id === over.id) return;
 
-		setActiveWord(null);
+		const draggedItemIndex = words.findIndex(
+			(word) => word.position === active.id,
+		);
+		const targetIndex = words.findIndex((word) => word.position === over.id);
 
-		if (!over) return;
+		if (draggedItemIndex === -1 || targetIndex === -1) return;
 
-		if (over.id === "dropzone") {
-			setWords((prev) => prev.filter((word) => word !== active.id));
-		} else if (active.id !== over.id) {
-			const oldIndex = words.indexOf(active.id);
-			const newIndex = words.indexOf(over.id);
-			if (oldIndex !== -1 && newIndex !== -1) {
-				setWords(arrayMove(words, oldIndex, newIndex));
-			}
+		// 移動先の前後の position を取得
+		let newPosition: string;
+
+		if (targetIndex === 0) {
+			// 先頭に移動
+			newPosition = getFirstPosition();
+		} else if (targetIndex === words.length - 1) {
+			// 末尾に移動
+			newPosition = getLastPosition();
+		} else {
+			// 途中に移動
+			const prevPosition = words[targetIndex - 1].position;
+			const nextPosition = words[targetIndex].position;
+			newPosition = getMiddlePosition(prevPosition, nextPosition);
 		}
+
+		// 更新された words 配列を作成
+		const updatedWords = arrayMove(words, draggedItemIndex, targetIndex).map(
+			(word, index) =>
+				index === targetIndex ? { ...word, position: newPosition } : word,
+		);
+
+		console.log("🔷 更新前:", JSON.stringify(words, null, 2));
+		console.log("🔶 更新後:", JSON.stringify(updatedWords, null, 2));
+
+		setWords(updatedWords);
 	};
 
 	return (
-		<DndContext
-			collisionDetection={pointerWithin}
-			onDragStart={handleDragStart}
-			onDragOver={handleDragOver}
-			onDragEnd={handleDragEnd}
-			autoScroll={{
-				threshold: { x: 0.2, y: 0.2 },
-				acceleration: 70,
-			}}
-		>
-			<SortableContext items={words} strategy={verticalListSortingStrategy}>
-				<FilterInput words={words}>
-					<DropZone />
-				</FilterInput>
-			</SortableContext>
-			<DragOverlay>
-				{activeWord ? <WordCard word={activeWord} isOverlay /> : null}
-			</DragOverlay>
-		</DndContext>
+		<div className="mb-2">
+			<TagHeader totalCount={words.length} />
+			<DndContext
+				collisionDetection={closestCenter}
+				onDragEnd={handleDragEnd}
+				autoScroll={{ threshold: { x: 0.2, y: 0.2 }, acceleration: 70 }}
+			>
+				<SortableContext
+					items={words.map((word) => word.position)}
+					strategy={verticalListSortingStrategy}
+				>
+					<WordList words={words} />
+				</SortableContext>
+			</DndContext>
+		</div>
 	);
 };
 

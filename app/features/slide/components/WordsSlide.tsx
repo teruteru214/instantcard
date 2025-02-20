@@ -133,8 +133,8 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								key={item.id}
 								aria-label={`スライド: ${item.word || item.translation}`}
 							>
-								<div className="p-1">
-									<Card>
+								<div className="mt-2 mb-3 p-1">
+									<Card className="rounded-md">
 										<CardContent className="flex flex-col items-center aspect-square justify-center p-6">
 											{/* 単語データ */}
 											{item.word && (
@@ -189,7 +189,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					<CarouselNext />
 				</Carousel>
 
-				<div className="my-3 flex justify-center space-x-3">
+				<div className="flex justify-center space-x-3">
 					{/* ▶ / ⏸ 再生・停止 */}
 					<TooltipProvider>
 						<Tooltip>
