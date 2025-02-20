@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react"; // 🔥 RemixのLinkをインポート
+import { Link } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import {
 	Dialog,
@@ -28,7 +28,7 @@ const DeleteModal = ({ word, triggerElement }: DeleteProps) => {
 					</Link>
 					でタグを再追加できます。
 				</p>
-				<Button size="giant" variant="destructive" aria-label="削除">
+				<Button size="giant" variant="destructive" aria-label="ゴミ箱に入れる">
 					タグから削除
 				</Button>
 				<DialogClose>

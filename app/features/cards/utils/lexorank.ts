@@ -24,10 +24,14 @@ export const getMiddlePosition = (
 	prevPosition: string,
 	nextPosition: string,
 ) => {
-	const prevRank = LexoRank.parse(prevPosition);
-	const nextRank = LexoRank.parse(nextPosition);
+	try {
+		const prevRank = LexoRank.parse(prevPosition);
+		const nextRank = LexoRank.parse(nextPosition);
 
-	return prevRank.between(nextRank).toString();
+		return prevRank.between(nextRank).toString();
+	} catch {
+		throw new Error("無効なposition文字列が指定されました");
+	}
 };
 
 export const generateInitialPositions = (words: string[]): WordData[] => {
