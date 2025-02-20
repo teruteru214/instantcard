@@ -8,13 +8,14 @@ import DeleteModal from "./DeleteModal";
 
 interface WordCardProps {
 	word: string;
+	position: string;
 	style?: React.CSSProperties;
 }
 
-const WordCard = ({ word, style }: WordCardProps) => {
+const WordCard = ({ word, position, style }: WordCardProps) => {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({
-			id: word,
+			id: position,
 		});
 
 	return (
