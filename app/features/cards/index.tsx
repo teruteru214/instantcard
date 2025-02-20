@@ -1,11 +1,11 @@
 import { DndContext, type DragEndEvent, closestCenter } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
 	SortableContext,
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
 import TagHeader from "~/components/layout/TagHeader";
-
 import WordList from "./components/WordList";
 import type { WordData } from "./types";
 import {
@@ -102,6 +102,7 @@ const CardsPage = () => {
 		<div className="mb-2">
 			<TagHeader totalCount={words.length} />
 			<DndContext
+				modifiers={[restrictToVerticalAxis]}
 				collisionDetection={closestCenter}
 				onDragEnd={handleDragEnd}
 				autoScroll={{ threshold: { x: 0.2, y: 0.2 }, acceleration: 70 }}
