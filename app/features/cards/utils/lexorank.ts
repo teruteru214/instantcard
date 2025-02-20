@@ -15,11 +15,6 @@ export const getLastPosition = () => {
 	return LexoRank.max().toString();
 };
 
-/**
- * 2つのpositionの間の新しいpositionを計算
- * @param prevPosition 前のposition
- * @param nextPosition 次のposition
- */
 export const getMiddlePosition = (
 	prevPosition: string,
 	nextPosition: string,

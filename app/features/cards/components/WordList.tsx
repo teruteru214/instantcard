@@ -20,7 +20,7 @@ const WordList = ({ words }: WordListProps) => {
 							<WordCard
 								key={word.word_tag_id}
 								word={word.word}
-								position={word.position}
+								word_tag_id={word.word_tag_id.toString()}
 							/>
 						))}
 					</div>
