@@ -11,7 +11,10 @@ const WordList = ({ words }: WordListProps) => {
 	return (
 		<>
 			{words.length > 0 ? (
-				<ScrollArea className="sm:h-[78vh] min-h-[75vh] w-full rounded-md border">
+				<ScrollArea
+					className="sm:h-[78vh] min-h-[40vh] w-full rounded-md border"
+					aria-label="単語カードリスト"
+				>
 					<div className="p-4 space-y-2">
 						{words.map((word) => (
 							<WordCard
