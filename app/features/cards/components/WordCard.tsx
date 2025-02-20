@@ -1,122 +1,68 @@
-import type { UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Trash2 } from "lucide-react";
-import DeleteModal from "~/components/global/DeleteModal";
+
 import WordDetails from "~/components/global/WordDetails";
 import { Card } from "~/components/ui/card";
+import DeleteModal from "./DeleteModal";
 
 interface WordCardProps {
-	word: UniqueIdentifier;
+	word: string;
+	position: string;
 	style?: React.CSSProperties;
-	isOverlay?: boolean;
-	filterText?: string;
 }
 
-const WordCard = ({ word, style, isOverlay, filterText }: WordCardProps) => {
-	const {
-		attributes,
-		listeners,
-		setNodeRef,
-		transform,
-		transition,
-		isDragging,
-	} = useSortable({
-		id: word,
-	});
-
-	if (typeof word !== "string") {
-		return null;
-	}
-
-	if (isDragging) {
-		return (
-			<div
-				ref={setNodeRef}
-				style={{
-					...style,
-					transform: CSS.Transform.toString(transform),
-					transition,
-				}}
-				className="my-0 py-0"
-			>
-				<hr className="border-t-4 border-[#54A2C0] my-0" />
-			</div>
-		);
-	}
-
-	if (isOverlay) {
-		return (
-			<Card
-				style={{ ...style }}
-				className="relative w-full bg-gray-100 opacity-50 border border-gray-300"
-			>
-				<div className="flex justify-between items-center p-2">
-					<p className="text-xl truncate overflow-hidden whitespace-nowrap">
-						{word}
-					</p>
-					<div className="flex items-center space-x-1">
-						<div className="block sm:hidden">
-							<Trash2
-								aria-label="削除"
-								className="h-7 w-7 text-gray-400 p-1 rounded"
-							/>
-						</div>
-						<div className="cursor-default flex-shrink-0">
-							<GripVertical className="h-7 w-7 text-gray-400" />
-						</div>
-					</div>
-				</div>
-			</Card>
-		);
-	}
+const WordCard = ({ word, position, style }: WordCardProps) => {
+	const { attributes, listeners, setNodeRef, transform, transition } =
+		useSortable({
+			id: position,
+		});
 
 	return (
-		<Card
+		<div
 			ref={setNodeRef}
 			style={{
-				...style,
 				transform: CSS.Transform.toString(transform),
 				transition,
 			}}
-			className="relative w-full"
+			className="flex items-center w-full"
 		>
-			<div className="flex justify-between items-center p-2">
-				<div className="flex-1 overflow-hidden">
-					<WordDetails
-						triggerElement={
-							<p className="text-xl hover:cursor-pointer hover:underline truncate overflow-hidden whitespace-nowrap">
-								{word}
-							</p>
-						}
-						word={word}
-					/>
-				</div>
-				<div className="flex items-center space-x-1">
-					<div className="block sm:hidden">
-						<DeleteModal
-							word={word}
-							triggerElement={
-								<Trash2
-									aria-label="削除"
-									className="h-7 w-7 text-gray-400 hover:text-gray-500 cursor-pointer p-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded"
-								/>
-							}
-						/>
-					</div>
-					{!filterText && (
-						<div
-							className="cursor-grab flex-shrink-0 touch-none"
-							{...listeners}
-							{...attributes}
-							aria-label="ドラッグハンドル"
-						>
-							<GripVertical className="h-7 w-7 text-gray-400 hover:text-gray-500" />
-						</div>
-					)}
-				</div>
+			{/* Grip (ドラッグ可能エリア) */}
+			<div
+				className="cursor-grab flex-shrink-0 touch-none bg-gray-200 hover:bg-gray-300 px-2 py-3 rounded-l-md"
+				{...listeners}
+				{...attributes}
+				aria-label="ドラッグハンドル"
+			>
+				<GripVertical className="h-[18px] w-[18px] text-gray-400 hover:text-gray-500" />
 			</div>
-		</Card>
+
+			{/* WordCard 本体 */}
+			<Card
+				style={style}
+				className="flex-1 bg-white border rounded-r-md px-3 py-2"
+			>
+				<WordDetails
+					triggerElement={
+						<p className="text-gray-700 truncate cursor-pointer hover:underline">
+							{word}
+						</p>
+					}
+					word={word}
+				/>
+			</Card>
+
+			{/* 削除ボタン */}
+			<DeleteModal
+				word={word}
+				triggerElement={
+					<Trash2
+						aria-label="削除"
+						className="ml-2 h-5 w-5 text-gray-400 hover:text-gray-500 cursor-pointer"
+					/>
+				}
+			/>
+		</div>
 	);
 };
 

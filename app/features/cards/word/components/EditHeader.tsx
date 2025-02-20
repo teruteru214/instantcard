@@ -1,9 +1,10 @@
 import { useNavigate } from "@remix-run/react";
 import { ArrowLeft, Tags, Trash2 } from "lucide-react";
-import DeleteModal from "~/components/global/DeleteModal";
+
 import TagsDropdownMenu from "~/components/global/TagsDropDown";
 import { Button } from "~/components/ui/button";
 import type { Tag } from "~/types/word";
+import DeleteModal from "./DeleteModal";
 
 interface EditHeaderProps {
 	tags: Tag[];
