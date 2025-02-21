@@ -24,53 +24,62 @@ const WordList = ({ initialWords }: WordListProps) => {
 	const [words, setWords] = useState<WordData[]>(initialWords);
 
 	const handleDragEnd = (event: DragEndEvent) => {
-		const { active, over } = event;
-		if (!over || active.id === over.id) return;
+		try {
+			const { active, over } = event;
+			if (!over || active.id === over.id) return;
 
-		const draggedItemIndex = words.findIndex(
-			(word) => word.word_tag_id === Number(active.id),
-		);
-		const targetIndex = words.findIndex(
-			(word) => word.word_tag_id === Number(over.id),
-		);
+			const draggedItemIndex = words.findIndex(
+				(word) => word.word_tag_id === Number(active.id),
+			);
+			const targetIndex = words.findIndex(
+				(word) => word.word_tag_id === Number(over.id),
+			);
 
-		if (draggedItemIndex === -1 || targetIndex === -1) return;
+			if (draggedItemIndex === -1 || targetIndex === -1) return;
 
-		// 移動方向を判定
-		const isMovingDown = draggedItemIndex < targetIndex;
+			// 移動方向を判定
+			const isMovingDown = draggedItemIndex < targetIndex;
 
-		let newPosition: string;
+			// position の計算
+			let newPosition: string;
+			if (isMovingDown) {
+				const prevPosition = words[targetIndex].position;
+				const nextPosition =
+					targetIndex < words.length - 1
+						? words[targetIndex + 1].position
+						: getLastPosition();
+				newPosition = getMiddlePosition(prevPosition, nextPosition);
+			} else {
+				const prevPosition =
+					targetIndex > 0
+						? words[targetIndex - 1].position
+						: getFirstPosition();
+				const nextPosition = words[targetIndex].position;
+				newPosition = getMiddlePosition(prevPosition, nextPosition);
+			}
 
-		if (isMovingDown) {
-			// 下から上への移動
-			const prevPosition = words[targetIndex].position;
-			const nextPosition =
-				targetIndex < words.length - 1
-					? words[targetIndex + 1].position
-					: getLastPosition();
-			newPosition = getMiddlePosition(prevPosition, nextPosition);
-		} else {
-			// 上から下への移動
-			const prevPosition =
-				targetIndex > 0 ? words[targetIndex - 1].position : getFirstPosition();
-			const nextPosition = words[targetIndex].position;
-			newPosition = getMiddlePosition(prevPosition, nextPosition);
+			// words 配列を更新し、position を変更
+			const updatedWords = words.map((word) =>
+				word.word_tag_id === Number(active.id)
+					? { ...word, position: newPosition }
+					: word,
+			);
+
+			// position でソートして order を維持
+			const sortedWords = [...updatedWords].sort((a, b) =>
+				a.position.localeCompare(b.position),
+			);
+
+			console.log("🔷 更新前:", JSON.stringify(words, null, 2));
+			console.log("🔶 更新後:", JSON.stringify(sortedWords, null, 2));
+
+			setWords(sortedWords);
+		} catch (error) {
+			console.error(
+				"❌ ドラッグ＆ドロップの処理中にエラーが発生しました:",
+				error,
+			);
 		}
-
-		// 更新された words 配列を作成
-		const updatedWords = words.map((word, index) =>
-			index === draggedItemIndex ? { ...word, position: newPosition } : word,
-		);
-
-		// position でソートして order を維持
-		const sortedWords = [...updatedWords].sort((a, b) =>
-			a.position.localeCompare(b.position),
-		);
-
-		console.log("🔷 更新前:", JSON.stringify(words, null, 2));
-		console.log("🔶 更新後:", JSON.stringify(sortedWords, null, 2));
-
-		setWords(sortedWords);
 	};
 
 	return (

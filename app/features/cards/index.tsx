@@ -1,5 +1,3 @@
-import {} from "@dnd-kit/core";
-import {} from "@dnd-kit/sortable";
 import TagHeader from "~/components/layout/TagHeader";
 import WordList from "./components/WordList";
 import type { WordData } from "./types";
