@@ -13,22 +13,30 @@ interface WordCardProps {
 }
 
 const WordCard = ({ word, word_tag_id, style }: WordCardProps) => {
-	const { attributes, listeners, setNodeRef, transform, transition } =
-		useSortable({
-			id: word_tag_id,
-		});
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
+		id: word_tag_id,
+	});
 
 	return (
 		<div
 			ref={setNodeRef}
+			data-dragging={isDragging ? "true" : "false"}
 			style={{
 				transform: CSS.Transform.toString(transform),
 				transition,
 			}}
-			className="flex items-center w-full"
+			className="flex items-center w-full group"
 		>
 			<div
-				className="cursor-grab flex-shrink-0 touch-none bg-gray-200 hover:bg-gray-300 px-2 py-3 rounded-l-md"
+				className="flex-shrink-0 touch-none bg-gray-200 hover:bg-gray-300 px-2 py-3 rounded-l-md
+                  group-data-[dragging=true]:cursor-grabbing group-data-[dragging=false]:cursor-grab"
 				{...listeners}
 				{...attributes}
 				aria-label="ドラッグハンドル"
