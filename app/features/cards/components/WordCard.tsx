@@ -27,7 +27,6 @@ const WordCard = ({ word, word_tag_id, style }: WordCardProps) => {
 			}}
 			className="flex items-center w-full"
 		>
-			{/* Grip (ドラッグ可能エリア) */}
 			<div
 				className="cursor-grab flex-shrink-0 touch-none bg-gray-200 hover:bg-gray-300 px-2 py-3 rounded-l-md"
 				{...listeners}
@@ -37,7 +36,6 @@ const WordCard = ({ word, word_tag_id, style }: WordCardProps) => {
 				<GripVertical className="h-[18px] w-[18px] text-gray-400 hover:text-gray-500" />
 			</div>
 
-			{/* WordCard 本体 */}
 			<Card
 				style={style}
 				className="flex-1 bg-white border rounded-r-md px-3 py-2"
@@ -52,7 +50,6 @@ const WordCard = ({ word, word_tag_id, style }: WordCardProps) => {
 				/>
 			</Card>
 
-			{/* 削除ボタン */}
 			<DeleteModal
 				word={word}
 				triggerElement={
