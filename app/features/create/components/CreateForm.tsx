@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { aiOptions } from "../config/ai-options";
 import type { TagOption } from "../types";
 import AiSettings from "./AiSettings";
@@ -15,28 +15,23 @@ interface AiOption {
 }
 
 const CreateForm = ({ tags }: CreateFormProps) => {
-	const [options, setOptions] = useState<TagOption[]>([
-		{ label: "Global" },
-		...tags.map((tag) => ({ label: tag })),
-	]);
+	const [options, setOptions] = useState<TagOption[]>(
+		tags.map((tag) => ({ label: tag })),
+	);
 
-	const [selectedTags, setSelectedTags] = useState<TagOption[]>([
-		{ label: "Global" },
-	]);
+	const [selectedTags, setSelectedTags] = useState<TagOption[]>(
+		tags.includes("Global") ? [{ label: "Global" }] : [],
+	);
 
 	const [selectedAiOutputs, setSelectedAiOutputs] =
 		useState<AiOption[]>(aiOptions);
 
-	const filteredAiOutputs = useMemo(
-		() =>
-			selectedAiOutputs.filter((opt) => opt.checked).map((opt) => opt.label),
-		[selectedAiOutputs],
-	);
-
 	return (
 		<WordForm
-			selectedTags={selectedTags.map((tag) => tag.label)} // `string[]` に変換
-			selectedAiOutputs={filteredAiOutputs}
+			selectedTags={selectedTags.map((tag) => tag.label)}
+			selectedAiOutputs={selectedAiOutputs
+				.filter((opt) => opt.checked)
+				.map((opt) => opt.label)}
 		>
 			<MultiSelect
 				options={options}
