@@ -13,16 +13,13 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
-
-interface Option {
-	label: string;
-}
+import type { TagOption } from "../types";
 
 interface MultiSelectProps {
-	options: Option[];
-	setOptions: (options: Option[]) => void;
-	selectedOptions: string[];
-	setSelectedOptions: (values: string[]) => void;
+	options: TagOption[];
+	setOptions: (options: TagOption[]) => void;
+	selectedOptions: TagOption[];
+	setSelectedOptions: (values: TagOption[]) => void;
 	placeholder?: string;
 }
 
@@ -60,7 +57,6 @@ const MultiSelect = ({
 
 	const newTag = watch("newTag");
 
-	// ✅ タグの追加処理
 	const handleAddTag = () => {
 		const formattedNewTag = newTag.trim();
 		if (!formattedNewTag || formattedNewTag.length > 15) return;
@@ -75,11 +71,11 @@ const MultiSelect = ({
 			return;
 		}
 
-		const newTagObject: Option = { label: formattedNewTag };
+		const newTagObject: TagOption = { label: formattedNewTag };
 
 		setOptions([...options, newTagObject]);
 
-		setSelectedOptions([...selectedOptions, formattedNewTag]);
+		setSelectedOptions([...selectedOptions, newTagObject]);
 
 		setValue("newTag", "");
 		clearErrors("newTag");
@@ -97,13 +93,14 @@ const MultiSelect = ({
 							<Input
 								id="multi-select"
 								readOnly
+								data-testid="multi-select-input"
 								className="h-11 w-full overflow-x-auto pointer-events-none"
 								placeholder={selectedOptions.length > 0 ? "" : placeholder}
 							/>
 							<div className="absolute left-3 top-1/2 -translate-y-1/2 flex flex-wrap gap-2">
-								{selectedOptions.map((selectedLabel) => (
-									<Badge key={selectedLabel} variant="outline" size="sm">
-										{selectedLabel}
+								{selectedOptions.map((selectedTag) => (
+									<Badge key={selectedTag.label} variant="outline" size="sm">
+										{selectedTag.label}
 									</Badge>
 								))}
 							</div>
@@ -117,13 +114,15 @@ const MultiSelect = ({
 								<LabeledCheckbox
 									key={option.label}
 									label={option.label}
-									checked={selectedOptions.includes(option.label)}
+									checked={selectedOptions.some(
+										(tag) => tag.label === option.label,
+									)}
 									onCheckedChange={(checked) => {
 										setSelectedOptions(
 											checked
-												? [...selectedOptions, option.label]
+												? [...selectedOptions, option]
 												: selectedOptions.filter(
-														(label) => label !== option.label,
+														(tag) => tag.label !== option.label,
 													),
 										);
 									}}

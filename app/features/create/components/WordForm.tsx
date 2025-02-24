@@ -18,12 +18,13 @@ interface WordFormProps {
 	children: React.ReactNode;
 }
 
-// 🔥 バリデーションスキーマ（英単語のみ管理）
 const formSchema = z.object({
 	word: z
 		.string()
 		.min(1, { message: "英単語を入力してください" })
-		.max(50, { message: "50文字以内で入力してください" }),
+		.max(50, { message: "50文字以内で入力してください" })
+		.regex(/^[a-zA-Z\s-]+$/, { message: "英単語は半角英字のみ使用可能です" })
+		.trim(),
 });
 
 type FormData = z.infer<typeof formSchema>;

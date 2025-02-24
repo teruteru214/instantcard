@@ -2,7 +2,7 @@ import CreateForm from "./components/CreateForm";
 
 const CreatePage = () => {
 	// 仮のタグデータ
-	const tags = ["プログラミング", "TOEIC"];
+	const tags = ["Global", "プログラミング", "TOEIC"];
 
 	return (
 		<div className="h-screen">

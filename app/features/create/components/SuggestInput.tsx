@@ -8,16 +8,18 @@ interface Suggestion {
 }
 
 interface SuggestInputProps {
-	field: ControllerRenderProps<{ word: string }, "word">; // 🔥 型を修正
+	field: ControllerRenderProps<{ word: string }, "word">;
 	maxLength?: number;
 }
 
 const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
-	const [inputValue, setInputValue] = useState(field.value || ""); // 🔥 初期値を設定
+	const [inputValue, setInputValue] = useState(field.value || "");
 	const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 	const [isOpen, setIsOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const debouncedFetch = useDebounce(600);
+
+	const DATAMUSE_API_URL = import.meta.env.VITE_DATAMUSE_API_URL;
 
 	const handleInputChange = (value: string) => {
 		if (value.length > maxLength) return;
@@ -32,7 +34,7 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 			if (value.trim()) {
 				try {
 					const response = await fetch(
-						`https://api.datamuse.com/words?sp=${encodeURIComponent(value)}*&max=10`,
+						`${DATAMUSE_API_URL}?sp=${encodeURIComponent(value)}*&max=10`,
 						{ signal },
 					);
 					if (!response.ok) {
@@ -83,7 +85,6 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 					/>
 				</div>
 
-				{/* サジェストリスト（スクロールなし） */}
 				{isOpen && (
 					<ul
 						id="suggestions-list"

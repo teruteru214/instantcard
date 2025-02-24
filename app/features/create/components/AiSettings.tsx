@@ -23,10 +23,15 @@ const AiSettings = ({
 	setSelectedAiOutputs,
 }: AiSettingsProps) => {
 	const toggleAllOptions = () => {
-		const allChecked = selectedAiOutputs.every((opt) => opt.checked); // すべて true か？
-		setSelectedAiOutputs(
-			selectedAiOutputs.map((opt) => ({ ...opt, checked: !allChecked })),
-		);
+		const allChecked = selectedAiOutputs.every((opt) => opt.checked);
+		try {
+			setSelectedAiOutputs(
+				selectedAiOutputs.map((opt) => ({ ...opt, checked: !allChecked })),
+			);
+		} catch (error) {
+			console.error("AIの出力設定の更新に失敗しました:", error);
+			// TODO: エラー状態の表示やエラーバウンダリの実装を検討
+		}
 	};
 
 	const toggleAiOption = (optionLabel: string, checked: boolean) => {
@@ -66,7 +71,11 @@ const AiSettings = ({
 					<p className="text-xs text-gray-500 my-4">
 						AIの生成速度は、選択した項目が少ないほど速く、多いほど時間がかかります。
 					</p>
-					<Button variant={buttonVariant} onClick={toggleAllOptions}>
+					<Button
+						variant={buttonVariant}
+						onClick={toggleAllOptions}
+						aria-label={`AIの出力設定を${buttonLabel}する`}
+					>
 						{buttonIcon}
 						{buttonLabel}
 					</Button>
