@@ -44,7 +44,7 @@ const LabeledCheckbox = ({
 	};
 
 	return (
-		<label htmlFor={id} className="flex items-center space-x-2 cursor-pointer">
+		<label htmlFor={id} className="flex items-center space-x-1 cursor-pointer">
 			<Checkbox
 				id={id}
 				checked={checked}

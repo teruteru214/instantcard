@@ -1,0 +1,16 @@
+export const aiOptions = [
+	{ label: "意味", checked: true },
+	{ label: "発音のコツ", checked: true },
+	{ label: "例文", checked: true },
+	{ label: "コロケーション", checked: true },
+	{ label: "TOEICでの使用頻度", checked: true },
+	{ label: "TOEICでの出題傾向", checked: true },
+	{ label: "派生語", checked: true },
+	{ label: "類義語", checked: true },
+	{ label: "句動詞", checked: true },
+	{ label: "関連語", checked: true },
+	{ label: "対義語", checked: true },
+	{ label: "文法の種類", checked: true },
+	{ label: "語源", checked: false },
+	{ label: "その他(重要事項)", checked: false },
+];
