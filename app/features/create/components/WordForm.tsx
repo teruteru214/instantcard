@@ -7,9 +7,9 @@ import {
 	FormControl,
 	FormField,
 	FormItem,
-	FormLabel,
 	FormMessage,
 } from "~/components/ui/form";
+import { Label } from "~/components/ui/label";
 import SuggestInput from "./SuggestInput";
 
 interface WordFormProps {
@@ -61,7 +61,7 @@ const WordForm = ({
 					name="word"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>英単語</FormLabel>
+							<Label indispensable>英単語</Label>
 							<FormControl>
 								<SuggestInput field={field} maxLength={50} />
 							</FormControl>

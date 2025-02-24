@@ -13,6 +13,7 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import type { TagOption } from "../types";
 
 interface MultiSelectProps {
@@ -84,9 +85,7 @@ const MultiSelect = ({
 	return (
 		<div>
 			<div>
-				<label htmlFor="multi-select" className="text-xl font-bold mb-1 block">
-					タグの付与
-				</label>
+				<Label indispensable>タグの付与</Label>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<div className="relative cursor-pointer">
