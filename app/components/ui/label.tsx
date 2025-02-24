@@ -1,6 +1,6 @@
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { type VariantProps, cva } from "class-variance-authority";
-import { Asterisk } from "lucide-react"; // 必須項目用のアイコン
+import { Asterisk } from "lucide-react";
 import * as React from "react";
 import { cn } from "~/lib/utils";
 
@@ -21,7 +21,7 @@ const Label = React.forwardRef<
 		aria-required={indispensable}
 		{...props}
 	>
-		<span className="text-xl font-semibold text-gray-900">{children}</span>
+		<span className="text-lg text-gray-900">{children}</span>
 		{indispensable && (
 			<Asterisk
 				className="text-red-500 inline-block align-middle"
