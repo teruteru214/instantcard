@@ -1,22 +1,28 @@
 import { NavLink } from "@remix-run/react";
-import { GraduationCap, Layers, Search, TvMinimal } from "lucide-react";
+import {
+	BrainCircuit,
+	GraduationCap,
+	Layers,
+	LucideGalleryThumbnails,
+	Settings,
+} from "lucide-react";
 
 const LoginMenu = () => {
 	const linkClass = ({ isActive }: { isActive: boolean }) =>
 		`flex flex-col items-center space-y-1 w-full py-2 transition ${
 			isActive
-				? "bg-gray-200 text-black"
+				? "bg-gray-200 text-[#54A2C0]"
 				: "text-gray-400 hover:bg-gray-100 hover:text-gray-500"
 		}`;
 
 	return (
 		<div className="sticky border-t bottom-0 left-0 right-0 bg-white z-50">
-			<nav className="mx-auto" aria-label="メインナビゲーション">
+			<nav className="mx-auto max-w-[944px]" aria-label="メインナビゲーション">
 				<ul className="flex">
 					<li className="flex-1">
-						<NavLink to="/search" className={linkClass} aria-label="検索/作成">
-							<Search className="w-8 h-8" />
-							<p className="text-xs">検索/作成</p>
+						<NavLink to="/create" className={linkClass} aria-label="検索/作成">
+							<BrainCircuit className="w-8 h-8" />
+							<p className="text-xs">カード作成</p>
 						</NavLink>
 					</li>
 					<li className="flex-1">
@@ -33,8 +39,14 @@ const LoginMenu = () => {
 					</li>
 					<li className="flex-1">
 						<NavLink to="/slide" className={linkClass} aria-label="スライド">
-							<TvMinimal className="w-8 h-8" />
+							<LucideGalleryThumbnails className="w-8 h-8" />
 							<p className="text-xs">スライド</p>
+						</NavLink>
+					</li>
+					<li className="flex-1">
+						<NavLink to="/settings" className={linkClass} aria-label="スライド">
+							<Settings className="w-8 h-8" />
+							<p className="text-xs">設定</p>
 						</NavLink>
 					</li>
 				</ul>
