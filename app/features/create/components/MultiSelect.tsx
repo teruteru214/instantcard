@@ -24,10 +24,10 @@ interface MultiSelectProps {
 	placeholder?: string;
 }
 
-// ✅ タグのバリデーションスキーマ（最大15文字）
 const tagsSchema = z.object({
 	newTag: z
 		.string()
+		.min(1, { message: "タグを入力してください" })
 		.max(15, { message: "タグは15文字以内で入力してください" })
 		.default(""),
 });
@@ -48,9 +48,10 @@ const MultiSelect = ({
 		setError,
 		clearErrors,
 		watch,
-		formState: { errors },
+		formState: { errors, isValid },
 	} = useForm<TagsFormData>({
 		resolver: zodResolver(tagsSchema),
+		mode: "onChange",
 		defaultValues: {
 			newTag: "",
 		},
@@ -60,7 +61,11 @@ const MultiSelect = ({
 
 	const handleAddTag = () => {
 		const formattedNewTag = newTag.trim();
-		if (!formattedNewTag || formattedNewTag.length > 15) return;
+		if (!formattedNewTag) {
+			setError("newTag", { message: "タグを入力してください" });
+			setTimeout(() => clearErrors("newTag"), 3000);
+			return;
+		}
 
 		if (
 			options.some(
@@ -75,7 +80,6 @@ const MultiSelect = ({
 		const newTagObject: TagOption = { label: formattedNewTag };
 
 		setOptions([...options, newTagObject]);
-
 		setSelectedOptions([...selectedOptions, newTagObject]);
 
 		setValue("newTag", "");
@@ -128,20 +132,30 @@ const MultiSelect = ({
 								/>
 							))}
 						</div>
-						<form
-							onSubmit={handleSubmit(handleAddTag)}
-							className="flex gap-2 items-center"
-						>
+						<form className="flex gap-2 items-center">
 							<Input
 								{...register("newTag")}
 								placeholder="タグを追加 (15文字以内)"
 								className="w-52"
 							/>
-							{errors.newTag && (
-								<p className="text-red-500 text-xs">{errors.newTag.message}</p>
-							)}
-							<Button type="submit">追加</Button>
+							<Button
+								type="button"
+								onClick={() => handleSubmit(handleAddTag)()}
+								disabled={
+									!isValid ||
+									options.some(
+										(tag) => tag.label.toLowerCase() === newTag.toLowerCase(),
+									)
+								}
+							>
+								追加
+							</Button>
 						</form>
+						{errors.newTag && (
+							<p className="mt-1 text-red-500 text-xs">
+								{errors.newTag.message}
+							</p>
+						)}
 						<DropdownMenuSeparator className="my-2" />
 						<Link
 							to="/settings/tags"
