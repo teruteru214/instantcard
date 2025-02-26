@@ -58,7 +58,7 @@ const TagHeader = ({
 				</Badge>
 				<TooltipProvider>
 					<Tooltip>
-						<TooltipTrigger>
+						<TooltipTrigger asChild>
 							<Button
 								size="icon"
 								variant="outline"
@@ -101,13 +101,13 @@ const TagHeader = ({
 			{isTagActive && tags.length === 0 && (
 				<p className="my-5 text-center text-gray-400 animate-fade-up">
 					タグがありません。{" "}
-					<button
-						type="button"
-						className="underline hover:text-gray-500"
+					<span
+						className="underline hover:text-gray-500 cursor-pointer"
 						onClick={() => navigate("/create")}
+						onKeyUp={(e) => e.key === "Enter" && navigate("/create")}
 					>
 						英単語カード
-					</button>
+					</span>
 					をタグで分類できます。
 				</p>
 			)}
