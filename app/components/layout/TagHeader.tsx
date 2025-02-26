@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "@remix-run/react"; // Remix の useNavigate, useLocation
+import { Link, useLocation, useNavigate } from "@remix-run/react"; // Remix の useNavigate, useLocation
 import { Tag, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
@@ -58,7 +58,7 @@ const TagHeader = ({
 				</Badge>
 				<TooltipProvider>
 					<Tooltip>
-						<TooltipTrigger>
+						<TooltipTrigger asChild>
 							<Button
 								size="icon"
 								variant="outline"
@@ -87,7 +87,7 @@ const TagHeader = ({
 					{tags.map((tag) => (
 						<Badge
 							key={tag}
-							variant="outline"
+							variant="plain"
 							size="sm"
 							className="animate-fade-up cursor-pointer"
 							onClick={() => handleTagClick(tag)}
@@ -101,13 +101,12 @@ const TagHeader = ({
 			{isTagActive && tags.length === 0 && (
 				<p className="my-5 text-center text-gray-400 animate-fade-up">
 					タグがありません。{" "}
-					<button
-						type="button"
-						className="underline hover:text-gray-500"
-						onClick={() => navigate("/create")}
+					<Link
+						to="/create"
+						className="underline hover:text-gray-500 cursor-pointer"
 					>
 						英単語カード
-					</button>
+					</Link>
 					をタグで分類できます。
 				</p>
 			)}

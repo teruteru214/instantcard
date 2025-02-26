@@ -30,7 +30,7 @@ interface UnsplashResponse {
 	results: UnsplashImage[];
 }
 
-const ImageSetting = () => {
+const ImageSetting = ({ word }: { word: string }) => {
 	const [searchWord, setSearchWord] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [images, setImages] = useState<UnsplashImage[]>([]);
@@ -90,7 +90,7 @@ const ImageSetting = () => {
 		<div>
 			<div className="flex flex-col items-center">
 				<div
-					aria-label="画像設定"
+					aria-label={`画像設定 (${word})`}
 					className="w-48 h-48 sm:h-96 sm:w-96 flex flex-col items-center justify-center border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-100"
 					onClick={focusInput}
 					onKeyDown={(e) => {

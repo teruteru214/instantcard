@@ -75,6 +75,7 @@ const AiSettings = ({
 						variant={buttonVariant}
 						onClick={toggleAllOptions}
 						aria-label={`AIの出力設定を${buttonLabel}する`}
+						type="button"
 					>
 						{buttonIcon}
 						{buttonLabel}

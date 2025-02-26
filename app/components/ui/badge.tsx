@@ -6,21 +6,17 @@ const badgeVariants = cva(
 	{
 		variants: {
 			variant: {
-				default:
-					"border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-				secondary:
-					"border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+				default: "border-transparent bg-primary text-primary-foreground",
+				secondary: "border-transparent bg-secondary text-secondary-foreground",
 				destructive:
-					"border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+					"border-transparent bg-destructive text-destructive-foreground",
 				outline: "text-foreground",
-				important:
-					"border-transparent bg-orange-400 text-white hover:bg-orange-400",
-				info: "border-transparent bg-yellow-400 text-white hover:bg-yellow-600",
-				excellent:
-					"border-transparent bg-green-500 text-white hover:bg-green-600",
-				good: "border-transparent bg-sky-500 text-white hover:bg-sky-700",
-				average:
-					"border-transparent bg-yellow-500 text-black hover:bg-yellow-600",
+				plain: "text-foreground hover:bg-gray-100", // outline と同じデザインで hover で色が変わる
+				important: "border-transparent bg-orange-400 text-white",
+				info: "border-transparent bg-yellow-400 text-white",
+				excellent: "border-transparent bg-green-500 text-white",
+				good: "border-transparent bg-sky-500 text-white",
+				average: "border-transparent bg-yellow-500 text-black",
 			},
 			size: {
 				default: "px-3 py-1 text-lg",
