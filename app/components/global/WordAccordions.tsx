@@ -1,5 +1,6 @@
 import type { WordData } from "~/types/word";
 import { frequencyLabel } from "~/utils/frequencyLabel";
+import { translateGrammarType } from "~/utils/translate";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
 import ImageSetting from "./ImageSetting";
@@ -12,8 +13,6 @@ interface WordAccordionsProps {
 }
 
 const WordAccordions = ({ word, data }: WordAccordionsProps) => {
-	const { label, variant } = frequencyLabel(data.frequency);
-
 	return (
 		<ScrollArea className="p-3 flex-grow">
 			<WordAccordion
@@ -65,17 +64,21 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 					))}
 				/>
 			)}
-			{data.frequency && (
-				<WordAccordion
-					id="frequency"
-					title="TOIECの頻出度"
-					content={
-						<Badge variant={variant} size="sm">
-							{label}
-						</Badge>
-					}
-				/>
-			)}
+			{data.frequency &&
+				(() => {
+					const { label, variant } = frequencyLabel(data.frequency);
+					return (
+						<WordAccordion
+							id="frequency"
+							title="TOIECの頻出度"
+							content={
+								<Badge variant={variant} size="sm">
+									{label}
+								</Badge>
+							}
+						/>
+					);
+				})()}
 			{data.trend && (
 				<WordAccordion
 					id="trend"
@@ -119,7 +122,7 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 					title="文法の種類"
 					content={data.types.map((type) => (
 						<Badge key={type.name} variant="outline" size="sm">
-							{type.name}
+							{translateGrammarType(type.name)}
 						</Badge>
 					))}
 				/>

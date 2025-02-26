@@ -44,7 +44,7 @@ const LoginMenu = () => {
 						</NavLink>
 					</li>
 					<li className="flex-1">
-						<NavLink to="/settings" className={linkClass} aria-label="スライド">
+						<NavLink to="/settings" className={linkClass} aria-label="設定">
 							<Settings className="w-8 h-8" />
 							<p className="text-xs">設定</p>
 						</NavLink>

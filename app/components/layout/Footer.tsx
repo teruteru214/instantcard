@@ -56,10 +56,13 @@ const Footer = () => {
 							</Link>
 						</li>
 						<li>
+							{/* 外部リンクのため、<a>タグを使用 */}
 							<a
-								href="/#"
+								href="https://example.com/contact"
 								aria-label="お問い合わせ"
 								className="hover:underline hover:text-gray-700"
+								target="_blank"
+								rel="noopener noreferrer"
 							>
 								お問い合わせ
 							</a>

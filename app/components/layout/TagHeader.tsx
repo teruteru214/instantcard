@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "@remix-run/react"; // Remix の useNavigate, useLocation
+import { Link, useLocation, useNavigate } from "@remix-run/react"; // Remix の useNavigate, useLocation
 import { Tag, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
@@ -18,7 +18,7 @@ const TagHeader = ({
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const tags: string[] = ["TOIEC", "プログラミング"];
+	const tags: string[] = [];
 
 	const handleKeyDown = useCallback((event: KeyboardEvent) => {
 		switch (event.key) {
@@ -101,13 +101,12 @@ const TagHeader = ({
 			{isTagActive && tags.length === 0 && (
 				<p className="my-5 text-center text-gray-400 animate-fade-up">
 					タグがありません。{" "}
-					<span
+					<Link
+						to="/create"
 						className="underline hover:text-gray-500 cursor-pointer"
-						onClick={() => navigate("/create")}
-						onKeyUp={(e) => e.key === "Enter" && navigate("/create")}
 					>
 						英単語カード
-					</span>
+					</Link>
 					をタグで分類できます。
 				</p>
 			)}

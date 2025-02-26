@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo } from "react"; // useMemoを追加
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -51,7 +51,7 @@ const QuizForm = ({ quizData }: QuizFormProps) => {
 					<QuizCard
 						key={quiz.word}
 						quiz={quiz}
-						options={quiz.options} // ここでシャッフル済みの options を渡す
+						options={quiz.options}
 						index={index}
 						totalCount={enhancedQuizData.length}
 						scrollToNext={() => scrollToNext(index)}
