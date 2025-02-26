@@ -18,7 +18,7 @@ const TagHeader = ({
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const tags: string[] = [];
+	const tags: string[] = ["TOIEC", "プログラミング"];
 
 	const handleKeyDown = useCallback((event: KeyboardEvent) => {
 		switch (event.key) {
@@ -87,7 +87,7 @@ const TagHeader = ({
 					{tags.map((tag) => (
 						<Badge
 							key={tag}
-							variant="outline"
+							variant="plain"
 							size="sm"
 							className="animate-fade-up cursor-pointer"
 							onClick={() => handleTagClick(tag)}
