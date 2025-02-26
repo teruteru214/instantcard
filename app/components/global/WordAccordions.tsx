@@ -64,21 +64,17 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 					))}
 				/>
 			)}
-			{data.frequency &&
-				(() => {
-					const { label, variant } = frequencyLabel(data.frequency);
-					return (
-						<WordAccordion
-							id="frequency"
-							title="TOIECの頻出度"
-							content={
-								<Badge variant={variant} size="sm">
-									{label}
-								</Badge>
-							}
-						/>
-					);
-				})()}
+			{data.frequency && (
+				<WordAccordion
+					id="frequency"
+					title="TOIECの頻出度"
+					content={
+						<Badge variant={frequencyLabel(data.frequency).variant} size="sm">
+							{frequencyLabel(data.frequency).label}
+						</Badge>
+					}
+				/>
+			)}
 			{data.trend && (
 				<WordAccordion
 					id="trend"

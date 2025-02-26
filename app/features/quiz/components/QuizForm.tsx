@@ -44,6 +44,12 @@ const QuizForm = ({ quizData }: QuizFormProps) => {
 
 	const answers = form.watch("answers");
 
+	const isAnswerCorrect = (correctAnswer: string, userAnswer: string) => {
+		return (
+			correctAnswer.trim().toLowerCase() === userAnswer.trim().toLowerCase()
+		);
+	};
+
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -72,6 +78,7 @@ const QuizForm = ({ quizData }: QuizFormProps) => {
 							size="giant"
 							disabled={!form.formState.isValid}
 							onClick={scrollToResult}
+							aria-label="クイズを終了して結果を表示する"
 						>
 							クイズを終了する
 						</Button>
@@ -84,9 +91,7 @@ const QuizForm = ({ quizData }: QuizFormProps) => {
 						word: quiz.word,
 						correctAnswer: quiz.translation,
 						userAnswer: answers[index],
-						isCorrect:
-							quiz.translation.trim().toLowerCase() ===
-							answers[index].trim().toLowerCase(),
+						isCorrect: isAnswerCorrect(quiz.translation, answers[index]),
 					}))}
 				/>
 			)}
