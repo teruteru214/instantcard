@@ -106,7 +106,7 @@ const TextPairManager = ({
 					variant="black"
 					disabled={!isValid || !isDirty}
 				>
-					更新する
+					保存する
 				</Button>
 			</div>
 
@@ -128,9 +128,7 @@ const TextPairManager = ({
 						<div className="flex items-stretch gap-2 w-full">
 							<div className="flex-1 space-y-2">
 								<div className="flex items-center gap-1">
-									<span className="text-sm font-bold whitespace-nowrap">
-										英文:
-									</span>
+									<span className="text-sm whitespace-nowrap">英文:</span>
 									<div className="w-full">
 										<Input
 											{...control.register(`items.${index}.text`)}
@@ -145,9 +143,7 @@ const TextPairManager = ({
 								)}
 
 								<div className="flex items-center gap-1">
-									<span className="text-sm font-bold whitespace-nowrap">
-										翻訳:
-									</span>
+									<span className="text-sm whitespace-nowrap">翻訳:</span>
 									<div className="w-full">
 										<Input
 											{...control.register(`items.${index}.translation`)}

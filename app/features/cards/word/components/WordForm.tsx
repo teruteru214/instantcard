@@ -271,7 +271,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 				disabled={!form.formState.isValid || !form.formState.isDirty}
 				className="mb-3 ml-auto block"
 			>
-				更新する
+				保存する
 			</Button>
 		</>
 	);
