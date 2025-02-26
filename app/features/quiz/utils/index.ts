@@ -78,7 +78,12 @@ export const scrollToNext = (index: number) => {
 };
 
 export const scrollToResult = () => {
-	if (isClient) scrollToElement("result");
+	if (typeof window !== "undefined") {
+		window.scrollTo({
+			top: document.body.scrollHeight,
+			behavior: "smooth",
+		});
+	}
 };
 
 export const getBadgeVariant = (

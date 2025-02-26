@@ -261,7 +261,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 
 			<div className="mt-3">
 				<Label>イメージ</Label>
-				<ImageSetting />
+				<ImageSetting word={wordDetail.word} />
 			</div>
 
 			<Button
@@ -271,7 +271,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 				disabled={!form.formState.isValid || !form.formState.isDirty}
 				className="mb-3 ml-auto block"
 			>
-				更新する
+				保存する
 			</Button>
 		</>
 	);
