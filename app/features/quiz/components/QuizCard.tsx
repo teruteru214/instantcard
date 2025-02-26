@@ -8,6 +8,7 @@ import {
 	FormItem,
 	FormMessage,
 } from "~/components/ui/form";
+
 import { frequencyLabel } from "~/utils/frequencyLabel";
 import AntonymsModal from "./AntonymsModal";
 import ExampleModal from "./ExampleModal";
@@ -35,7 +36,7 @@ const QuizCard = ({
 	const { label, variant } = frequencyLabel(quiz.frequency);
 
 	return (
-		<Card id={`quiz-card-${index}`} className="p-4">
+		<Card id={`quiz-card-${index}`} className="p-4 rounded-md">
 			<div className="flex flex-col">
 				<div className="flex justify-between items-center">
 					<Badge variant={variant} size="sm">
