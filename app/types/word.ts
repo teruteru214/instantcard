@@ -7,3 +7,20 @@ export interface Tag {
 export interface WordProps {
 	word: string;
 }
+
+export interface WordData {
+	translation: string;
+	meaning?: string;
+	pronunciation?: string;
+	examples?: { text: string; translation: string }[];
+	collocations?: { text: string; translation: string }[];
+	frequency: number;
+	trend?: string;
+	derivations?: { text: string; translation: string }[];
+	phrasalVerbs?: { text: string; translation: string }[];
+	synonyms?: { text: string; translation: string }[];
+	antonyms?: { text: string; translation: string }[];
+	types?: { name: string }[];
+	etymology?: string;
+	other?: string;
+}

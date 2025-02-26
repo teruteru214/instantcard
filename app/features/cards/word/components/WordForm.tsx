@@ -261,7 +261,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 
 			<div className="mt-3">
 				<Label>イメージ</Label>
-				<ImageSetting />
+				<ImageSetting word={wordDetail.word} />
 			</div>
 
 			<Button

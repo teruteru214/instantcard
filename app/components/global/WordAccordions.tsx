@@ -1,146 +1,143 @@
+import type { WordData } from "~/types/word";
+import { frequencyLabel } from "~/utils/frequencyLabel";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
 import ImageSetting from "./ImageSetting";
 import Speech from "./Speech";
 import WordAccordion from "./parts/WordAccordion";
 
-const WordAccordions = () => {
+interface WordAccordionsProps {
+	word: string;
+	data: WordData;
+}
+
+const WordAccordions = ({ word, data }: WordAccordionsProps) => {
+	const { label, variant } = frequencyLabel(data.frequency);
+
 	return (
 		<ScrollArea className="p-3 flex-grow">
 			<WordAccordion
-				id="frequency"
-				title="頻出度"
-				content={
-					<Badge variant="destructive" className="text-sm">
-						🥇目から鱗
-					</Badge>
-				}
+				id="translation"
+				title="翻訳"
+				content={<p>{data.translation}</p>}
 			/>
-			<WordAccordion
-				id="syllables"
-				title="音節"
-				content={
-					<p>
-						「turbo」の音節は2つです。英語では「tur-bo」と分けることができます。発音的には「TUR-bo」となり、最初の音節が強調される形になります。
-					</p>
-				}
-			/>
-			<WordAccordion
-				id="meaning"
-				title="意味"
-				content={
-					<p>
-						Menは「男性」または「男たち」という意味の名詞で、特に成人男性を指します。単数形は「man」です。
-					</p>
-				}
-			/>
+			{data.meaning && (
+				<WordAccordion
+					id="meaning"
+					title="意味"
+					content={<p>{data.meaning}</p>}
+				/>
+			)}
+			{data.pronunciation && (
+				<WordAccordion
+					id="pronunciation"
+					title="発音のコツ"
+					content={<p>{data.pronunciation}</p>}
+				/>
+			)}
+			{data.examples && (
+				<WordAccordion
+					id="examples"
+					title="例文"
+					content={data.examples.map((ex) => (
+						<div key={ex.text} className="flex">
+							<div>
+								<p>{ex.text}</p>
+								<p className="text-xs">{ex.translation}</p>
+							</div>
+							<Speech word={ex.text} size={24} />
+						</div>
+					))}
+				/>
+			)}
+			{data.collocations && (
+				<WordAccordion
+					id="collocations"
+					title="コロケーション"
+					content={data.collocations.map((col) => (
+						<div key={col.text} className="flex">
+							<div>
+								<p>{col.text}</p>
+								<p className="text-xs">{col.translation}</p>
+							</div>
+							<Speech word={col.text} size={24} />
+						</div>
+					))}
+				/>
+			)}
+			{data.frequency && (
+				<WordAccordion
+					id="frequency"
+					title="TOIECの頻出度"
+					content={
+						<Badge variant={variant} size="sm">
+							{label}
+						</Badge>
+					}
+				/>
+			)}
+			{data.trend && (
+				<WordAccordion
+					id="trend"
+					title="TOIECの出題傾向"
+					content={<p>{data.trend}</p>}
+				/>
+			)}
+			{data.derivations && (
+				<WordAccordion
+					id="derivations"
+					title="派生語"
+					content={data.derivations.map((der) => (
+						<div key={der.text} className="flex">
+							<div>
+								<p>{der.text}</p>
+								<p className="text-xs">{der.translation}</p>
+							</div>
+							<Speech word={der.text} size={24} />
+						</div>
+					))}
+				/>
+			)}
+			{data.antonyms && (
+				<WordAccordion
+					id="antonyms"
+					title="対義語"
+					content={data.antonyms.map((ant) => (
+						<div key={ant.text} className="flex">
+							<div>
+								<p>{ant.text}</p>
+								<p className="text-xs">{ant.translation}</p>
+							</div>
+							<Speech word={ant.text} size={24} />
+						</div>
+					))}
+				/>
+			)}
+			{data.types && (
+				<WordAccordion
+					id="types"
+					title="文法の種類"
+					content={data.types.map((type) => (
+						<Badge key={type.name} variant="outline" size="sm">
+							{type.name}
+						</Badge>
+					))}
+				/>
+			)}
 			<WordAccordion
 				id="etymology"
 				title="語源"
-				content={
-					<p>
-						古英語の"mann"に由来し、もともとは「人」を意味しましたが、時とともに「男性」を特に指す言葉として使われるようになりました。
-					</p>
-				}
+				content={data.etymology ? <p>{data.etymology}</p> : <p>なし</p>}
 			/>
 			<WordAccordion
-				id="collocations"
-				title="コロケーション"
-				content={
-					<>
-						<div className="flex">
-							<div>
-								<p>men and women</p>
-								<p className="text-xs">男女</p>
-							</div>
-							<Speech word="men and women" size={24} />
-						</div>
-						<div className="flex">
-							<div>
-								<p>men's clothing</p>
-								<p className="text-xs">男性用衣類</p>
-							</div>
-							<Speech word="men's clothing" size={24} />
-						</div>
-						<div className="flex">
-							<div>
-								<p>men's rights</p>
-								<p className="text-xs">男性の権利</p>
-							</div>
-							<Speech word="men's rights" size={24} />
-						</div>
-						<div className="flex">
-							<div>
-								<p>men in uniform</p>
-								<p className="text-xs">制服を着た男性</p>
-							</div>
-							<Speech word="men in uniform" size={24} />
-						</div>
-						<div className="flex">
-							<div>
-								<p>strong men</p>
-								<p className="text-xs">力強い男性</p>
-							</div>
-							<Speech word="strong men" size={24} />
-						</div>
-					</>
-				}
-			/>
-			<WordAccordion
-				id="examples"
-				title="例文"
-				content={
-					<>
-						<div className="flex">
-							<div>
-								<p>I need to get off the bus at the next stop</p>
-								<p className="text-xs">
-									次の停留所でバスを降りる必要があります。
-								</p>
-							</div>
-							<Speech
-								word="I need to get off the bus at the next stop"
-								size={24}
-							/>
-						</div>
-						<div className="flex">
-							<div>
-								<p>What time do you usually get off work?</p>
-								<p className="text-xs">通常は何時に仕事を終えますか？</p>
-							</div>
-							<Speech word="What time do you usually get off work?" size={24} />
-						</div>
-						<div className="flex">
-							<div>
-								<p>Please get off the phone we need to talk in person.</p>
-								<p className="text-xs">
-									電話を切ってください。直接話す必要があります。
-								</p>
-							</div>
-							<Speech
-								word="Please get off the phone we need to talk in person."
-								size={24}
-							/>
-						</div>
-					</>
-				}
-			/>
-			<WordAccordion
-				title="その他重要事項"
-				content={
-					<p>
-						「get
-						off」は非常に多用途で、日常会話やビジネスシーンでよく使用されます。また、特定の状況において、よりカジュアルに使われることが多いため、親しい間柄での会話でも頻繁に見られます。さらに、「get
-						off」には「免除される」や「罰を受けない」という意味もあり、「He got
-						off with just a
-						warning.」（彼は警告だけで済んだ。）のように使われることもあります。このように、文脈によって意味が変わるため、柔軟に理解することが重要です。
-					</p>
-				}
+				id="other"
+				title="その他"
+				content={data.other ? <p>{data.other}</p> : <p>なし</p>}
 			/>
 			<WordAccordion
 				id="image-section"
 				title="イメージ"
-				content={<ImageSetting />}
+				content={<ImageSetting word={word} />}
 			/>
 		</ScrollArea>
 	);
