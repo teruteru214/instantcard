@@ -1,28 +1,22 @@
 export async function onRequest(context: {
 	request: Request;
-	env: { GC_API_KEY: string; AUDIO_CACHE: KVNamespace };
+	env: { GC_API_KEY: string };
 }) {
 	try {
-		const requestData: { text: string } = await context.request.json();
-		const { text } = requestData;
+		const requestData: { text: string; speaker: string } =
+			await context.request.json();
+		const { text, speaker } = requestData;
 
-		const cacheKey = `audio_${encodeURIComponent(text.trim())}`;
-		const cachedAudio = await context.env.AUDIO_CACHE.get(
-			cacheKey,
-			"arrayBuffer",
+		const cache = await caches.open("default");
+		const cacheKey = new Request(
+			`${context.request.url}?text=${encodeURIComponent(text.trim())}&speaker=${encodeURIComponent(speaker)}`,
 		);
+		const cachedResponse = await cache.match(cacheKey);
 
-		if (cachedAudio) {
-			// キャッシュが存在する場合
-			return new Response(cachedAudio, {
-				status: 200,
-				headers: {
-					"Content-Type": "audio/wav",
-				},
-			});
+		if (cachedResponse) {
+			return cachedResponse;
 		}
 
-		// キャッシュが存在しない場合、音声データを生成
 		const response = await fetch(
 			`https://texttospeech.googleapis.com/v1/text:synthesize?key=${context.env.GC_API_KEY}`,
 			{
@@ -32,8 +26,7 @@ export async function onRequest(context: {
 					input: { text },
 					voice: {
 						languageCode: "en-US",
-						name: "en-US-Standard-F",
-						ssmlGender: "NEUTRAL",
+						name: speaker,
 					},
 					audioConfig: { audioEncoding: "LINEAR16" },
 				}),
@@ -48,18 +41,17 @@ export async function onRequest(context: {
 		}
 
 		const audioBuffer = await response.arrayBuffer();
-
-		// 生成した音声データをキャッシュに保存（TTLを設定して自動削除）
-		await context.env.AUDIO_CACHE.put(cacheKey, audioBuffer, {
-			expirationTtl: 86400,
-		}); // 24時間（86400秒）
-
-		return new Response(audioBuffer, {
+		const newResponse = new Response(audioBuffer, {
 			status: 200,
 			headers: {
 				"Content-Type": "audio/wav",
+				"Cache-Control": "public, max-age=86400",
 			},
 		});
+
+		await cache.put(cacheKey, newResponse.clone());
+
+		return newResponse;
 	} catch (error) {
 		console.error("Error:", error);
 		const statusCode =

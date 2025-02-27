@@ -6,7 +6,7 @@ export const useAudio = () => {
 	const { playAudio } = audioPlayer();
 
 	const fetchAudio = useCallback(
-		async (text: string) => {
+		async (text: string, speaker: string) => {
 			try {
 				setIsPlaying(true);
 
@@ -15,7 +15,7 @@ export const useAudio = () => {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify({ text }),
+					body: JSON.stringify({ text, speaker }),
 				});
 
 				if (!response.ok) {
