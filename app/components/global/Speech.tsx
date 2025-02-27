@@ -10,12 +10,14 @@ interface SpeechProps {
 const Speech = ({ word, size }: SpeechProps) => {
 	const { isPlaying, fetchAudio } = useAudio();
 
+	const speaker = "en-US-Standard-B";
+
 	const handlePlay = () => {
 		if (!word || word.trim() === "") {
 			alert("再生する単語がありません");
 			return;
 		}
-		fetchAudio(word);
+		fetchAudio(word, speaker);
 	};
 
 	return (
