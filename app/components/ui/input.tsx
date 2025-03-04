@@ -22,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 				<input
 					type={type}
 					className={cn(
-						"h-10 w-full rounded-md border border-input bg-background text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+						"h-10 w-full rounded-md border border-gray-300 bg-background text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-gray-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-200",
 						icon ? "pl-10" : "pl-3",
 						className,
 					)}
