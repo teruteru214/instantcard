@@ -4,7 +4,7 @@ export interface Tag {
 	check: boolean;
 }
 
-export interface WordProps {
+export interface Word {
 	word: string;
 }
 
