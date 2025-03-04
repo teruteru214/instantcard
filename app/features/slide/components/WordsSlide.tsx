@@ -157,7 +157,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 														{Math.ceil(data.length / 2)}
 													</p>
 													<div className="absolute bottom-2 right-2">
-														<Speech size={6} word={item.word} />
+														<Speech word={item.word} />
 													</div>
 												</div>
 											)}

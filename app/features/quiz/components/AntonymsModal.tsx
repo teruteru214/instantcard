@@ -33,7 +33,7 @@ const AntonymsModal = ({ word }: { word: string }) => {
 							className="flex justify-center items-center"
 						>
 							<p>{collocation.text}</p>
-							<Speech word={collocation.text} size={20} />
+							<Speech word={collocation.text} />
 						</div>
 					))}
 				</div>

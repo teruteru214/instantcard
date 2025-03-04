@@ -4,33 +4,38 @@ import { useAudio } from "~/hooks/useAudio";
 
 interface SpeechProps {
 	word: string;
-	size: number;
+	speakerId?: string;
+	size?: number;
 }
 
-const Speech = ({ word, size }: SpeechProps) => {
+const Speech = ({
+	word,
+	speakerId = "en-US-Standard-B",
+	size,
+}: SpeechProps) => {
 	const { isPlaying, fetchAudio } = useAudio();
-
-	const speaker = "en-US-Standard-B";
 
 	const handlePlay = () => {
 		if (!word || word.trim() === "") {
 			alert("再生する単語がありません");
 			return;
 		}
-		fetchAudio(word, speaker);
+		fetchAudio(word, speakerId);
 	};
+
+	const buttonSizeClass = size ? `h-${size} w-${size}` : "h-10 w-10";
 
 	return (
 		<Button
 			variant="ghost"
 			size="icon"
-			className="p-2 rounded-full"
+			className={`p-2 rounded-full ${buttonSizeClass}`}
 			onClick={!isPlaying ? handlePlay : undefined}
 			aria-label={`Play pronunciation for ${word}`}
 			disabled={isPlaying}
 			type="button"
 		>
-			<Volume2 className={`h-${size} w-${size}`} />
+			<Volume2 className="h-full w-full" />
 		</Button>
 	);
 };

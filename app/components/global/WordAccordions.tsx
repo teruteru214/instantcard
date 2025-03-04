@@ -44,7 +44,7 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 								<p>{ex.text}</p>
 								<p className="text-xs">{ex.translation}</p>
 							</div>
-							<Speech word={ex.text} size={24} />
+							<Speech word={ex.text} />
 						</div>
 					))}
 				/>
@@ -59,7 +59,7 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 								<p>{col.text}</p>
 								<p className="text-xs">{col.translation}</p>
 							</div>
-							<Speech word={col.text} size={24} />
+							<Speech word={col.text} />
 						</div>
 					))}
 				/>
@@ -92,7 +92,7 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 								<p>{der.text}</p>
 								<p className="text-xs">{der.translation}</p>
 							</div>
-							<Speech word={der.text} size={24} />
+							<Speech word={der.text} />
 						</div>
 					))}
 				/>
@@ -107,7 +107,7 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 								<p>{ant.text}</p>
 								<p className="text-xs">{ant.translation}</p>
 							</div>
-							<Speech word={ant.text} size={24} />
+							<Speech word={ant.text} />
 						</div>
 					))}
 				/>
