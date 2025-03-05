@@ -3,8 +3,8 @@ import type { WordDetail } from "./types";
 
 const mockData: WordDetail = {
 	tags: [
-		{ id: 1, name: "果物", check: true },
-		{ id: 2, name: "食べ物", check: false },
+		{ id: 1, name: "果物", isChecked: true },
+		{ id: 2, name: "食べ物", isChecked: false },
 	],
 	word: "apple",
 	translation: "リンゴ",

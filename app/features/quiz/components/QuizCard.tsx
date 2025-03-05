@@ -53,7 +53,7 @@ const QuizCard = ({
 						<FormItem>
 							<div className="flex justify-between items-center">
 								<p>正しい答えを選んでください</p>
-								<Speech word={quiz.word} size={20} />
+								<Speech word={quiz.word} />
 							</div>
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 								{options.map((option) => (

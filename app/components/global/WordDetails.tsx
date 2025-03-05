@@ -106,7 +106,7 @@ const WordDetails = ({ triggerElement, word }: WordDetailsProps) => {
 					</div>
 					<div className="ml-3 flex">
 						<SheetTitle>{word}</SheetTitle>
-						<Speech word={word} size={20} aria-label="クリックして発音を聞く" />
+						<Speech word={word} aria-label="クリックして発音を聞く" />
 					</div>
 				</SheetHeader>
 				<WordAccordions word={word} data={mockWordData} />

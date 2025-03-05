@@ -1,10 +1,10 @@
 export interface Tag {
 	id: number;
 	name: string;
-	check: boolean;
+	isChecked: boolean;
 }
 
-export interface WordProps {
+export interface Word {
 	word: string;
 }
 
