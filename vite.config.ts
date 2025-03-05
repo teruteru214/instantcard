@@ -19,6 +19,13 @@ export default defineConfig({
 					route("cards/:word", "features/cards/word/index.tsx");
 					route("/quiz", "features/quiz/index.tsx");
 					route("/slide", "features/slide/index.tsx");
+					route("/settings", "features/settings/index.tsx");
+					route("/settings/trash", "features/settings/trash/index.tsx");
+					route("/settings/tags", "features/settings/tags/index.tsx");
+					route(
+						"/settings/delete-account",
+						"features/settings/delete-account/index.tsx",
+					);
 					route("*", "features/not-found.tsx");
 				});
 			},
