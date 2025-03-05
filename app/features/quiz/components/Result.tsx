@@ -56,7 +56,7 @@ const Result = ({ result }: ResultProps) => {
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead>英単語</TableHead>
+						<TableHead>英単語 ( 熟語 )</TableHead>
 						<TableHead>正解</TableHead>
 						<TableHead>あなたの答え</TableHead>
 						<TableHead>正否</TableHead>
@@ -67,8 +67,13 @@ const Result = ({ result }: ResultProps) => {
 						<TableRow key={item.word}>
 							<WordDetails
 								triggerElement={
-									<TableCell className="hover:underline cursor-pointer">
-										{item.word}
+									<TableCell className="hover:underline cursor-pointer max-w-[200px] truncate">
+										<span
+											className="block overflow-hidden text-ellipsis whitespace-nowrap"
+											title={item.word}
+										>
+											{item.word}
+										</span>
 									</TableCell>
 								}
 								word={item.word}
