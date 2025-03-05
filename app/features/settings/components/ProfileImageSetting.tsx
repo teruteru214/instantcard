@@ -63,7 +63,7 @@ const ProfileImageSection = ({ img }: { img: string }) => {
 					variant="outline"
 					className="block sm:hidden"
 					onClick={triggerFileSelect}
-					aria-label="変更した名前を保存"
+					aria-label="プロフィール画像を変更"
 				>
 					画像を変更
 				</Button>
