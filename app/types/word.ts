@@ -1,7 +1,7 @@
 export interface Tag {
 	id: number;
 	name: string;
-	check: boolean;
+	isChecked: boolean;
 }
 
 export interface Word {

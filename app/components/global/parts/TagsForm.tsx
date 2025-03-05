@@ -15,7 +15,7 @@ const tagsSchema = z.object({
 				name: z
 					.string()
 					.max(15, { message: "タグは15文字以内で入力してください" }),
-				check: z.boolean(),
+				isChecked: z.boolean(),
 			}),
 		)
 		.default([]),
@@ -41,10 +41,11 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 	const [newTag, setNewTag] = useState("");
 	const [tagError, setTagError] = useState<string | null>(null);
 
-	const toggleCheck = (id: number, checked: boolean) => {
+	// isCheckedを使用するように変更
+	const toggleCheck = (id: number, isChecked: boolean) => {
 		setValue(
 			"tags",
-			tags.map((tag) => (tag.id === id ? { ...tag, check: checked } : tag)),
+			tags.map((tag) => (tag.id === id ? { ...tag, isChecked } : tag)),
 		);
 	};
 
@@ -60,9 +61,10 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 			return;
 		}
 
+		// isCheckedをfalseで初期化
 		setValue("tags", [
 			...tags,
-			{ id: Date.now(), name: formattedNewTag, check: false },
+			{ id: Date.now(), name: formattedNewTag, isChecked: false },
 		]);
 
 		setTagError(null);
@@ -75,7 +77,7 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 					<LabeledCheckbox
 						key={tag.id}
 						label={tag.name}
-						checked={tag.check}
+						checked={tag.isChecked} // isCheckedを参照
 						onCheckedChange={(checked) =>
 							toggleCheck(tag.id, checked as boolean)
 						}
