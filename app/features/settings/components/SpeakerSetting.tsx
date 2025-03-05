@@ -47,6 +47,7 @@ const SpeakerSetting = ({ initialSpeaker }: { initialSpeaker: string }) => {
 						<RadioGroup
 							defaultValue={formSpeaker}
 							onValueChange={(value) => setValue("speaker", value)}
+							aria-label="話し手の選択"
 						>
 							{Object.entries(speakers).map(([key, label]) => (
 								<div key={key} className="flex items-center gap-1">
@@ -84,7 +85,7 @@ const SpeakerSetting = ({ initialSpeaker }: { initialSpeaker: string }) => {
 					</form>
 				) : (
 					<>
-						<p className="text-gray-500">
+						<p className="text-gray-500" aria-live="polite">
 							{getSpeakerDescription({ speakerId: selectedSpeaker })}
 						</p>
 						<Button variant="outline" onClick={() => setIsEditing(true)}>

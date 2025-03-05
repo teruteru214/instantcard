@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -15,8 +15,13 @@ const nameSchema = z.object({
 const ProfileNameSetting = ({ name: initialName }: { name: string }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [displayName, setDisplayName] = useState(initialName);
-	// 型を明示的に指定して、nullableにする
 	const inputRef = useRef<HTMLInputElement | null>(null);
+
+	useEffect(() => {
+		if (isEditing) {
+			inputRef.current?.focus();
+		}
+	}, [isEditing]);
 
 	const {
 		register,
@@ -36,15 +41,10 @@ const ProfileNameSetting = ({ name: initialName }: { name: string }) => {
 
 	const startEditing = () => {
 		setIsEditing(true);
-		setTimeout(() => {
-			inputRef.current?.focus();
-		}, 0);
 	};
 
-	// registerの結果とrefを合成
 	const { ref, ...registerRest } = register("name");
 
-	// インラインでrefを処理する方法
 	return (
 		<div className="rounded-lg border border-gray-200 p-6">
 			<div className="space-y-4">
@@ -57,9 +57,7 @@ const ProfileNameSetting = ({ name: initialName }: { name: string }) => {
 								type="text"
 								{...registerRest}
 								ref={(element) => {
-									// react-hook-form の ref に渡す
 									ref(element);
-									// 自分の ref に代入
 									if (element) {
 										inputRef.current = element;
 									}
@@ -72,7 +70,7 @@ const ProfileNameSetting = ({ name: initialName }: { name: string }) => {
 								</p>
 							)}
 						</div>
-						<div className="mt-6 flex justify-end gap-5">
+						<div className="mt-6 flex justify-end gap-2">
 							<Button
 								variant="ghost"
 								type="button"
@@ -81,10 +79,15 @@ const ProfileNameSetting = ({ name: initialName }: { name: string }) => {
 									setValue("name", displayName);
 								}}
 								className="text-gray-400 hover:text-gray-500"
+								aria-label="名前の編集をキャンセル"
 							>
 								キャンセル
 							</Button>
-							<Button variant="default" type="submit">
+							<Button
+								variant="default"
+								type="submit"
+								aria-label="変更した名前を保存"
+							>
 								保存する
 							</Button>
 						</div>

@@ -12,6 +12,7 @@ const TagSection = () => {
 				<Link
 					to="/settings/tags"
 					className="inline-flex items-center text-gray-500 hover:text-gray-600 underline"
+					aria-label="タグを管理ページへ移動"
 				>
 					タグを管理 <ArrowRight className="ml-1 h-4 w-4" />
 				</Link>

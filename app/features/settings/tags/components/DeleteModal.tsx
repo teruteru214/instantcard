@@ -17,12 +17,14 @@ const DeleteModal = ({ tag_name, tag_count, triggerElement }: DeleteProps) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>{triggerElement}</DialogTrigger>
-			<DialogContent aria-labelledby="delete-modal-title">
-				<DialogHeader>タグを削除しますか？</DialogHeader>
-				<p
-					id="delete-modal-description"
-					className="text-gray-400 text-center break-words"
-				>
+			<DialogContent
+				aria-labelledby="delete-modal-title"
+				aria-describedby="delete-modal-description"
+			>
+				<DialogHeader id="delete-modal-title">
+					タグを削除しますか？
+				</DialogHeader>
+				<p id="delete-modal-description" className="text-gray-400 text-center ">
 					"<span className="font-medium">{tag_name}</span>"を選択中です。
 					<br />
 					削除すると、{tag_count}つのカードのタグが外れます。

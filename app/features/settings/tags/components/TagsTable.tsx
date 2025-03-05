@@ -11,7 +11,7 @@ const TagsTable = ({ tags }: TagsTableProps) => {
 	return (
 		<Table>
 			<TableBody>
-				{tags.map((tag: TagEdit) => (
+				{tags.map((tag) => (
 					<TagEditRow key={tag.id} tag={tag} />
 				))}
 			</TableBody>

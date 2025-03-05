@@ -37,21 +37,18 @@ const ProfileImageSection = ({ img }: { img: string }) => {
 	return (
 		<div className="rounded-lg border border-gray-200 p-6">
 			<div className="flex items-center gap-4">
-				{/* div をボタンに変更してアクセシビリティを向上 */}
 				<button
 					type="button"
 					className="relative w-20 h-20 cursor-pointer border-0 p-0 bg-transparent"
 					onClick={triggerFileSelect}
-					onKeyDown={(e) => {
-						if (e.key === "Enter" || e.key === " ") {
-							triggerFileSelect();
-						}
-					}}
+					onKeyDown={(e) =>
+						e.key === "Enter" || e.key === " " ? triggerFileSelect() : null
+					}
 					aria-label="プロフィール画像を選択"
 				>
 					<img
 						src={selectedImage}
-						alt="プロフィール画像"
+						alt="ユーザープロフィール画像 - クリックして変更"
 						className="rounded-full object-cover w-20 h-20"
 					/>
 				</button>
@@ -66,6 +63,7 @@ const ProfileImageSection = ({ img }: { img: string }) => {
 					variant="outline"
 					className="block sm:hidden"
 					onClick={triggerFileSelect}
+					aria-label="変更した名前を保存"
 				>
 					画像を変更
 				</Button>

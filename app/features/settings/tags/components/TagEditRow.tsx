@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "~/components/ui/button";
@@ -22,8 +22,13 @@ const tagSchema = z.object({
 const TagEditRow = ({ tag: initialTag }: TagEditRowProps) => {
 	const [tag, setTag] = useState<TagEdit>(initialTag);
 	const [isEditing, setIsEditing] = useState(false);
-
 	const inputRef = useRef<HTMLInputElement | null>(null);
+
+	useEffect(() => {
+		if (isEditing && inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [isEditing]);
 
 	const {
 		register,
@@ -39,9 +44,7 @@ const TagEditRow = ({ tag: initialTag }: TagEditRowProps) => {
 	const handleSave = (data: { name: string }) => {
 		const updatedTag = { ...tag, name: data.name };
 		setTag(updatedTag);
-
 		console.log("保存されたタグ:", updatedTag);
-
 		setIsEditing(false);
 	};
 
@@ -52,9 +55,6 @@ const TagEditRow = ({ tag: initialTag }: TagEditRowProps) => {
 
 	const startEditing = () => {
 		setIsEditing(true);
-		setTimeout(() => {
-			inputRef.current?.focus();
-		}, 0);
 	};
 
 	const { ref, ...registerRest } = register("name");
