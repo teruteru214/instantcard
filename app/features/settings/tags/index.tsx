@@ -1,7 +1,7 @@
 import TagsTable from "./components/TagsTable";
-import type { Tag } from "./types/tag";
+import type { TagEdit } from "./types/tag";
 
-const tags: Tag[] = [
+const tags: TagEdit[] = [
 	{ id: 2, name: "プログラミング", count: 7 },
 	{ id: 3, name: "TOEIC", count: 67 },
 ];

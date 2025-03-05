@@ -1,17 +1,17 @@
 import { Table, TableBody } from "~/components/ui/table";
 
-import type { Tag } from "../types/tag";
+import type { TagEdit } from "../types/tag";
 import TagEditRow from "./TagEditRow";
 
 interface TagsTableProps {
-	tags: Tag[];
+	tags: TagEdit[];
 }
 
 const TagsTable = ({ tags }: TagsTableProps) => {
 	return (
 		<Table>
 			<TableBody>
-				{tags.map((tag: Tag) => (
+				{tags.map((tag: TagEdit) => (
 					<TagEditRow key={tag.id} tag={tag} />
 				))}
 			</TableBody>

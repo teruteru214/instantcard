@@ -5,11 +5,11 @@ import * as z from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { TableCell, TableRow } from "~/components/ui/table";
-import type { Tag } from "../types/tag";
+import type { TagEdit } from "../types/tag";
 import DeleteModal from "./DeleteModal";
 
 interface TagEditRowProps {
-	tag: Tag;
+	tag: TagEdit;
 }
 
 const tagSchema = z.object({
@@ -20,7 +20,7 @@ const tagSchema = z.object({
 });
 
 const TagEditRow = ({ tag: initialTag }: TagEditRowProps) => {
-	const [tag, setTag] = useState<Tag>(initialTag);
+	const [tag, setTag] = useState<TagEdit>(initialTag);
 	const [isEditing, setIsEditing] = useState(false);
 
 	const inputRef = useRef<HTMLInputElement | null>(null);
