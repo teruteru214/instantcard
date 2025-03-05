@@ -6,7 +6,7 @@ const tags: Tag[] = [
 	{ id: 3, name: "TOEIC", count: 67 },
 ];
 
-const TrashSettings = () => {
+const TagsSetting = () => {
 	return (
 		<div className="min-h-screen flex flex-col">
 			<div className="py-4 space-y-5">
@@ -19,4 +19,4 @@ const TrashSettings = () => {
 	);
 };
 
-export default TrashSettings;
+export default TagsSetting;

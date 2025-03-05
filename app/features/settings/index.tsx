@@ -1,4 +1,4 @@
-import DeleteAccount from "./components/DeleteAccout";
+import DeleteAccount from "./components/DeleteAccount";
 import ProfileImageSection from "./components/ProfileImageSetting";
 import ProfileNameSetting from "./components/ProfileNameSetting";
 import SpeakerSetting from "./components/SpeakerSetting";

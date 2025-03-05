@@ -1,17 +1,32 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 
 const ProfileImageSection = ({ img }: { img: string }) => {
 	const [selectedImage, setSelectedImage] = useState(img);
+	const [objectUrl, setObjectUrl] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files?.[0]) {
 			const file = event.target.files[0];
+			if (objectUrl) {
+				URL.revokeObjectURL(objectUrl);
+			}
+
 			const imageUrl = URL.createObjectURL(file);
+			setObjectUrl(imageUrl);
+
 			setSelectedImage(imageUrl);
 		}
 	};
+
+	useEffect(() => {
+		return () => {
+			if (objectUrl) {
+				URL.revokeObjectURL(objectUrl);
+			}
+		};
+	}, [objectUrl]);
 
 	const triggerFileSelect = () => {
 		if (fileInputRef.current) {
