@@ -35,7 +35,7 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
-	TooltipTrigger,
+	TooltipTriggerNoButton,
 } from "~/components/ui/tooltip";
 import type { SlideWord } from "../types";
 
@@ -193,7 +193,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					{/* ▶ / ⏸ 再生・停止 */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button
 									size="icon"
 									variant={slide.isPlaying ? "black" : "default"}
@@ -206,7 +206,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								>
 									{slide.isPlaying ? <Pause /> : <Play />}
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								{slide.isPlaying ? (
 									<>
@@ -226,7 +226,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					{/* ⏳ スライド1枚あたりの表示時間設定 */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
 										<Button size="icon">
@@ -256,7 +256,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 										<p className="px-2 text-left">{slide.playbackSpeed}秒</p>
 									</DropdownMenuContent>
 								</DropdownMenu>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								スライド1枚あたりの表示時間
 							</TooltipContent>
@@ -266,7 +266,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					{/* 🖼 / 🚫🖼 画像表示・非表示 */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button
 									size="icon"
 									variant={slide.showImages ? "black" : "default"}
@@ -279,7 +279,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								>
 									{slide.showImages ? <Image /> : <ImageOff />}
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								{slide.showImages ? "画像非表示" : "画像表示"}
 							</TooltipContent>
@@ -289,7 +289,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					{/* ♾ ループ切り替え */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button
 									size="icon"
 									variant={slide.isLooping ? "black" : "default"}
@@ -302,7 +302,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								>
 									<InfinityIcon />
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								ループ{slide.isLooping ? "オフ" : "オン"}
 							</TooltipContent>
@@ -312,11 +312,11 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					{/* 🔀 スライドシャッフル */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button size="icon" onClick={handleShuffle}>
 									<Shuffle />
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								スライドをシャッフル
 							</TooltipContent>
@@ -326,7 +326,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					{/* ⛶ / ⛌ 拡大・縮小 */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button
 									size="icon"
 									variant={isSizing ? "black" : "default"}
@@ -334,7 +334,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								>
 									{isSizing ? <Minimize2 /> : <Expand />}
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								{isSizing ? (
 									<>
