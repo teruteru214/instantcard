@@ -20,7 +20,7 @@ const TrashWordsTable = ({ words, tags }: TrashWordsTableProps) => {
 							<WordDetails
 								word={w.word}
 								triggerElement={
-									<div className="hover:underline cursor-pointer max-w-[200px] truncate">
+									<div className="hover:underline cursor-pointer sm:max-w-[300px] max-w-[150px] truncate">
 										<span
 											className="block overflow-hidden text-ellipsis whitespace-nowrap"
 											title={w.word}
@@ -36,7 +36,8 @@ const TrashWordsTable = ({ words, tags }: TrashWordsTableProps) => {
 									tags={tags}
 									triggerElement={
 										<Button size="sm" variant="outline">
-											元に戻す
+											<span className="hidden sm:inline">元に戻す</span>
+											<span className="sm:hidden">戻す</span>
 										</Button>
 									}
 								/>
@@ -44,7 +45,8 @@ const TrashWordsTable = ({ words, tags }: TrashWordsTableProps) => {
 									word={w.word}
 									triggerElement={
 										<Button size="sm" variant="secondary">
-											削除する
+											<span className="hidden sm:inline">削除する</span>
+											<span className="sm:hidden">削除</span>
 										</Button>
 									}
 								/>
