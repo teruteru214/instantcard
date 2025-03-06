@@ -23,7 +23,7 @@ const WordCardOverlay = ({ word }: WordCardOverlayProps) => {
 			<Card className="flex-1 bg-white border px-4 py-3 rounded-r-md">
 				<WordDetails
 					triggerElement={
-						<p className="text-gray-800 text-lg font-medium truncate cursor-pointer hover:underline">
+						<p className="text-gray-800 text-lg font-medium truncate hover:underline">
 							{word}
 						</p>
 					}

@@ -11,13 +11,13 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
+import NoCard from "~/components/global/NoCard";
 import type { WordData } from "../types";
 import {
 	getFirstPosition,
 	getLastPosition,
 	getMiddlePosition,
 } from "../utils/lexorank";
-import EmptyState from "./EmptyState";
 import WordCard from "./WordCard";
 import WordCardOverlay from "./WordCardOverlay";
 
@@ -126,7 +126,7 @@ const WordList = ({ initialWords }: WordListProps) => {
 					</DragOverlay>
 				</DndContext>
 			) : (
-				<EmptyState />
+				<NoCard />
 			)}
 		</>
 	);
