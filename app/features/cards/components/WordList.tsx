@@ -11,7 +11,6 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { ScrollArea } from "~/components/ui/scroll-area";
 import type { WordData } from "../types";
 import {
 	getFirstPosition,
@@ -107,8 +106,8 @@ const WordList = ({ initialWords }: WordListProps) => {
 						items={words.map((wordData) => wordData.word)}
 						strategy={verticalListSortingStrategy}
 					>
-						<ScrollArea
-							className="sm:h-[78vh] min-h-[40vh] w-full rounded-md border"
+						<div
+							className="w-full rounded-md border min-h-screen h-auto"
 							aria-label="単語カードリスト"
 						>
 							<div className="p-4 space-y-2">
@@ -120,7 +119,7 @@ const WordList = ({ initialWords }: WordListProps) => {
 									/>
 								))}
 							</div>
-						</ScrollArea>
+						</div>
 					</SortableContext>
 
 					<DragOverlay>
