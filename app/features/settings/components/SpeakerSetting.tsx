@@ -66,7 +66,7 @@ const SpeakerSetting = ({ initialSpeaker }: { initialSpeaker: string }) => {
 						{errors.speaker && (
 							<p className="text-red-500 text-sm">{errors.speaker.message}</p>
 						)}
-						<div className="mt-6 flex justify-end gap-5">
+						<div className="mt-6 flex justify-end gap-2">
 							<Button
 								variant="ghost"
 								type="button"

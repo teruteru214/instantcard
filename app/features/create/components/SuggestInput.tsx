@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ControllerRenderProps } from "react-hook-form";
 import { cn } from "~/lib/utils";
 import { useDebounce } from "../hooks/useDebounce";
@@ -18,6 +18,13 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const debouncedFetch = useDebounce(600);
+
+	// コンポーネントがマウントされた時に自動的にフォーカスする
+	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, []);
 
 	const DATAMUSE_API_URL = import.meta.env.VITE_DATAMUSE_API_URL;
 
@@ -63,7 +70,7 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 
 	return (
 		<div className="relative w-full">
-			<div className="rounded-lg border bg-white">
+			<div className="rounded-md">
 				<div className="relative">
 					<input
 						ref={(el) => {
@@ -77,7 +84,13 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 						onBlur={handleBlur}
 						onFocus={handleFocus}
 						maxLength={maxLength}
-						className="h-11 w-full rounded-lg py-2 pl-4 pr-4 text-sm focus:outline-none"
+						className={cn(
+							"h-10 w-full rounded-md border border-gray-300 bg-background text-base",
+							"placeholder:text-muted-foreground focus-visible:outline-none",
+							"focus-visible:border-gray-500 disabled:cursor-not-allowed",
+							"disabled:opacity-50 transition-colors duration-200 py-2 px-4",
+							isOpen ? "rounded-b-none border-b-0" : "",
+						)}
 						aria-label="検索キーワード"
 						aria-haspopup="listbox"
 						aria-expanded={isOpen}
@@ -88,7 +101,7 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 				{isOpen && (
 					<ul
 						id="suggestions-list"
-						className="py-2"
+						className="border border-t-0 border-gray-500 rounded-b-md bg-white py-1"
 						aria-labelledby="suggestions-list"
 					>
 						{suggestions.map((suggestion) => (
