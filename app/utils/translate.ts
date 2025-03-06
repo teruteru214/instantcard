@@ -15,5 +15,5 @@ const grammarTypeMap: Record<string, string> = {
 };
 
 export const translateGrammarType = (type: string): string => {
-	return grammarTypeMap[type] || type; // 未定義ならそのまま返す
+	return grammarTypeMap[type] || type;
 };

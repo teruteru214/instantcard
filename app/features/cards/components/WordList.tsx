@@ -28,7 +28,6 @@ interface WordListProps {
 const WordList = ({ initialWords }: WordListProps) => {
 	const [words, setWords] = useState<WordData[]>(initialWords);
 
-	// ドラッグ中の word を保持
 	const [activeWord, setActiveWord] = useState<WordData | null>(null);
 
 	const handleDragStart = (event: DragStartEvent) => {

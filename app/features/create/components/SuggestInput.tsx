@@ -19,7 +19,6 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const debouncedFetch = useDebounce(600);
 
-	// コンポーネントがマウントされた時に自動的にフォーカスする
 	useEffect(() => {
 		if (inputRef.current) {
 			inputRef.current.focus();
@@ -63,7 +62,7 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 
 	const handleBlur = () => {
 		setTimeout(() => setIsOpen(false), 100);
-		field.onBlur(); // 🔥 react-hook-form の `onBlur` を呼び出す
+		field.onBlur();
 	};
 
 	const handleFocus = () => setIsOpen(!!inputValue.trim());
@@ -74,7 +73,7 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 				<div className="relative">
 					<input
 						ref={(el) => {
-							field.ref(el); // 🔥 ref を react-hook-form に渡す
+							field.ref(el);
 							inputRef.current = el;
 						}}
 						type="text"
@@ -113,7 +112,7 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 								)}
 								onClick={() => {
 									setInputValue(suggestion.word);
-									field.onChange(suggestion.word); // 🔥 react-hook-form に選択値を反映
+									field.onChange(suggestion.word);
 									setIsOpen(false);
 									inputRef.current?.blur();
 								}}

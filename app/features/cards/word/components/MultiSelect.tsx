@@ -34,7 +34,6 @@ const MultiSelect = ({
 		);
 	};
 
-	// 表示制限
 	const maxDisplayCountSm = 3; // スマホの最大表示数
 	const maxDisplayCountMd = 7; // タブレット・PCの最大表示数
 
@@ -86,7 +85,6 @@ const MultiSelect = ({
 							{/* タブレット・PC用の表示 (7個まで) */}
 							{visibleOptionsMd.map((selectedId, index) => {
 								const option = options.find((o) => o.value === selectedId);
-								// スマホではすでに表示されているため `sm:hidden` を適用
 								return (
 									option && (
 										<Badge

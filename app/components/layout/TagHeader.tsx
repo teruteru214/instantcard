@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "@remix-run/react"; // Remix の useNavigate, useLocation
+import { Link, useLocation, useNavigate } from "@remix-run/react";
 import { Tag, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
