@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@remix-run/react";
 import { ChevronsUpDown } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Badge } from "~/components/ui/badge";
@@ -14,6 +15,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { cn } from "~/lib/utils";
 import type { TagOption } from "../types";
 
 interface MultiSelectProps {
@@ -41,6 +43,8 @@ const MultiSelect = ({
 	setSelectedOptions,
 	placeholder = "選択してください",
 }: MultiSelectProps) => {
+	const [isOpen, setIsOpen] = useState(false);
+
 	const {
 		register,
 		handleSubmit,
@@ -90,14 +94,18 @@ const MultiSelect = ({
 		<div>
 			<div>
 				<Label indispensable>タグの付与</Label>
-				<DropdownMenu>
+				<DropdownMenu open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
 					<DropdownMenuTrigger asChild>
 						<div className="relative cursor-pointer">
 							<Input
 								id="multi-select"
 								readOnly
 								data-testid="multi-select-input"
-								className="h-11 w-full overflow-x-auto pointer-events-none"
+								className={cn(
+									"h-11 w-full overflow-x-auto pointer-events-none",
+									"hover:border-gray-500 transition-colors duration-200",
+									isOpen && "border-gray-500",
+								)}
 								placeholder={selectedOptions.length > 0 ? "" : placeholder}
 							/>
 							<div className="absolute left-3 top-1/2 -translate-y-1/2 flex flex-wrap gap-2">
@@ -107,7 +115,13 @@ const MultiSelect = ({
 									</Badge>
 								))}
 							</div>
-							<ChevronsUpDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 shrink-0 opacity-50" />
+							<ChevronsUpDown
+								className={cn(
+									"absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 shrink-0",
+									"transition-opacity duration-200",
+									isOpen ? "opacity-100" : "opacity-50",
+								)}
+							/>
 						</div>
 					</DropdownMenuTrigger>
 
