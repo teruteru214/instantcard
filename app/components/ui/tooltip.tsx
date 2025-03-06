@@ -9,6 +9,16 @@ const Tooltip = TooltipPrimitive.Root;
 
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
+const TooltipTriggerNoButton = React.forwardRef<
+	React.ElementRef<typeof TooltipPrimitive.Trigger>,
+	React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+	<TooltipPrimitive.Trigger ref={ref} {...props} asChild>
+		<span className={cn("cursor-pointer", className)}>{children}</span>
+	</TooltipPrimitive.Trigger>
+));
+TooltipTriggerNoButton.displayName = "TooltipTriggerNoButton";
+
 const TooltipContent = React.forwardRef<
 	React.ElementRef<typeof TooltipPrimitive.Content>,
 	React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
@@ -25,4 +35,10 @@ const TooltipContent = React.forwardRef<
 ));
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
+export {
+	Tooltip,
+	TooltipTrigger,
+	TooltipTriggerNoButton,
+	TooltipContent,
+	TooltipProvider,
+};

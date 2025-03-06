@@ -1,5 +1,6 @@
 import { useState } from "react";
 import TagHeader from "~/components/layout/TagHeader";
+
 import WordsSlide from "./components/WordsSlide";
 import type { SlideWord } from "./types";
 

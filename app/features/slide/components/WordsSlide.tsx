@@ -35,9 +35,10 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
-	TooltipTrigger,
+	TooltipTriggerNoButton,
 } from "~/components/ui/tooltip";
 import type { SlideWord } from "../types";
+import { shuffleSlides } from "../utils/shuffle";
 
 interface WordsSlideProps {
 	data: SlideWord[];
@@ -51,10 +52,9 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 		playbackSpeed: 5,
 		isLooping: true,
 		showImages: true,
-		data: data, // data を state に保持
+		data: data,
 	});
 
-	// キーバインドの処理
 	const handleKeyDown = useCallback(
 		(event: KeyboardEvent) => {
 			switch (event.key) {
@@ -85,19 +85,6 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 		};
 	}, [handleKeyDown]);
 
-	// シャッフル関数
-	const shuffleSlides = (data: SlideWord[]) => {
-		const grouped = data.reduce<Record<string, SlideWord[]>>((acc, item) => {
-			const pairId = item.id.split("-")[0];
-			if (!acc[pairId]) acc[pairId] = [];
-			acc[pairId].push(item);
-			return acc;
-		}, {});
-		return Object.values(grouped)
-			.sort(() => Math.random() - 0.5)
-			.flat();
-	};
-
 	const handleShuffle = () => {
 		setSlide((prev) => ({
 			...prev,
@@ -119,7 +106,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 		</>
 	) : (
 		<div className="flex flex-col justify-center items-center">
-			<div className={isSizing ? "w-10/12" : "w-8/12"}>
+			<div className={isSizing ? "w-10/12" : "w-9/12"}>
 				<Carousel
 					opts={{ loop: slide.isLooping }}
 					plugins={plugins}
@@ -133,36 +120,37 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								key={item.id}
 								aria-label={`スライド: ${item.word || item.translation}`}
 							>
-								<div className="mt-2 mb-3 p-1">
+								<div className="my-3 p-1">
 									<Card className="rounded-md">
 										<CardContent className="flex flex-col items-center aspect-square justify-center p-6">
-											{/* 単語データ */}
 											{item.word && (
 												<div className="relative w-full h-full flex items-center justify-center">
 													<p className="text-2xl sm:text-4xl font-semibold text-center">
 														{item.word}
 													</p>
-													<div className="absolute bottom-2 left-2">
-														<WordDetails
-															word={item.word}
-															triggerElement={
-																<Button variant="ghost" size="icon">
-																	<Info />
-																</Button>
-															}
-														/>
-													</div>
-													<p className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
-														{Math.ceil((slide.data.indexOf(item) + 1) / 2)}/
-														{Math.ceil(data.length / 2)}
-													</p>
-													<div className="absolute bottom-2 right-2">
-														<Speech word={item.word} />
+													<div className="absolute bottom-0 left-0 right-0 flex justify-between items-center px-2">
+														<div>
+															<WordDetails
+																word={item.word}
+																triggerElement={
+																	<Button variant="ghost" size="icon">
+																		<Info />
+																	</Button>
+																}
+															/>
+														</div>
+
+														<p className="text-center">
+															{Math.ceil((slide.data.indexOf(item) + 1) / 2)}/
+															{Math.ceil(data.length / 2)}
+														</p>
+
+														<div>
+															<Speech word={item.word} />
+														</div>
 													</div>
 												</div>
 											)}
-
-											{/* 翻訳データ */}
 											{item.translation && (
 												<div className="relative flex items-center justify-center w-full h-full">
 													{/* 背景画像 */}
@@ -189,11 +177,10 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					<CarouselNext />
 				</Carousel>
 
-				<div className="flex justify-center space-x-3">
-					{/* ▶ / ⏸ 再生・停止 */}
+				<div className="mb-4 flex justify-center space-x-3">
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button
 									size="icon"
 									variant={slide.isPlaying ? "black" : "default"}
@@ -206,7 +193,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								>
 									{slide.isPlaying ? <Pause /> : <Play />}
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								{slide.isPlaying ? (
 									<>
@@ -223,10 +210,9 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 						</Tooltip>
 					</TooltipProvider>
 
-					{/* ⏳ スライド1枚あたりの表示時間設定 */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
 										<Button size="icon">
@@ -256,17 +242,16 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 										<p className="px-2 text-left">{slide.playbackSpeed}秒</p>
 									</DropdownMenuContent>
 								</DropdownMenu>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								スライド1枚あたりの表示時間
 							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
 
-					{/* 🖼 / 🚫🖼 画像表示・非表示 */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button
 									size="icon"
 									variant={slide.showImages ? "black" : "default"}
@@ -279,17 +264,16 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								>
 									{slide.showImages ? <Image /> : <ImageOff />}
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								{slide.showImages ? "画像非表示" : "画像表示"}
 							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
 
-					{/* ♾ ループ切り替え */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button
 									size="icon"
 									variant={slide.isLooping ? "black" : "default"}
@@ -302,7 +286,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								>
 									<InfinityIcon />
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								ループ{slide.isLooping ? "オフ" : "オン"}
 							</TooltipContent>
@@ -312,21 +296,20 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					{/* 🔀 スライドシャッフル */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button size="icon" onClick={handleShuffle}>
 									<Shuffle />
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								スライドをシャッフル
 							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
 
-					{/* ⛶ / ⛌ 拡大・縮小 */}
 					<TooltipProvider>
 						<Tooltip>
-							<TooltipTrigger>
+							<TooltipTriggerNoButton>
 								<Button
 									size="icon"
 									variant={isSizing ? "black" : "default"}
@@ -334,7 +317,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 								>
 									{isSizing ? <Minimize2 /> : <Expand />}
 								</Button>
-							</TooltipTrigger>
+							</TooltipTriggerNoButton>
 							<TooltipContent side="bottom">
 								{isSizing ? (
 									<>
