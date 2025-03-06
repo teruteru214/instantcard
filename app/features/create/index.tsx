@@ -5,10 +5,10 @@ const CreatePage = () => {
 	const tags = ["Global", "プログラミング", "TOEIC"];
 
 	return (
-		<div className="h-screen">
-			<div className="mt-5">
-				<CreateForm tags={tags} />
-			</div>
+		<div className="mt-5 mb-[35rem]">
+			{" "}
+			{/* 余白をさらに広げる */}
+			<CreateForm tags={tags} />
 		</div>
 	);
 };
