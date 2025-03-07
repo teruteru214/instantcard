@@ -14,13 +14,15 @@ const TrashSection = ({ cardCount }: { cardCount: number }) => {
 				<p className="text-gray-500">
 					毎月1日にタグ未分類の単語カードが自動で削除されます。
 				</p>
-				<Link
-					to="/settings/trash"
-					className="inline-flex items-center text-gray-500 hover:text-gray-600 underline"
-					aria-label="ゴミ箱の中身を確認"
-				>
-					中身を見る <ArrowRight className="ml-1 h-4 w-4" />
-				</Link>
+				{cardCount > 0 ? (
+					<Link
+						to="/settings/trash"
+						className="inline-flex items-center text-gray-500 hover:text-gray-600 underline"
+						aria-label="ゴミ箱の中身を確認"
+					>
+						中身を見る <ArrowRight className="ml-1 h-4 w-4" />
+					</Link>
+				) : null}
 			</div>
 		</div>
 	);

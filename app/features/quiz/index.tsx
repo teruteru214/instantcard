@@ -30,11 +30,7 @@ const QuizPage = () => {
 	return (
 		<>
 			<TagHeader totalCount={quizData.length} />
-			{quizData.length === 0 ? (
-				<NoCard type="quiz" />
-			) : (
-				<QuizForm quizData={quizData} />
-			)}
+			{quizData.length === 0 ? <NoCard /> : <QuizForm quizData={quizData} />}
 		</>
 	);
 };

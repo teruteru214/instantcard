@@ -41,7 +41,6 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 	const [newTag, setNewTag] = useState("");
 	const [tagError, setTagError] = useState<string | null>(null);
 
-	// isCheckedを使用するように変更
 	const toggleCheck = (id: number, isChecked: boolean) => {
 		setValue(
 			"tags",
@@ -61,7 +60,6 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 			return;
 		}
 
-		// isCheckedをfalseで初期化
 		setValue("tags", [
 			...tags,
 			{ id: Date.now(), name: formattedNewTag, isChecked: false },
@@ -71,13 +69,13 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 	};
 
 	return (
-		<div className="mt-2 mb-4 px-2">
-			<div className="space-y-4">
+		<>
+			<div className="space-y-2">
 				{tags.map((tag) => (
 					<LabeledCheckbox
 						key={tag.id}
 						label={tag.name}
-						checked={tag.isChecked} // isCheckedを参照
+						checked={tag.isChecked}
 						onCheckedChange={(checked) =>
 							toggleCheck(tag.id, checked as boolean)
 						}
@@ -105,7 +103,7 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 					{errors.tags?.message || tagError}
 				</p>
 			)}
-		</div>
+		</>
 	);
 };
 

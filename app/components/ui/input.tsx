@@ -27,8 +27,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 						className,
 					)}
 					ref={ref}
-					onKeyDown={handleKeyDown} // Enterキーの検知
-					{...props} // props内のvalueとonChangeを使用
+					onKeyDown={handleKeyDown}
+					{...props}
 				/>
 				{search && props.value && handleSearch && (
 					<Badge

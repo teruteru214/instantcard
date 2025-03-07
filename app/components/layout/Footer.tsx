@@ -5,7 +5,6 @@ const Footer = () => {
 	return (
 		<footer className="bg-gray-100">
 			<div className="mx-auto max-w-screen-lg px-5 py-10 sm:px-10 md:flex md:flex-col md:items-start lg:flex-row lg:items-center lg:justify-between">
-				{/* 1列目: ユーザー情報とログアウトボタン */}
 				<div className="flex items-center space-x-3">
 					<img
 						src="https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

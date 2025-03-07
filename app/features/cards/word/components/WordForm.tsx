@@ -197,7 +197,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 							<TextPairManager
 								type="phrasal_verbs"
 								initialData={wordDetail.phrasal_verbs || []}
-								maxTextLength={50} // 変更
+								maxTextLength={50}
 								maxTranslationLength={200}
 							/>
 						</div>
