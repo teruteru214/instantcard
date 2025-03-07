@@ -10,7 +10,6 @@ import { LabeledCheckbox } from "~/components/ui/checkbox";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
@@ -125,8 +124,8 @@ const MultiSelect = ({
 						</div>
 					</DropdownMenuTrigger>
 
-					<DropdownMenuContent className="w-80 p-3">
-						<div className="my-2 space-y-2">
+					<DropdownMenuContent className="w-80 p-2">
+						<div className="space-y-2">
 							{options.map((option) => (
 								<LabeledCheckbox
 									key={option.label}
@@ -146,7 +145,7 @@ const MultiSelect = ({
 								/>
 							))}
 						</div>
-						<form className="flex gap-2 items-center">
+						<form className="my-2 flex gap-2 items-center">
 							<Input
 								{...register("newTag")}
 								placeholder="タグを追加 (15文字以内)"
@@ -170,13 +169,17 @@ const MultiSelect = ({
 								{errors.newTag.message}
 							</p>
 						)}
-						<DropdownMenuSeparator className="my-2" />
-						<Link
-							to="/settings/tags"
-							className="text-sm text-gray-500 hover:underline cursor-pointer"
-						>
-							タグを編集する →
-						</Link>
+
+						{(options.length > 1 ||
+							(options.length === 1 &&
+								options[0].label.toLowerCase() !== "global")) && (
+							<Link
+								to="/settings/tags"
+								className="text-sm text-gray-500 hover:underline"
+							>
+								タグを編集する →
+							</Link>
+						)}
 					</DropdownMenuContent>
 				</DropdownMenu>
 

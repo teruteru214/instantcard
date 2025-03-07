@@ -16,7 +16,6 @@ const speakerSchema = z.object({
 });
 
 const SpeakerSetting = ({ initialSpeaker }: { initialSpeaker: string }) => {
-	// `initialSpeaker` を useState で管理
 	const [selectedSpeaker, setSelectedSpeaker] = useState(initialSpeaker);
 	const [isEditing, setIsEditing] = useState(false);
 

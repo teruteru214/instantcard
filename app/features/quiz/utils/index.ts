@@ -98,5 +98,5 @@ export const getBadgeVariant = (
 	if (percentage >= 90) return { variant: "excellent", emoji: "🏆" };
 	if (percentage >= 70) return { variant: "good", emoji: "😃" };
 	if (percentage >= 50) return { variant: "info", emoji: "😐" };
-	return { variant: "destructive", emoji: "😢" }; //
+	return { variant: "destructive", emoji: "😢" };
 };

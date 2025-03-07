@@ -11,13 +11,13 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
+import NoCard from "~/components/global/NoCard";
 import type { WordData } from "../types";
 import {
 	getFirstPosition,
 	getLastPosition,
 	getMiddlePosition,
 } from "../utils/lexorank";
-import EmptyState from "./EmptyState";
 import WordCard from "./WordCard";
 import WordCardOverlay from "./WordCardOverlay";
 
@@ -28,7 +28,6 @@ interface WordListProps {
 const WordList = ({ initialWords }: WordListProps) => {
 	const [words, setWords] = useState<WordData[]>(initialWords);
 
-	// ドラッグ中の word を保持
 	const [activeWord, setActiveWord] = useState<WordData | null>(null);
 
 	const handleDragStart = (event: DragStartEvent) => {
@@ -127,7 +126,7 @@ const WordList = ({ initialWords }: WordListProps) => {
 					</DragOverlay>
 				</DndContext>
 			) : (
-				<EmptyState />
+				<NoCard />
 			)}
 		</>
 	);

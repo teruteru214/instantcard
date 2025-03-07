@@ -35,7 +35,7 @@ export const generateInitialPositions = (words: string[]): WordData[] => {
 		const wordData = {
 			word,
 			position: currentRank.toString(),
-			word_tag_id: index + 1, // IDは1から順番
+			word_tag_id: index + 1,
 		};
 		currentRank = currentRank.genNext();
 		return wordData;

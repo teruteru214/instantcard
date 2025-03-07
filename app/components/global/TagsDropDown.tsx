@@ -3,7 +3,6 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import type { Tag } from "~/types/word";
@@ -20,14 +19,20 @@ const TagsDropdownMenu = ({ triggerElement, tags }: TagsProps) => {
 			<DropdownMenuTrigger asChild>{triggerElement}</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-80">
 				<DropdownMenuLabel>タグを付与する</DropdownMenuLabel>
-				<TagsForm initialTags={tags} />
-				<DropdownMenuSeparator />
-				<Link
-					to="/settings/tags"
-					className="px-1 py-2 text-sm text-gray-500 hover:underline"
-				>
-					タグを編集する →
-				</Link>
+				<div className="p-2">
+					<TagsForm initialTags={tags} />
+					{(tags.length > 1 ||
+						(tags.length === 1 && tags[0].name.toLowerCase() !== "global")) && (
+						<div className="pt-1">
+							<Link
+								to="/settings/tags"
+								className="text-sm text-gray-500 hover:underline"
+							>
+								タグを編集する →
+							</Link>
+						</div>
+					)}
+				</div>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

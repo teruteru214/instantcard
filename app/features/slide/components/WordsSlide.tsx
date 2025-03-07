@@ -102,7 +102,7 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 
 	return data.length === 0 ? (
 		<>
-			<NoCard type="slide" />
+			<NoCard />
 		</>
 	) : (
 		<div className="flex flex-col justify-center items-center">
