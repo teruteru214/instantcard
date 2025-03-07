@@ -69,8 +69,8 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 	};
 
 	return (
-		<div className="mt-2 mb-4 px-2">
-			<div className="space-y-4">
+		<>
+			<div className="space-y-2">
 				{tags.map((tag) => (
 					<LabeledCheckbox
 						key={tag.id}
@@ -103,7 +103,7 @@ const TagsForm = ({ initialTags }: TagsFormProps) => {
 					{errors.tags?.message || tagError}
 				</p>
 			)}
-		</div>
+		</>
 	);
 };
 

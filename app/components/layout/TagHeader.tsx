@@ -1,8 +1,9 @@
-import { Link, useLocation, useNavigate } from "@remix-run/react";
+import { useLocation, useNavigate } from "@remix-run/react";
 import { Tag, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import NoTag from "../global/NoTag";
 import {
 	Tooltip,
 	TooltipContent,
@@ -98,18 +99,7 @@ const TagHeader = ({
 				</div>
 			)}
 
-			{isTagActive && tags.length === 0 && (
-				<p className="my-5 text-center text-gray-400 animate-fade-up">
-					タグがありません。{" "}
-					<Link
-						to="/create"
-						className="underline hover:text-gray-500 cursor-pointer"
-					>
-						英単語カード
-					</Link>
-					をタグで分類できます。
-				</p>
-			)}
+			{isTagActive && tags.length === 0 && <NoTag />}
 		</header>
 	);
 };

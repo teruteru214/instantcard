@@ -118,7 +118,7 @@ const MultiSelect = ({
 					{options.map((option) => (
 						<div
 							key={option.value}
-							className="flex items-center cursor-pointer px-2 py-1.5"
+							className="flex items-center cursor-pointer mx-2"
 						>
 							<LabeledCheckbox
 								label={option.label}
