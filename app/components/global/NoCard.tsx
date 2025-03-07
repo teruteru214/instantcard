@@ -5,7 +5,7 @@ const NoCard = () => {
 	const navigate = useNavigate();
 
 	return (
-		<div className="my-64 space-y-3 flex flex-col items-center justify-center">
+		<div className="my-32 sm:my-64 space-y-3 flex flex-col items-center justify-center">
 			<img
 				src="/tree.webp"
 				alt="単語カードがありません"
