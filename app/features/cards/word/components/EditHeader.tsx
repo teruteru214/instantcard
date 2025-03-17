@@ -9,21 +9,35 @@ import DeleteModal from "./DeleteModal";
 interface EditHeaderProps {
 	tags: Tag[];
 	word: string;
+	isDisabled: boolean;
+	onSubmit: () => void;
 }
 
-const EditHeader = ({ tags, word }: EditHeaderProps) => {
+const EditHeader = ({ tags, word, isDisabled, onSubmit }: EditHeaderProps) => {
 	const navigate = useNavigate();
 
 	return (
 		<div className="sticky top-0 left-0 right-0 z-50 bg-white py-3 flex items-center justify-between">
-			<Button
-				type="button"
-				variant="ghost"
-				size="icon"
-				onClick={() => navigate(-1)}
-			>
-				<ArrowLeft className="text-gray-400 hover:text-gray-500" />
-			</Button>
+			<div className="space-x-2">
+				<Button
+					type="button"
+					variant="ghost"
+					size="icon"
+					onClick={() => navigate(-1)}
+				>
+					<ArrowLeft className="text-gray-400 hover:text-gray-500" />
+				</Button>
+				<Button
+					variant="black"
+					size="sm"
+					type="submit"
+					onClick={onSubmit}
+					disabled={isDisabled} // 直接判定
+					className="text-sm"
+				>
+					保存する
+				</Button>
+			</div>
 
 			<div className="space-x-2">
 				<TagsDropdownMenu
