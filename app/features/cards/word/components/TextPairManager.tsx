@@ -1,159 +1,107 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import { Trash2 } from "lucide-react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+	type Control,
+	Controller,
+	type FieldErrors,
+	type UseFormSetValue,
+	useWatch,
+} from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import type { FormData } from "../schema/wordFormSchema";
+import type { TextPair } from "../types";
 
-type TextPairFormData = {
-	items: {
-		id: number;
-		text: string;
-		translation: string;
-	}[];
-};
+type TextPairFieldName = keyof Pick<
+	FormData,
+	| "synonyms"
+	| "antonyms"
+	| "collocations"
+	| "examples"
+	| "derivations"
+	| "phrasal_verbs"
+>;
 
 interface TextPairManagerProps {
-	type:
-		| "synonyms"
-		| "antonyms"
-		| "collocations"
-		| "examples"
-		| "derivations"
-		| "phrasal_verbs";
-	initialData: { id: number; text: string; translation: string }[];
-	maxTextLength: number;
-	maxTranslationLength: number;
+	initialData: TextPair[];
+	name: TextPairFieldName;
+	control: Control<FormData>;
+	setValue: UseFormSetValue<FormData>;
+	errors: FieldErrors<FormData>;
 }
 
-const TYPE_LABELS = {
-	synonyms: "類義語",
-	antonyms: "対義語",
-	collocations: "コロケーション",
-	examples: "例文",
-	derivations: "派生語",
-	phrasal_verbs: "句動詞",
-};
-
 const TextPairManager = ({
-	type,
 	initialData,
-	maxTextLength,
-	maxTranslationLength,
+	name,
+	control,
+	setValue,
+	errors,
 }: TextPairManagerProps) => {
-	const textPairSchema = z.object({
-		items: z
-			.array(
-				z.object({
-					id: z.number(),
-					text: z
-						.string()
-						.nonempty({ message: "英文を入力してください" })
-						.max(maxTextLength, {
-							message: `英文は${maxTextLength}文字以内で入力してください`,
-						}),
-					translation: z
-						.string()
-						.nonempty({ message: "翻訳を入力してください" })
-						.max(maxTranslationLength, {
-							message: `翻訳は${maxTranslationLength}文字以内で入力してください`,
-						}),
-				}),
-			)
-			.max(5, { message: "最大5件まで入力できます" }),
-	});
+	const labelMap: Record<TextPairFieldName, string> = {
+		synonyms: "類義語を追加",
+		antonyms: "対義語を追加",
+		collocations: "コロケーションを追加",
+		examples: "例文を追加",
+		derivations: "派生語を追加",
+		phrasal_verbs: "句動詞を追加",
+	};
 
-	const {
-		control,
-		handleSubmit,
-		formState: { errors, isValid, isDirty },
-	} = useForm<TextPairFormData>({
-		resolver: zodResolver(textPairSchema),
-		defaultValues: { items: initialData },
-		mode: "onChange",
-	});
-
-	const { fields, append, remove } = useFieldArray({
-		control,
-		name: "items",
-	});
+	const items: TextPair[] = useWatch({ control, name }) ?? initialData;
 
 	const handleAdd = () => {
-		if (fields.length < 5) {
-			append({ id: Date.now(), text: "", translation: "" });
+		if (items.length < 5) {
+			setValue(
+				name,
+				[...items, { id: Date.now(), text: "", translation: "" }],
+				{
+					shouldValidate: true,
+				},
+			);
 		}
 	};
 
-	const onSubmit = (data: TextPairFormData) => {
-		console.log(`${TYPE_LABELS[type]} を保存:`, data.items);
+	const handleRemove = (index: number) => {
+		setValue(
+			name,
+			items.filter((_, i) => i !== index),
+			{ shouldValidate: true },
+		);
 	};
 
 	return (
 		<div className="bg-gray-100 p-3 rounded-md space-y-4">
-			<div className="flex justify-between">
-				<Button
-					type="button"
-					onClick={handleAdd}
-					disabled={fields.length >= 5}
-					variant="highlight"
-				>
-					+ 追加
-				</Button>
-				<Button
-					type="button"
-					onClick={handleSubmit(onSubmit)}
-					variant="black"
-					disabled={!isValid || !isDirty}
-				>
-					保存する
-				</Button>
-			</div>
-
-			{fields.map((item, index) => {
-				const errorCount = [
-					errors.items?.[index]?.text,
-					errors.items?.[index]?.translation,
-				].filter(Boolean).length;
-
-				const minHeightClass =
-					errorCount === 0
-						? "min-h-[88px]"
-						: errorCount === 1
-							? "min-h-[112px]"
-							: "min-h-[136px]";
+			{items.map((item, index) => {
+				const fieldErrors = errors[name]?.[index] || {};
 
 				return (
-					<div key={item.id}>
+					<div key={item.id || index}>
 						<div className="flex items-stretch gap-2 w-full">
 							<div className="flex-1 space-y-2">
-								<div className="flex items-center gap-1">
-									<span className="text-sm whitespace-nowrap">英文:</span>
-									<div className="w-full">
-										<Input
-											{...control.register(`items.${index}.text`)}
-											placeholder="英文を入力してください"
-										/>
-									</div>
-								</div>
-								{errors.items?.[index]?.text && (
+								<Controller
+									name={`${name}.${index}.text` as const}
+									control={control}
+									defaultValue={item.text}
+									render={({ field }) => (
+										<Input {...field} placeholder="英文を入力してください" />
+									)}
+								/>
+								{fieldErrors.text?.message && (
 									<p className="text-red-500 text-xs">
-										{errors.items[index]?.text?.message}
+										{fieldErrors.text.message}
 									</p>
 								)}
 
-								<div className="flex items-center gap-1">
-									<span className="text-sm whitespace-nowrap">翻訳:</span>
-									<div className="w-full">
-										<Input
-											{...control.register(`items.${index}.translation`)}
-											placeholder="翻訳を入力してください"
-										/>
-									</div>
-								</div>
-								{errors.items?.[index]?.translation && (
+								<Controller
+									name={`${name}.${index}.translation` as const}
+									control={control}
+									defaultValue={item.translation}
+									render={({ field }) => (
+										<Input {...field} placeholder="翻訳を入力してください" />
+									)}
+								/>
+								{fieldErrors.translation?.message && (
 									<p className="text-red-500 text-xs">
-										{errors.items[index]?.translation?.message}
+										{fieldErrors.translation.message}
 									</p>
 								)}
 							</div>
@@ -162,19 +110,32 @@ const TextPairManager = ({
 								type="button"
 								variant="destructive"
 								size="sm"
-								className={clsx(minHeightClass)}
-								onClick={() => remove(index)}
+								onClick={() => handleRemove(index)}
+								className={clsx("flex items-center justify-center", {
+									"h-[88px]":
+										!fieldErrors.text?.message &&
+										!fieldErrors.translation?.message,
+									"h-[112px]":
+										fieldErrors.text?.message ||
+										fieldErrors.translation?.message,
+								})}
 							>
 								<Trash2 />
 							</Button>
 						</div>
-
-						{index < fields.length - 1 && (
-							<hr className="my-3 border-gray-300" />
-						)}
 					</div>
 				);
 			})}
+			<div className="flex justify-center">
+				<Button
+					type="button"
+					onClick={handleAdd}
+					disabled={items.length >= 5}
+					variant="highlight"
+				>
+					+ {labelMap[name]}
+				</Button>
+			</div>
 		</div>
 	);
 };

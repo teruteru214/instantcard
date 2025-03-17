@@ -21,10 +21,10 @@ const Label = React.forwardRef<
 		aria-required={indispensable}
 		{...props}
 	>
-		<span className="text-lg text-gray-900">{children}</span>
+		<span className="text-gray-900">{children}</span>
 		{indispensable && (
 			<Asterisk
-				className="text-red-500 inline-block align-middle"
+				className="h-4 w-4 text-red-500 inline-block align-middle"
 				aria-hidden="true"
 			/>
 		)}

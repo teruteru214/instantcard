@@ -18,6 +18,8 @@ interface MultiSelectProps {
 	selectedOptions: number[];
 	setSelectedOptions: (values: number[]) => void;
 	placeholder?: string;
+	name: string;
+	error?: string;
 }
 
 const MultiSelect = ({
@@ -25,6 +27,8 @@ const MultiSelect = ({
 	selectedOptions,
 	setSelectedOptions,
 	placeholder = "選択してください",
+	name,
+	error,
 }: MultiSelectProps) => {
 	const toggleOption = (optionValue: number, checked: boolean) => {
 		setSelectedOptions(
@@ -49,7 +53,7 @@ const MultiSelect = ({
 				<DropdownMenuTrigger asChild>
 					<div className="relative cursor-pointer">
 						<Input
-							id="multi-select"
+							id={`multi-select-${name}`}
 							readOnly
 							className="h-11 w-full overflow-x-auto pointer-events-none"
 							placeholder={selectedOptions.length > 0 ? "" : placeholder}
@@ -114,12 +118,9 @@ const MultiSelect = ({
 						<ChevronsUpDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 shrink-0 opacity-50" />
 					</div>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent className="w-full">
+				<DropdownMenuContent className="w-full p-3 space-y-2">
 					{options.map((option) => (
-						<div
-							key={option.value}
-							className="flex items-center cursor-pointer mx-2"
-						>
+						<div key={option.value} className="flex items-center">
 							<LabeledCheckbox
 								label={option.label}
 								checked={selectedOptions.includes(option.value)}
@@ -133,6 +134,7 @@ const MultiSelect = ({
 					))}
 				</DropdownMenuContent>
 			</DropdownMenu>
+			{error && <p className="text-red-500 text-xs">{error}</p>}
 		</div>
 	);
 };
