@@ -62,7 +62,10 @@ const QuizCard = ({
 											type="button"
 											variant={field.value === option ? "black" : "white"}
 											size="option"
-											onClick={() => field.onChange(option)}
+											onClick={() => {
+												field.onChange(option);
+												scrollToNext();
+											}}
 											aria-label={`選択肢: ${option}`}
 											aria-pressed={field.value === option}
 											className="break-words whitespace-normal"

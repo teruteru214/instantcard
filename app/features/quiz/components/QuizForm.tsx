@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
+import { quizSchema } from "../schema/quizSchema";
 import type { QuizData } from "../types";
 import {
 	generateEnhancedQuizData,
@@ -12,14 +12,6 @@ import {
 } from "../utils";
 import QuizCard from "./QuizCard";
 import Result from "./Result";
-
-const quizSchema = z.object({
-	answers: z
-		.array(z.string())
-		.refine((answers) => answers.some((answer) => answer.trim() !== ""), {
-			message: "少なくとも1つのクイズに回答してください",
-		}),
-});
 
 interface QuizFormProps {
 	quizData: QuizData[];
@@ -65,7 +57,7 @@ const QuizForm = ({ quizData }: QuizFormProps) => {
 				))}
 
 				{!form.formState.isSubmitted && (
-					<div className="py-16 space-y-4 flex flex-col items-center justify-center">
+					<div className="pt-8 pb-16 space-y-4 flex flex-col items-center justify-center">
 						<img
 							src="/check.webp"
 							alt="confirmation"
@@ -78,6 +70,7 @@ const QuizForm = ({ quizData }: QuizFormProps) => {
 							size="giant"
 							disabled={!form.formState.isValid}
 							onClick={scrollToResult}
+							id="quiz-result-button"
 							aria-label="クイズを終了して結果を表示する"
 						>
 							クイズを終了する
