@@ -3,21 +3,28 @@ import type { ControllerRenderProps } from "react-hook-form";
 import { cn } from "~/lib/utils";
 import { useDebounce } from "../hooks/useDebounce";
 
-interface Suggestion {
-	word: string;
+import type { Word } from "~/types/word";
+import type { FormData } from "../schema/cardFormSchema";
+
+interface SuggestState {
+	suggestions: Word[];
+	isOpen: boolean;
+	selectedIndex: number;
 }
 
 interface SuggestInputProps {
-	field: ControllerRenderProps<{ word: string }, "word">;
-	maxLength?: number;
+	field: ControllerRenderProps<FormData, "word">;
 }
 
-const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
+const SuggestInput = ({ field }: SuggestInputProps) => {
 	const [inputValue, setInputValue] = useState(field.value || "");
-	const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-	const [isOpen, setIsOpen] = useState(false);
+	const [suggestState, setSuggestState] = useState<SuggestState>({
+		suggestions: [],
+		isOpen: false,
+		selectedIndex: -1,
+	});
 	const inputRef = useRef<HTMLInputElement | null>(null);
-	const debouncedFetch = useDebounce(600);
+	const debouncedFetch = useDebounce(300);
 
 	useEffect(() => {
 		if (inputRef.current) {
@@ -28,44 +35,99 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 	const DATAMUSE_API_URL = import.meta.env.VITE_DATAMUSE_API_URL;
 
 	const handleInputChange = (value: string) => {
-		if (value.length > maxLength) return;
 		setInputValue(value);
-		setIsOpen(false);
+		setSuggestState((prev) => ({
+			...prev,
+			suggestions: [],
+			isOpen: false,
+			selectedIndex: -1,
+		}));
 		field.onChange(value);
 
-		const controller = new AbortController();
-		const signal = controller.signal;
-
 		debouncedFetch(async () => {
-			if (value.trim()) {
-				try {
-					const response = await fetch(
-						`${DATAMUSE_API_URL}?sp=${encodeURIComponent(value)}*&max=10`,
-						{ signal },
-					);
-					if (!response.ok) {
-						throw new Error("サジェスト取得に失敗しました");
-					}
-					const data: Suggestion[] = await response.json();
-					setSuggestions(data);
-					setIsOpen(data.length > 0);
-				} catch {
-					setSuggestions([]);
-					throw new Error("サジェスト取得に失敗しました");
-				}
-			} else {
-				setSuggestions([]);
-				setIsOpen(false);
+			if (!value.trim()) return;
+
+			try {
+				const response = await fetch(
+					`${DATAMUSE_API_URL}?sp=${encodeURIComponent(value)}*&max=10`,
+				);
+				if (!response.ok) throw new Error("サジェスト取得に失敗しました");
+
+				const data: Word[] = await response.json();
+				setSuggestState({
+					suggestions: data,
+					isOpen: data.length > 0,
+					selectedIndex: -1,
+				});
+			} catch {
+				setSuggestState((prev) => ({
+					...prev,
+					suggestions: [],
+					isOpen: false,
+				}));
 			}
 		});
 	};
 
 	const handleBlur = () => {
-		setTimeout(() => setIsOpen(false), 100);
+		setTimeout(
+			() => setSuggestState((prev) => ({ ...prev, isOpen: false })),
+			100,
+		);
 		field.onBlur();
 	};
 
-	const handleFocus = () => setIsOpen(!!inputValue.trim());
+	const handleFocus = () => {
+		if (inputValue.trim()) {
+			setSuggestState((prev) => ({ ...prev, isOpen: true }));
+		}
+	};
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "ArrowDown") {
+			e.preventDefault();
+			setSuggestState((prev) => ({
+				...prev,
+				selectedIndex:
+					prev.selectedIndex < prev.suggestions.length - 1
+						? prev.selectedIndex + 1
+						: 0,
+			}));
+		} else if (e.key === "ArrowUp") {
+			e.preventDefault();
+			setSuggestState((prev) => ({
+				...prev,
+				selectedIndex:
+					prev.selectedIndex > 0
+						? prev.selectedIndex - 1
+						: prev.suggestions.length - 1,
+			}));
+		} else if (e.key === "Enter") {
+			e.preventDefault();
+			if (
+				suggestState.selectedIndex >= 0 &&
+				suggestState.suggestions.length > 0
+			) {
+				handleOptionSelect(
+					suggestState.suggestions[suggestState.selectedIndex].word,
+				);
+			}
+			inputRef.current?.blur();
+		} else if (e.key === "Escape") {
+			e.preventDefault();
+			setInputValue("");
+			field.onChange("");
+			setSuggestState({ suggestions: [], isOpen: false, selectedIndex: -1 });
+			inputRef.current?.blur();
+		}
+	};
+
+	const handleOptionSelect = (word: string) => {
+		setInputValue(word);
+		field.onChange(word);
+		setSuggestState({ suggestions: [], isOpen: false, selectedIndex: -1 });
+		inputRef.current?.blur();
+	};
 
 	return (
 		<div className="relative w-full">
@@ -82,52 +144,53 @@ const SuggestInput = ({ field, maxLength = 50 }: SuggestInputProps) => {
 						onChange={(e) => handleInputChange(e.target.value)}
 						onBlur={handleBlur}
 						onFocus={handleFocus}
-						maxLength={maxLength}
+						onKeyDown={handleKeyDown}
 						className={cn(
-							"h-10 w-full rounded-md border border-gray-300 bg-background text-base",
+							"h-10 w-full border border-gray-300 bg-background text-base",
 							"placeholder:text-muted-foreground focus-visible:outline-none",
 							"focus-visible:border-gray-500 disabled:cursor-not-allowed",
 							"disabled:opacity-50 transition-colors duration-200 py-2 px-4",
-							isOpen ? "rounded-b-none border-b-0" : "",
+							suggestState.isOpen
+								? "rounded-t-md border-b-0"
+								: "rounded-md border-b border-gray-300",
 						)}
 						aria-label="検索キーワード"
 						aria-haspopup="listbox"
-						aria-expanded={isOpen}
+						aria-expanded={suggestState.isOpen}
 						aria-controls="suggestions-list"
 					/>
 				</div>
 
-				{isOpen && (
+				{suggestState.isOpen && (
 					<ul
 						id="suggestions-list"
-						className="border border-t-0 border-gray-500 rounded-b-md bg-white py-1"
+						role="menu"
+						className="absolute z-10 w-full border-x border-b border-gray-500 rounded-b-md bg-white top-full shadow-lg"
 						aria-labelledby="suggestions-list"
 					>
-						{suggestions.map((suggestion) => (
-							<li
+						{suggestState.suggestions.map((suggestion, index) => (
+							<button
 								key={suggestion.word}
+								type="button"
+								aria-current={
+									index === suggestState.selectedIndex ? "true" : undefined
+								}
+								tabIndex={0}
 								className={cn(
-									"cursor-pointer px-4 py-2 text-sm transition-colors",
-									"hover:bg-gray-50 text-gray-700",
+									"cursor-pointer px-4 py-2 text-sm transition-colors w-full text-left",
+									"hover:bg-gray-100 rounded-md text-gray-700",
+									index === suggestState.selectedIndex ? "bg-gray-200" : "",
 								)}
-								onClick={() => {
-									setInputValue(suggestion.word);
-									field.onChange(suggestion.word);
-									setIsOpen(false);
-									inputRef.current?.blur();
-								}}
+								onClick={() => handleOptionSelect(suggestion.word)}
 								onKeyDown={(e) => {
 									if (e.key === "Enter" || e.key === " ") {
 										e.preventDefault();
-										setInputValue(suggestion.word);
-										field.onChange(suggestion.word);
-										setIsOpen(false);
-										inputRef.current?.blur();
+										handleOptionSelect(suggestion.word);
 									}
 								}}
 							>
 								{suggestion.word}
-							</li>
+							</button>
 						))}
 					</ul>
 				)}
