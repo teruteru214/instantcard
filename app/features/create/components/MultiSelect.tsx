@@ -12,6 +12,7 @@ import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 
 interface Tag {
+	id: number;
 	name: string;
 	isChecked: boolean;
 }
@@ -37,15 +38,18 @@ const MultiSelect = ({ availableTags, value, onChange }: MultiSelectProps) => {
 		return allTags.some((tag) => tag.name.toLowerCase() === normalizedName);
 	};
 
-	const toggleTagSelection = (tagName: string, isSelected: boolean) => {
+	const toggleTagSelection = (tagId: number, isSelected: boolean) => {
 		// 既存のタグの状態を更新
 		const updatedTags = value.map((tag) =>
-			tag.name === tagName ? { ...tag, isChecked: isSelected } : tag,
+			tag.id === tagId ? { ...tag, isChecked: isSelected } : tag,
 		);
 
 		// もし既存のタグリストになければ追加する
-		if (!updatedTags.some((tag) => tag.name === tagName)) {
-			updatedTags.push({ name: tagName, isChecked: isSelected });
+		if (!updatedTags.some((tag) => tag.id === tagId)) {
+			const tagToAdd = allTags.find((tag) => tag.id === tagId);
+			if (tagToAdd) {
+				updatedTags.push({ ...tagToAdd, isChecked: isSelected });
+			}
 		}
 
 		onChange(updatedTags);
@@ -72,7 +76,11 @@ const MultiSelect = ({ availableTags, value, onChange }: MultiSelectProps) => {
 			return;
 		}
 
-		const newTagObj = { name: formattedNewTag, isChecked: true };
+		// 新しいIDを生成（既存の最大ID + 1）
+		const maxId = Math.max(...allTags.map((tag) => tag.id), 0);
+		const newId = maxId + 1;
+
+		const newTagObj = { id: newId, name: formattedNewTag, isChecked: true };
 		const updatedAllTags = [...allTags, newTagObj];
 		setAllTags(updatedAllTags);
 
@@ -122,13 +130,11 @@ const MultiSelect = ({ availableTags, value, onChange }: MultiSelectProps) => {
 					<div className="space-y-2">
 						{allTags.map((tag) => (
 							<LabeledCheckbox
-								key={tag.name}
+								key={tag.id}
 								label={tag.name}
-								checked={
-									value.find((t) => t.name === tag.name)?.isChecked || false
-								}
+								checked={value.find((t) => t.id === tag.id)?.isChecked || false}
 								onCheckedChange={(checked: boolean) =>
-									toggleTagSelection(tag.name, checked as boolean)
+									toggleTagSelection(tag.id, checked as boolean)
 								}
 							/>
 						))}

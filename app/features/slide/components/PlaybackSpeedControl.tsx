@@ -30,7 +30,7 @@ const PlaybackSpeedControl = ({
 	};
 
 	return (
-		<div className="px-2  space-y-2 w-full">
+		<div className="px-2 space-y-2 w-full">
 			<div className="flex justify-center items-center">
 				<Slider
 					value={[sliderValue]}

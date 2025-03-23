@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const tagSchema = z.object({
+	id: z.number(),
 	name: z
 		.string()
 		.nonempty("タグを入力してください")

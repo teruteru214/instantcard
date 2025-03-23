@@ -28,11 +28,10 @@ const SlideItemWord = ({
 						}
 					/>
 				</div>
-
+				{/* 各単語は2スライド（単語と訳）で構成されるため、実際の表示インデックスは2で割って計算 */}
 				<p className="text-center">
 					{Math.ceil((index + 1) / 2)}/{Math.ceil(totalItems / 2)}
 				</p>
-
 				<div>
 					<Speech word={word} />
 				</div>

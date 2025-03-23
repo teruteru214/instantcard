@@ -2,8 +2,8 @@ import CardForm from "./components/CardForm";
 
 const CreatePage = () => {
 	const initialTags = [
-		{ name: "プログラミング", isChecked: false },
-		{ name: "TOEIC", isChecked: false },
+		{ id: 1, name: "プログラミング", isChecked: false },
+		{ id: 2, name: "TOEIC", isChecked: false },
 	];
 
 	return (

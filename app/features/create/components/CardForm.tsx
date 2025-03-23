@@ -16,8 +16,14 @@ import AiSettings from "./AiSettings";
 import MultiSelect from "./MultiSelect";
 import SuggestInput from "./SuggestInput";
 
+interface Tag {
+	id: number;
+	name: string;
+	isChecked: boolean;
+}
+
 interface CardFormProps {
-	initialTags: { name: string; isChecked: boolean }[];
+	initialTags: Tag[];
 }
 
 const CardForm = ({ initialTags }: CardFormProps) => {
@@ -36,7 +42,7 @@ const CardForm = ({ initialTags }: CardFormProps) => {
 
 	const isValid = formState.isValid && selectedAiOptions.length > 0;
 
-	const handleTagsChange = (tags: { name: string; isChecked: boolean }[]) => {
+	const handleTagsChange = (tags: Tag[]) => {
 		setValue("tags", tags);
 	};
 

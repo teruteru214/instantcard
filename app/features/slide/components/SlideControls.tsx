@@ -107,7 +107,7 @@ export const SlideControls = ({
 						</Button>
 					</TooltipTriggerNoButton>
 					<TooltipContent side="bottom">
-						{showImages ? "画像非表示" : "画像表示"}
+						{showImages ? "画像表示" : "画像非表示"}
 					</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
@@ -124,7 +124,7 @@ export const SlideControls = ({
 						</Button>
 					</TooltipTriggerNoButton>
 					<TooltipContent side="bottom">
-						ループ{isLooping ? "オフ" : "オン"}
+						ループ: {isLooping ? "オン" : "オフ"}
 					</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
