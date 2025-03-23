@@ -1,5 +1,7 @@
+import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import { LabeledCheckbox } from "~/components/ui/checkbox";
 import {
 	DropdownMenu,
@@ -7,28 +9,83 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
-import { cn } from "~/lib/utils"; // ✅ `cn` を使用してクラスの条件分岐をシンプルに
+import { cn } from "~/lib/utils";
 
-interface MultiSelectProps {
-	availableTags: string[];
-	value: string[];
-	onChange: (value: string[]) => void;
-	placeholder?: string;
+interface Tag {
+	name: string;
+	isChecked: boolean;
 }
 
-const MultiSelect = ({
-	availableTags,
-	value,
-	onChange,
-	placeholder = "選択してください",
-}: MultiSelectProps) => {
-	const [isOpen, setIsOpen] = useState(false);
+interface MultiSelectProps {
+	availableTags: Tag[];
+	value: Tag[];
+	onChange: (value: Tag[]) => void;
+}
 
-	const toggleTagSelection = (tag: string, isSelected: boolean) => {
-		if (isSelected) {
-			onChange([...value, tag]);
-		} else {
-			onChange(value.filter((t) => t !== tag));
+const MultiSelect = ({ availableTags, value, onChange }: MultiSelectProps) => {
+	const [isOpen, setIsOpen] = useState(false);
+	const [newTag, setNewTag] = useState<string>("");
+	const [tagError, setTagError] = useState<string | null>(null);
+	const [allTags, setAllTags] = useState<Tag[]>(availableTags);
+
+	const selectedTagNames = value
+		.filter((tag) => tag.isChecked)
+		.map((tag) => tag.name);
+
+	const tagExists = (tagName: string): boolean => {
+		const normalizedName = tagName.trim().toLowerCase();
+		return allTags.some((tag) => tag.name.toLowerCase() === normalizedName);
+	};
+
+	const toggleTagSelection = (tagName: string, isSelected: boolean) => {
+		// 既存のタグの状態を更新
+		const updatedTags = value.map((tag) =>
+			tag.name === tagName ? { ...tag, isChecked: isSelected } : tag,
+		);
+
+		// もし既存のタグリストになければ追加する
+		if (!updatedTags.some((tag) => tag.name === tagName)) {
+			updatedTags.push({ name: tagName, isChecked: isSelected });
+		}
+
+		onChange(updatedTags);
+	};
+
+	const handleAddTag = () => {
+		const formattedNewTag = newTag.trim();
+
+		if (!formattedNewTag) {
+			setTagError("タグを入力してください");
+			setTimeout(() => setTagError(null), 3000);
+			return;
+		}
+
+		if (formattedNewTag.length > 15) {
+			setTagError("タグは15文字以内で入力してください");
+			setTimeout(() => setTagError(null), 3000);
+			return;
+		}
+
+		if (tagExists(formattedNewTag)) {
+			setTagError("同じタグは追加できません");
+			setTimeout(() => setTagError(null), 3000);
+			return;
+		}
+
+		const newTagObj = { name: formattedNewTag, isChecked: true };
+		const updatedAllTags = [...allTags, newTagObj];
+		setAllTags(updatedAllTags);
+
+		onChange([...value, newTagObj]);
+
+		setNewTag("");
+		setTagError(null);
+	};
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			handleAddTag();
 		}
 	};
 
@@ -45,12 +102,16 @@ const MultiSelect = ({
 								"h-10 w-full pointer-events-none border transition-colors",
 								isOpen ? "border-gray-500" : "border-gray-300",
 							)}
-							placeholder={value.length > 0 ? "" : placeholder}
+							placeholder={
+								selectedTagNames.length > 0
+									? ""
+									: "タグを選択または追加してください"
+							}
 						/>
 						<div className="absolute left-3 top-1/2 -translate-y-1/2 flex flex-wrap gap-2">
-							{value.map((selectedTag) => (
-								<Badge key={selectedTag} variant="outline" size="sm">
-									{selectedTag}
+							{selectedTagNames.map((tagName) => (
+								<Badge key={tagName} variant="outline" size="sm">
+									{tagName}
 								</Badge>
 							))}
 						</div>
@@ -59,17 +120,52 @@ const MultiSelect = ({
 
 				<DropdownMenuContent className="w-80 p-3">
 					<div className="space-y-2">
-						{availableTags.map((tag) => (
+						{allTags.map((tag) => (
 							<LabeledCheckbox
-								key={tag}
-								label={tag}
-								checked={value.includes(tag)}
+								key={tag.name}
+								label={tag.name}
+								checked={
+									value.find((t) => t.name === tag.name)?.isChecked || false
+								}
 								onCheckedChange={(checked: boolean) =>
-									toggleTagSelection(tag, checked)
+									toggleTagSelection(tag.name, checked as boolean)
 								}
 							/>
 						))}
 					</div>
+
+					<div className="my-2 flex gap-2">
+						<div className="flex-1">
+							<Input
+								type="text"
+								placeholder="タグを追加 (15文字以内)"
+								className="h-9 w-full"
+								value={newTag}
+								onChange={(e) => setNewTag(e.target.value)}
+								onKeyDown={handleKeyDown}
+							/>
+						</div>
+						<Button
+							onClick={handleAddTag}
+							className="h-9 px-4"
+							type="button"
+							variant="secondary"
+						>
+							追加
+						</Button>
+					</div>
+
+					{tagError && <p className="mt-2 text-red-500 text-xs">{tagError}</p>}
+					{(availableTags.length > 1 ||
+						(availableTags.length === 1 &&
+							availableTags[0].name.toLowerCase() !== "global")) && (
+						<Link
+							to="/settings/tags"
+							className="mt-2 text-sm text-gray-500 hover:underline"
+						>
+							タグを編集する →
+						</Link>
+					)}
 				</DropdownMenuContent>
 			</DropdownMenu>
 		</div>

@@ -11,36 +11,44 @@ import {
 import { Label } from "~/components/ui/label";
 
 import { defaultAiOptions } from "../config/aiOptions";
-import { type FormData, formSchema } from "../schema/cardFormSchema";
+import { type CardFormData, cardFormSchema } from "../schema/cardFormSchema";
 import AiSettings from "./AiSettings";
 import MultiSelect from "./MultiSelect";
 import SuggestInput from "./SuggestInput";
 
 interface CardFormProps {
-	availableTags: string[];
+	initialTags: { name: string; isChecked: boolean }[];
 }
 
-const CardForm = ({ availableTags }: CardFormProps) => {
-	const form = useForm<FormData>({
-		resolver: zodResolver(formSchema),
+const CardForm = ({ initialTags }: CardFormProps) => {
+	const form = useForm<CardFormData>({
+		resolver: zodResolver(cardFormSchema),
 		defaultValues: {
 			word: "",
-			tags: ["Global"],
+			tags: initialTags,
 			aiOutputs: defaultAiOptions,
 		},
 	});
 
-	const { handleSubmit, formState, watch } = form;
+	const { handleSubmit, formState, watch, setValue } = form;
 
-	const selectedTags = watch("tags");
 	const selectedAiOptions = watch("aiOutputs");
-	const isValid =
-		formState.isValid &&
-		selectedTags.length > 0 &&
-		selectedAiOptions.length > 0;
 
-	const onSubmit = (data: FormData) => {
-		console.log("送信データ:", data);
+	const isValid = formState.isValid && selectedAiOptions.length > 0;
+
+	const handleTagsChange = (tags: { name: string; isChecked: boolean }[]) => {
+		setValue("tags", tags);
+	};
+
+	const onSubmit = (data: CardFormData) => {
+		const checkedTags = data.tags.filter((tag) => tag.isChecked);
+
+		const submissionData = {
+			...data,
+			tags: checkedTags,
+		};
+
+		console.log("送信データ:", submissionData);
 	};
 
 	return (
@@ -68,13 +76,12 @@ const CardForm = ({ availableTags }: CardFormProps) => {
 					name="tags"
 					render={({ field }) => (
 						<FormItem>
-							<Label indispensable>タグの付与</Label>
+							<Label>タグの付与</Label>
 							<FormControl>
 								<MultiSelect
-									availableTags={availableTags}
+									availableTags={initialTags}
 									value={field.value}
-									onChange={field.onChange}
-									placeholder="タグを選択してください"
+									onChange={handleTagsChange}
 								/>
 							</FormControl>
 							<FormMessage />

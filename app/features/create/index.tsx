@@ -1,11 +1,14 @@
 import CardForm from "./components/CardForm";
 
 const CreatePage = () => {
-	const tags = ["Global", "プログラミング", "TOEIC"];
+	const initialTags = [
+		{ name: "プログラミング", isChecked: false },
+		{ name: "TOEIC", isChecked: false },
+	];
 
 	return (
 		<div className="mt-5 mb-[35rem]">
-			<CardForm availableTags={tags} />
+			<CardForm initialTags={initialTags} />
 		</div>
 	);
 };
