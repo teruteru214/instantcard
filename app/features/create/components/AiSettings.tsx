@@ -7,42 +7,28 @@ import {
 } from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
 import { LabeledCheckbox } from "~/components/ui/checkbox";
-
-interface AiOption {
-	label: string;
-	checked: boolean;
-}
+import { aiOptions } from "../config/aiOptions";
 
 interface AiSettingsProps {
-	selectedAiOutputs: AiOption[];
-	setSelectedAiOutputs: React.Dispatch<React.SetStateAction<AiOption[]>>;
+	value: string[];
+	onChange: (value: string[]) => void;
 }
 
-const AiSettings = ({
-	selectedAiOutputs,
-	setSelectedAiOutputs,
-}: AiSettingsProps) => {
+const AiSettings = ({ value, onChange }: AiSettingsProps) => {
+	const isAllSelected = value.length === aiOptions.length;
+
 	const toggleAllOptions = () => {
-		const allChecked = selectedAiOutputs.every((opt) => opt.checked);
-		try {
-			setSelectedAiOutputs(
-				selectedAiOutputs.map((opt) => ({ ...opt, checked: !allChecked })),
-			);
-		} catch (error) {
-			console.error("AIの出力設定の更新に失敗しました:", error);
-			// TODO: エラー状態の表示やエラーバウンダリの実装を検討
-		}
+		onChange(isAllSelected ? [] : [...aiOptions]);
 	};
 
 	const toggleAiOption = (optionLabel: string, checked: boolean) => {
-		setSelectedAiOutputs((prev) =>
-			prev.map((opt) =>
-				opt.label === optionLabel ? { ...opt, checked } : opt,
-			),
-		);
+		if (checked) {
+			onChange([...value, optionLabel]);
+		} else {
+			onChange(value.filter((opt) => opt !== optionLabel));
+		}
 	};
 
-	const isAllSelected = selectedAiOutputs.every((opt) => opt.checked);
 	const buttonLabel = isAllSelected ? "全て解除" : "全て選択";
 	const buttonVariant = isAllSelected ? "outline" : "black";
 	const buttonIcon = isAllSelected ? (
@@ -54,16 +40,18 @@ const AiSettings = ({
 	return (
 		<Accordion type="single" collapsible>
 			<AccordionItem value="ai-settings">
-				<AccordionTrigger>AIの出力設定</AccordionTrigger>
+				<AccordionTrigger className="text-sm font-[roboto] ">
+					AIの出力設定
+				</AccordionTrigger>
 				<AccordionContent>
 					<div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-						{selectedAiOutputs.map((option) => (
+						{aiOptions.map((option) => (
 							<LabeledCheckbox
-								key={option.label}
-								label={option.label}
-								checked={option.checked}
+								key={option}
+								label={option}
+								checked={value.includes(option)}
 								onCheckedChange={(checked: boolean) =>
-									toggleAiOption(option.label, checked)
+									toggleAiOption(option, checked)
 								}
 							/>
 						))}

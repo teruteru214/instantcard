@@ -56,7 +56,7 @@ export const scrollToNext = (index: number) => {
 	if (!isClient) return;
 
 	const nextCardId = `quiz-card-${index + 1}`;
-	const footerId = "quiz-footer";
+	const resultButtonId = "quiz-result-button"; // クイズ終了ボタンのID
 
 	try {
 		const nextCard = document.getElementById(nextCardId);
@@ -65,10 +65,18 @@ export const scrollToNext = (index: number) => {
 			return;
 		}
 
-		const footer = document.getElementById(footerId);
-		if (footer) {
-			scrollToElement(footerId);
+		// 次のカードがない場合は "クイズを終了する" ボタンへスクロール
+		const resultButton = document.getElementById(resultButtonId);
+		if (resultButton) {
+			scrollToElement(resultButtonId);
+			return;
 		}
+
+		// それでも見つからなければ、ページの最下部へスクロール
+		window.scrollTo({
+			top: document.documentElement.scrollHeight,
+			behavior: smoothScrollSupported ? "smooth" : "auto",
+		});
 	} catch (error) {
 		console.error(
 			"次のカードへのスクロール処理中にエラーが発生しました:",

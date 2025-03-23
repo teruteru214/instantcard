@@ -1,16 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-
-const nameSchema = z.object({
-	name: z
-		.string()
-		.min(1, "表示名を入力してください")
-		.max(20, "20文字以内で入力してください"),
-});
+import { nameSchema } from "../schema/name";
 
 const ProfileNameSetting = ({ name: initialName }: { name: string }) => {
 	const [isEditing, setIsEditing] = useState(false);
