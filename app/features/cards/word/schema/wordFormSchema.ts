@@ -60,4 +60,4 @@ export const formSchema = z.object({
 		.optional(),
 });
 
-export type FormData = z.infer<typeof formSchema>;
+export type WordFormData = z.infer<typeof formSchema>;

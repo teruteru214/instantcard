@@ -21,9 +21,8 @@ const TagsDropdownMenu = ({ triggerElement, tags }: TagsProps) => {
 				<DropdownMenuLabel>タグを付与する</DropdownMenuLabel>
 				<div className="p-2">
 					<TagsForm initialTags={tags} />
-					{(tags.length > 1 ||
-						(tags.length === 1 && tags[0].name.toLowerCase() !== "global")) && (
-						<div className="pt-1">
+					{tags.length > 0 && (
+						<div className="mt-2">
 							<Link
 								to="/settings/tags"
 								className="text-sm text-gray-500 hover:underline"
