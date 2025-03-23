@@ -60,4 +60,4 @@ export const formSchema = z.object({
 		.optional(),
 });
 
-export interface FormData extends z.infer<typeof formSchema> {}
+export type FormData = z.infer<typeof formSchema>;

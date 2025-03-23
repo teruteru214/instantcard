@@ -1,4 +1,9 @@
-export const typeOptions = [
+interface TypeOption {
+	id: number;
+	label: string;
+}
+
+export const typeOptions: TypeOption[] = [
 	{ id: 1, label: "名詞" },
 	{ id: 2, label: "動詞" },
 	{ id: 3, label: "形容詞" },

@@ -53,7 +53,7 @@ const scrollToElement = (elementId: string) => {
 };
 
 export const scrollToNext = (index: number) => {
-	if (typeof window === "undefined") return;
+	if (!isClient) return;
 
 	const nextCardId = `quiz-card-${index + 1}`;
 	const resultButtonId = "quiz-result-button"; // クイズ終了ボタンのID
@@ -75,7 +75,7 @@ export const scrollToNext = (index: number) => {
 		// それでも見つからなければ、ページの最下部へスクロール
 		window.scrollTo({
 			top: document.documentElement.scrollHeight,
-			behavior: "smooth",
+			behavior: smoothScrollSupported ? "smooth" : "auto",
 		});
 	} catch (error) {
 		console.error(
