@@ -1,0 +1,20 @@
+interface TypeOption {
+	id: number;
+	label: string;
+}
+
+export const typeOptions: TypeOption[] = [
+	{ id: 1, label: "名詞" },
+	{ id: 2, label: "動詞" },
+	{ id: 3, label: "形容詞" },
+	{ id: 4, label: "副詞" },
+	{ id: 5, label: "前置詞" },
+	{ id: 6, label: "接続詞" },
+	{ id: 7, label: "代名詞" },
+	{ id: 8, label: "間投詞" },
+	{ id: 9, label: "慣用句" },
+	{ id: 10, label: "句動詞" },
+	{ id: 11, label: "コロケーション" },
+	{ id: 12, label: "定型表現" },
+	{ id: 13, label: "表現" },
+];

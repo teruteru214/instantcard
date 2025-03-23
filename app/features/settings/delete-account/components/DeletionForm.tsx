@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -11,22 +10,11 @@ import {
 	FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-
-const user = {
-	name: "tarou",
-};
-
-const schema = z.object({
-	confirmation: z.literal(user.name, {
-		errorMap: () => ({ message: `"${user.name}" と入力してください` }),
-	}),
-});
-
-type FormValues = z.infer<typeof schema>;
+import { type FormValues, nameSchema, user } from "../schema/name";
 
 const DeletionForm = () => {
 	const form = useForm<FormValues>({
-		resolver: zodResolver(schema),
+		resolver: zodResolver(nameSchema),
 		defaultValues: { confirmation: "" },
 	});
 

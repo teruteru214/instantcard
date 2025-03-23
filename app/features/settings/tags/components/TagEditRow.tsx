@@ -1,23 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { TableCell, TableRow } from "~/components/ui/table";
+import { tagSchema } from "../schema/tag";
 import type { TagEdit } from "../types/tag";
 import DeleteModal from "./DeleteModal";
 
 interface TagEditRowProps {
 	tag: TagEdit;
 }
-
-const tagSchema = z.object({
-	name: z
-		.string()
-		.min(1, "1文字以上入力してください")
-		.max(15, "15文字以内で入力してください"),
-});
 
 const TagEditRow = ({ tag: initialTag }: TagEditRowProps) => {
 	const [tag, setTag] = useState<TagEdit>(initialTag);

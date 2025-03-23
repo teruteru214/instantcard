@@ -19,7 +19,6 @@ interface ResultProps {
 	result: {
 		word: string;
 		correctAnswer: string;
-		userAnswer: string;
 		isCorrect: boolean;
 	}[];
 }
@@ -40,34 +39,44 @@ const Result = ({ result }: ResultProps) => {
 	}, [percentage]);
 
 	const { variant, emoji } = getBadgeVariant(correctCount, result.length);
+
 	return (
-		<div className="mt-20 mb-7 space-y-4">
+		<div className="my-7 space-y-4">
 			<h2 id="result" className="text-2xl text-center">
-				結果発表
+				スコア
 			</h2>
 			<Progress value={animatedValue} />
 
 			<div className="flex items-center gap-2">
-				<p className="text-lg font-semibold">正答率:</p>
+				<p className="text-lg font-semibold">正答率</p>
 				<Badge variant={variant} size="sm">
 					{emoji} {percentage} %
 				</Badge>
 			</div>
+
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead>英単語 ( 熟語 )</TableHead>
+						<TableHead className="w-3/12 sm:w-1/12">正否</TableHead>
+						<TableHead>英単語・フレーズ</TableHead>
 						<TableHead>正解</TableHead>
-						<TableHead>あなたの答え</TableHead>
-						<TableHead>正否</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
 					{result.map((item) => (
-						<TableRow key={item.word}>
-							<WordDetails
-								triggerElement={
-									<TableCell className="hover:underline cursor-pointer max-w-[200px] truncate">
+						<WordDetails
+							key={item.word}
+							word={item.word}
+							triggerElement={
+								<TableRow className="cursor-pointer hover:bg-gray-100">
+									<TableCell className="text-center">
+										{item.isCorrect ? (
+											<Circle className="text-green-400" />
+										) : (
+											<X className="text-red-400" />
+										)}
+									</TableCell>
+									<TableCell className="cursor-pointer truncate">
 										<span
 											className="block overflow-hidden text-ellipsis whitespace-nowrap"
 											title={item.word}
@@ -75,25 +84,14 @@ const Result = ({ result }: ResultProps) => {
 											{item.word}
 										</span>
 									</TableCell>
-								}
-								word={item.word}
-							/>
-							<TableCell>{item.correctAnswer}</TableCell>
-							<TableCell className={!item.isCorrect ? "text-red-500" : ""}>
-								{item.userAnswer}
-							</TableCell>
-
-							<TableCell>
-								{item.isCorrect ? (
-									<Circle className="text-green-400" />
-								) : (
-									<X className="text-red-400" />
-								)}
-							</TableCell>
-						</TableRow>
+									<TableCell>{item.correctAnswer}</TableCell>
+								</TableRow>
+							}
+						/>
 					))}
 				</TableBody>
 			</Table>
+
 			<div className="flex flex-col items-center space-y-4 mt-4">
 				<Button className="w-64" size="giant" onClick={() => navigate(0)}>
 					再チャレンジ

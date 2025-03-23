@@ -4,19 +4,18 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import Speech from "~/components/global/Speech";
-import { speakers } from "../data/speaker";
+import { SPEAKER_IDS, type SpeakerId, speakers } from "../data/speaker";
+import { type SpeakerFormValues, speakerSchema } from "../schema/speaker";
 import { getSpeakerDescription } from "../utils/getSpeakerDescription";
 
-const speakerSchema = z.object({
-	speaker: z.enum(Object.keys(speakers) as [string, ...string[]], {
-		message: "話し手を選択してください",
-	}),
-});
+interface SpeakerSettingProps {
+	initialSpeaker: SpeakerId;
+}
 
-const SpeakerSetting = ({ initialSpeaker }: { initialSpeaker: string }) => {
-	const [selectedSpeaker, setSelectedSpeaker] = useState(initialSpeaker);
+const SpeakerSetting = ({ initialSpeaker }: SpeakerSettingProps) => {
+	const [selectedSpeaker, setSelectedSpeaker] =
+		useState<SpeakerId>(initialSpeaker);
 	const [isEditing, setIsEditing] = useState(false);
 
 	const {
@@ -24,14 +23,14 @@ const SpeakerSetting = ({ initialSpeaker }: { initialSpeaker: string }) => {
 		formState: { errors },
 		setValue,
 		watch,
-	} = useForm({
+	} = useForm<SpeakerFormValues>({
 		resolver: zodResolver(speakerSchema),
 		defaultValues: { speaker: initialSpeaker },
 	});
 
 	const formSpeaker = watch("speaker");
 
-	const onSubmit = (data: { speaker: string }) => {
+	const onSubmit = (data: SpeakerFormValues) => {
 		console.log("選択された話し手:", data);
 		setSelectedSpeaker(data.speaker);
 		setIsEditing(false);
@@ -45,22 +44,29 @@ const SpeakerSetting = ({ initialSpeaker }: { initialSpeaker: string }) => {
 					<form onSubmit={handleSubmit(onSubmit)} className="mt-5">
 						<RadioGroup
 							defaultValue={formSpeaker}
-							onValueChange={(value) => setValue("speaker", value)}
+							onValueChange={(value: SpeakerId) => setValue("speaker", value)}
 							aria-label="話し手の選択"
 						>
-							{Object.entries(speakers).map(([key, label]) => (
-								<div key={key} className="flex items-center gap-1">
-									<RadioGroupItem value={key} id={key} />
-									<label htmlFor={key} className="text-gray-700 cursor-pointer">
-										{label}
-									</label>
-									<Speech
-										word="This is a sample voice."
-										speakerId={key}
-										size={7}
-									/>
-								</div>
-							))}
+							{Object.entries(speakers).map(
+								([key, label]) =>
+									// keyがSpeakerIdに含まれているものだけをマッピング
+									SPEAKER_IDS.includes(key as SpeakerId) && (
+										<div key={key} className="flex items-center gap-1">
+											<RadioGroupItem value={key} id={key} />
+											<label
+												htmlFor={key}
+												className="text-gray-700 cursor-pointer"
+											>
+												{label}
+											</label>
+											<Speech
+												word="This is a sample voice."
+												speakerId={key}
+												size={7}
+											/>
+										</div>
+									),
+							)}
 						</RadioGroup>
 						{errors.speaker && (
 							<p className="text-red-500 text-sm">{errors.speaker.message}</p>

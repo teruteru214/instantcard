@@ -1,6 +1,6 @@
 import type { Tag } from "~/types/word";
 
-interface TextPair {
+export interface TextPair {
 	id: number;
 	text: string;
 	translation: string;
@@ -20,6 +20,7 @@ export interface WordDetail {
 	synonyms?: TextPair[];
 	antonyms?: TextPair[];
 	types?: number[];
+	etymology?: string;
 	other?: string;
 	img?: string;
 }
