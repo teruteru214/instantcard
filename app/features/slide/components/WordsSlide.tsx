@@ -1,22 +1,5 @@
 import Autoplay from "embla-carousel-autoplay";
-import {
-	Expand,
-	Hourglass,
-	Image,
-	ImageOff,
-	Infinity as InfinityIcon,
-	Info,
-	Minimize2,
-	Pause,
-	Play,
-	Shuffle,
-} from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import NoCard from "~/components/global/NoCard";
-import Speech from "~/components/global/Speech";
-import WordDetails from "~/components/global/WordDetails";
-import { Button } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
 import {
 	Carousel,
 	CarouselContent,
@@ -24,21 +7,12 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "~/components/ui/carousel";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { Slider } from "~/components/ui/slider";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTriggerNoButton,
-} from "~/components/ui/tooltip";
+import { useKeyboardControls } from "../hooks/useKeyboardControls";
+import { useSlideState } from "../hooks/useSlideState";
 import type { SlideWord } from "../types";
-import { shuffleSlides } from "../utils/shuffle";
+
+import SlideCard from "./SlideCard";
+import { SlideControls } from "./SlideControls";
 
 interface WordsSlideProps {
 	data: SlideWord[];
@@ -46,65 +20,41 @@ interface WordsSlideProps {
 	setIsSizing: (value: boolean) => void;
 }
 
-const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
-	const [slide, setSlide] = useState({
-		isPlaying: false,
-		playbackSpeed: 5,
-		isLooping: true,
-		showImages: true,
-		data: data,
+const WordsSlide = ({
+	data,
+	isSizing,
+	setIsSizing,
+}: WordsSlideProps): JSX.Element => {
+	const {
+		slide,
+		togglePlay,
+		toggleLoop,
+		toggleImages,
+		setPlaybackSpeed,
+		handleShuffle,
+		handleSlideTouch,
+	} = useSlideState(data);
+
+	// 拡大縮小トグル関数
+	const toggleSizing = () => setIsSizing(!isSizing);
+
+	// キーボードコントロールの設定
+	useKeyboardControls({
+		togglePlay,
+		setIsSizing,
 	});
 
-	const handleKeyDown = useCallback(
-		(event: KeyboardEvent) => {
-			switch (event.key) {
-				case "f":
-					setIsSizing(true);
-					event.preventDefault();
-					break;
-				case "-":
-					setIsSizing(false);
-					event.preventDefault();
-					break;
-				case " ":
-				case "k":
-					setSlide((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
-					event.preventDefault();
-					break;
-				default:
-					break;
-			}
-		},
-		[setIsSizing],
-	);
-
-	useEffect(() => {
-		document.addEventListener("keydown", handleKeyDown);
-		return () => {
-			document.removeEventListener("keydown", handleKeyDown);
-		};
-	}, [handleKeyDown]);
-
-	const handleShuffle = () => {
-		setSlide((prev) => ({
-			...prev,
-			data: shuffleSlides(prev.data),
-		}));
-	};
-
+	// Autoplayプラグインの設定
 	const plugins = slide.isPlaying
 		? [Autoplay({ delay: slide.playbackSpeed * 1000 })]
 		: [];
 
-	const handleSlideTouch = () => {
-		setSlide((prev) => ({ ...prev, isPlaying: false }));
-	};
+	// データが空の場合
+	if (data.length === 0) {
+		return <NoCard />;
+	}
 
-	return data.length === 0 ? (
-		<>
-			<NoCard />
-		</>
-	) : (
+	return (
 		<div className="flex flex-col justify-center items-center">
 			<div className={isSizing ? "w-10/12" : "w-9/12"}>
 				<Carousel
@@ -115,61 +65,17 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					onPointerDown={handleSlideTouch}
 				>
 					<CarouselContent>
-						{slide.data.map((item) => (
+						{slide.data.map((item, index) => (
 							<CarouselItem
 								key={item.id}
 								aria-label={`スライド: ${item.word || item.translation}`}
 							>
-								<div className="my-3 p-1">
-									<Card className="rounded-md">
-										<CardContent className="flex flex-col items-center aspect-square justify-center p-6">
-											{item.word && (
-												<div className="relative w-full h-full flex items-center justify-center">
-													<p className="text-2xl sm:text-4xl font-semibold text-center">
-														{item.word}
-													</p>
-													<div className="absolute bottom-0 left-0 right-0 flex justify-between items-center px-2">
-														<div>
-															<WordDetails
-																word={item.word}
-																triggerElement={
-																	<Button variant="ghost" size="icon">
-																		<Info />
-																	</Button>
-																}
-															/>
-														</div>
-
-														<p className="text-center">
-															{Math.ceil((slide.data.indexOf(item) + 1) / 2)}/
-															{Math.ceil(data.length / 2)}
-														</p>
-
-														<div>
-															<Speech word={item.word} />
-														</div>
-													</div>
-												</div>
-											)}
-											{item.translation && (
-												<div className="relative flex items-center justify-center w-full h-full">
-													{/* 背景画像 */}
-													{slide.showImages && item.img && (
-														<img
-															src={item.img}
-															alt={item.translation}
-															className="absolute inset-0 w-full h-full rounded-md object-cover opacity-30"
-														/>
-													)}
-													{/* 翻訳テキスト */}
-													<p className="relative z-10 text-2xl sm:text-4xl font-semibold text-center text-gray-800">
-														{item.translation}
-													</p>
-												</div>
-											)}
-										</CardContent>
-									</Card>
-								</div>
+								<SlideCard
+									item={item}
+									index={index}
+									totalItems={data.length}
+									showImages={slide.showImages}
+								/>
 							</CarouselItem>
 						))}
 					</CarouselContent>
@@ -177,161 +83,19 @@ const WordsSlide = ({ data, isSizing, setIsSizing }: WordsSlideProps) => {
 					<CarouselNext />
 				</Carousel>
 
-				<div className="mb-4 flex justify-center space-x-3">
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTriggerNoButton>
-								<Button
-									size="icon"
-									variant={slide.isPlaying ? "black" : "default"}
-									onClick={() =>
-										setSlide((prev) => ({
-											...prev,
-											isPlaying: !prev.isPlaying,
-										}))
-									}
-								>
-									{slide.isPlaying ? <Pause /> : <Play />}
-								</Button>
-							</TooltipTriggerNoButton>
-							<TooltipContent side="bottom">
-								{slide.isPlaying ? (
-									<>
-										停止{" "}
-										<span className="bg-gray-100 p-1 rounded">K / Space</span>
-									</>
-								) : (
-									<>
-										再生{" "}
-										<span className="bg-gray-100 p-1 rounded">K / Space</span>
-									</>
-								)}
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTriggerNoButton>
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button size="icon">
-											<Hourglass />
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent className="w-72 space-y-2">
-										<DropdownMenuLabel>
-											スライド1枚あたりの表示時間を設定
-										</DropdownMenuLabel>
-										<div className="flex justify-center items-center">
-											<Slider
-												value={[slide.playbackSpeed]}
-												max={20}
-												min={1}
-												step={1}
-												onValueChange={(value) =>
-													setSlide((prev) => ({
-														...prev,
-														playbackSpeed: value[0],
-													}))
-												}
-												className="w-64 my-2"
-												aria-label="スライド表示速度の調整"
-											/>
-										</div>
-										<p className="px-2 text-left">{slide.playbackSpeed}秒</p>
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</TooltipTriggerNoButton>
-							<TooltipContent side="bottom">
-								スライド1枚あたりの表示時間
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTriggerNoButton>
-								<Button
-									size="icon"
-									variant={slide.showImages ? "black" : "default"}
-									onClick={() =>
-										setSlide((prev) => ({
-											...prev,
-											showImages: !prev.showImages,
-										}))
-									}
-								>
-									{slide.showImages ? <Image /> : <ImageOff />}
-								</Button>
-							</TooltipTriggerNoButton>
-							<TooltipContent side="bottom">
-								{slide.showImages ? "画像非表示" : "画像表示"}
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTriggerNoButton>
-								<Button
-									size="icon"
-									variant={slide.isLooping ? "black" : "default"}
-									onClick={() =>
-										setSlide((prev) => ({
-											...prev,
-											isLooping: !prev.isLooping,
-										}))
-									}
-								>
-									<InfinityIcon />
-								</Button>
-							</TooltipTriggerNoButton>
-							<TooltipContent side="bottom">
-								ループ{slide.isLooping ? "オフ" : "オン"}
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-
-					{/* 🔀 スライドシャッフル */}
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTriggerNoButton>
-								<Button size="icon" onClick={handleShuffle}>
-									<Shuffle />
-								</Button>
-							</TooltipTriggerNoButton>
-							<TooltipContent side="bottom">
-								スライドをシャッフル
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTriggerNoButton>
-								<Button
-									size="icon"
-									variant={isSizing ? "black" : "default"}
-									onClick={() => setIsSizing(!isSizing)}
-								>
-									{isSizing ? <Minimize2 /> : <Expand />}
-								</Button>
-							</TooltipTriggerNoButton>
-							<TooltipContent side="bottom">
-								{isSizing ? (
-									<>
-										縮小 <span className="bg-gray-100 p-1 rounded">-</span>
-									</>
-								) : (
-									<>
-										拡大 <span className="bg-gray-100 p-1 rounded">F</span>
-									</>
-								)}
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-				</div>
+				<SlideControls
+					isPlaying={slide.isPlaying}
+					togglePlay={togglePlay}
+					playbackSpeed={slide.playbackSpeed}
+					setPlaybackSpeed={setPlaybackSpeed}
+					showImages={slide.showImages}
+					toggleImages={toggleImages}
+					isLooping={slide.isLooping}
+					toggleLoop={toggleLoop}
+					handleShuffle={handleShuffle}
+					isSizing={isSizing}
+					toggleSizing={toggleSizing}
+				/>
 			</div>
 		</div>
 	);

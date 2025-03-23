@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import type { ControllerRenderProps } from "react-hook-form";
 import { cn } from "~/lib/utils";
-import { useDebounce } from "../hooks/useDebounce";
 
+import { useDebounce } from "~/hooks/useDebounce";
 import type { Word } from "~/types/word";
-import type { FormData } from "../schema/cardFormSchema";
+import type { CardFormData } from "../schema/cardFormSchema";
 
 interface SuggestState {
 	suggestions: Word[];
@@ -13,7 +13,7 @@ interface SuggestState {
 }
 
 interface SuggestInputProps {
-	field: ControllerRenderProps<FormData, "word">;
+	field: ControllerRenderProps<CardFormData, "word">;
 }
 
 const SuggestInput = ({ field }: SuggestInputProps) => {

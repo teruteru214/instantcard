@@ -1,6 +1,15 @@
 import { z } from "zod";
 
-export const formSchema = z.object({
+const tagSchema = z.object({
+	id: z.number(),
+	name: z
+		.string()
+		.nonempty("タグを入力してください")
+		.max(15, { message: "タグは15文字以内で入力してください" }),
+	isChecked: z.boolean(),
+});
+
+export const cardFormSchema = z.object({
 	word: z
 		.string()
 		.min(1, { message: "英単語を入力してください" })
@@ -8,11 +17,18 @@ export const formSchema = z.object({
 		.regex(/^[a-zA-Z\s-]+$/, { message: "英単語は半角英字のみ使用可能です" })
 		.trim(),
 
-	tags: z
-		.array(z.string())
-		.min(1, { message: "少なくとも1つのタグを選択してください" }),
+	tags: z.array(tagSchema).refine(
+		(tags) => {
+			const tagNames = tags.map((tag) => tag.name.toLowerCase());
+			return new Set(tagNames).size === tagNames.length;
+		},
+		{
+			message: "タグ名が重複しています",
+			path: ["tags"],
+		},
+	),
 
 	aiOutputs: z.array(z.string()),
 });
 
-export type FormData = z.infer<typeof formSchema>;
+export type CardFormData = z.infer<typeof cardFormSchema>;

@@ -40,7 +40,7 @@ const AiSettings = ({ value, onChange }: AiSettingsProps) => {
 	return (
 		<Accordion type="single" collapsible>
 			<AccordionItem value="ai-settings">
-				<AccordionTrigger className="text-sm font-[roboto] ">
+				<AccordionTrigger type="button" className="text-sm font-[roboto]">
 					AIの出力設定
 				</AccordionTrigger>
 				<AccordionContent>
