@@ -9,11 +9,11 @@ import {
 } from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import type { FormData } from "../schema/wordFormSchema";
+import type { WordFormData } from "../schema/wordFormSchema";
 import type { TextPair } from "../types";
 
 type TextPairFieldName = keyof Pick<
-	FormData,
+	WordFormData,
 	| "synonyms"
 	| "antonyms"
 	| "collocations"
@@ -25,9 +25,9 @@ type TextPairFieldName = keyof Pick<
 interface TextPairManagerProps {
 	initialData: TextPair[];
 	name: TextPairFieldName;
-	control: Control<FormData>;
-	setValue: UseFormSetValue<FormData>;
-	errors: FieldErrors<FormData>;
+	control: Control<WordFormData>;
+	setValue: UseFormSetValue<WordFormData>;
+	errors: FieldErrors<WordFormData>;
 }
 
 const TextPairManager = ({
@@ -54,7 +54,7 @@ const TextPairManager = ({
 				name,
 				[...items, { id: Date.now(), text: "", translation: "" }],
 				{
-					shouldValidate: true,
+					shouldValidate: false,
 				},
 			);
 		}
@@ -69,9 +69,10 @@ const TextPairManager = ({
 	};
 
 	return (
-		<div className="bg-gray-100 p-3 rounded-md space-y-4">
+		<div className="bg-gray-100 p-4 rounded-md space-y-4">
 			{items.map((item, index) => {
 				const fieldErrors = errors[name]?.[index] || {};
+				const isLast = index === items.length - 1;
 
 				return (
 					<div key={item.id || index}>
@@ -123,19 +124,19 @@ const TextPairManager = ({
 								<Trash2 />
 							</Button>
 						</div>
+						{!isLast && <hr className="my-4 border-gray-300" />}
 					</div>
 				);
 			})}
-			<div className="flex justify-center">
-				<Button
-					type="button"
-					onClick={handleAdd}
-					disabled={items.length >= 5}
-					variant="highlight"
-				>
-					+ {labelMap[name]}
-				</Button>
-			</div>
+			<Button
+				type="button"
+				onClick={handleAdd}
+				disabled={items.length >= 5}
+				variant="highlight"
+				className="mx-auto block"
+			>
+				+ {labelMap[name]}
+			</Button>
 		</div>
 	);
 };

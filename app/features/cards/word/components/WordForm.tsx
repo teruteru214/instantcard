@@ -12,14 +12,14 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { typeOptions } from "../config/typeOption";
-import { type FormData, formSchema } from "../schema/wordFormSchema";
+import { type WordFormData, formSchema } from "../schema/wordFormSchema";
 import type { WordDetail } from "../types";
 import EditHeader from "./EditHeader";
 import MultiSelect from "./MultiSelect";
 import TextPairManager from "./TextPairManager";
 
 const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
-	const form = useForm<FormData>({
+	const form = useForm<WordFormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			word: wordDetail.word || "",
@@ -40,9 +40,9 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 		mode: "onChange",
 	});
 
-	const onSubmit: SubmitHandler<FormData> = (data) => {
+	const onSubmit: SubmitHandler<WordFormData> = (data) => {
 		const changedData = Object.fromEntries(
-			(Object.keys(data) as Array<keyof FormData>)
+			(Object.keys(data) as Array<keyof WordFormData>)
 				.filter((key) => form.getValues(key) !== data[key])
 				.map((key) => [key, data[key]]),
 		);
@@ -116,43 +116,47 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 							)}
 						/>
 
-						<FormField
-							name="examples"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label className="mb-2">例文</Label>
-									<FormControl>
-										<TextPairManager
-											initialData={field.value || []}
-											name="examples"
-											control={form.control}
-											setValue={form.setValue}
-											errors={form.formState.errors}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
+						<div>
+							<FormField
+								name="examples"
+								control={form.control}
+								render={({ field }) => (
+									<FormItem>
+										<Label className="mb-2">例文</Label>
+										<FormControl>
+											<TextPairManager
+												initialData={field.value || []}
+												name="examples"
+												control={form.control}
+												setValue={form.setValue}
+												errors={form.formState.errors}
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+						</div>
 
-						<FormField
-							name="collocations"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label className="mb-2">コロケーション</Label>
-									<FormControl>
-										<TextPairManager
-											initialData={field.value || []}
-											name="collocations"
-											control={form.control}
-											setValue={form.setValue}
-											errors={form.formState.errors}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
+						<div className="border-t border-gray-200 pt-4">
+							<FormField
+								name="collocations"
+								control={form.control}
+								render={({ field }) => (
+									<FormItem>
+										<Label className="mb-2">コロケーション</Label>
+										<FormControl>
+											<TextPairManager
+												initialData={field.value || []}
+												name="collocations"
+												control={form.control}
+												setValue={form.setValue}
+												errors={form.formState.errors}
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+						</div>
 
 						<FormField
 							name="trend"
@@ -171,111 +175,121 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 							)}
 						/>
 
-						<FormField
-							name="derivations"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label className="mb-2">派生語</Label>
-									<FormControl>
-										<TextPairManager
-											initialData={field.value || []}
-											name="derivations"
-											control={form.control}
-											setValue={form.setValue}
-											errors={form.formState.errors}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
+						<div className="border-t border-gray-200 pt-4">
+							<FormField
+								name="derivations"
+								control={form.control}
+								render={({ field }) => (
+									<FormItem>
+										<Label className="mb-2">派生語</Label>
+										<FormControl>
+											<TextPairManager
+												initialData={field.value || []}
+												name="derivations"
+												control={form.control}
+												setValue={form.setValue}
+												errors={form.formState.errors}
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+						</div>
 
-						<FormField
-							name="phrasal_verbs"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label className="mb-2">句動詞</Label>
-									<FormControl>
-										<TextPairManager
-											initialData={field.value || []}
-											name="phrasal_verbs"
-											control={form.control}
-											setValue={form.setValue}
-											errors={form.formState.errors}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
+						<div className="border-t border-gray-200 pt-4">
+							<FormField
+								name="phrasal_verbs"
+								control={form.control}
+								render={({ field }) => (
+									<FormItem>
+										<Label className="mb-2">句動詞</Label>
+										<FormControl>
+											<TextPairManager
+												initialData={field.value || []}
+												name="phrasal_verbs"
+												control={form.control}
+												setValue={form.setValue}
+												errors={form.formState.errors}
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+						</div>
 
-						<FormField
-							name="synonyms"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label className="mb-2">類義語</Label>
-									<FormControl>
-										<TextPairManager
-											initialData={field.value || []}
-											name="synonyms"
-											control={form.control}
-											setValue={form.setValue}
-											errors={form.formState.errors}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
+						<div className="border-t border-gray-200 pt-4">
+							<FormField
+								name="synonyms"
+								control={form.control}
+								render={({ field }) => (
+									<FormItem>
+										<Label className="mb-2">類義語</Label>
+										<FormControl>
+											<TextPairManager
+												initialData={field.value || []}
+												name="synonyms"
+												control={form.control}
+												setValue={form.setValue}
+												errors={form.formState.errors}
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+						</div>
 
-						<FormField
-							name="antonyms"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label className="mb-2">対義語</Label>
-									<FormControl>
-										<TextPairManager
-											initialData={field.value || []}
-											name="antonyms"
-											control={form.control}
-											setValue={form.setValue}
-											errors={form.formState.errors}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+						<div className="border-t border-gray-200 pt-4">
+							<FormField
+								name="antonyms"
+								control={form.control}
+								render={({ field }) => (
+									<FormItem>
+										<Label className="mb-2">対義語</Label>
+										<FormControl>
+											<TextPairManager
+												initialData={field.value || []}
+												name="antonyms"
+												control={form.control}
+												setValue={form.setValue}
+												errors={form.formState.errors}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</div>
 
-						<FormField
-							name="types"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label>文法の種類</Label>
-									<FormControl>
-										<MultiSelect
-											options={typeOptions.map((t) => ({
-												value: t.id,
-												label: t.label,
-											}))}
-											selectedOptions={field.value || []}
-											setSelectedOptions={(values) => {
-												field.onChange(values);
-												form.setValue("types", values, {
-													shouldValidate: true,
-												});
-											}}
-											placeholder="品詞を選択してください"
-											name="types"
-											error={form.formState.errors.types?.message}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+						<div className="border-t border-gray-200 pt-4">
+							<FormField
+								name="types"
+								control={form.control}
+								render={({ field }) => (
+									<FormItem>
+										<Label>文法の種類</Label>
+										<FormControl>
+											<MultiSelect
+												options={typeOptions.map((t) => ({
+													value: t.id,
+													label: t.label,
+												}))}
+												selectedOptions={field.value || []}
+												setSelectedOptions={(values) => {
+													field.onChange(values);
+													form.setValue("types", values, {
+														shouldValidate: true,
+													});
+												}}
+												placeholder="品詞を選択してください"
+												name="types"
+												error={form.formState.errors.types?.message}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</div>
 
 						<FormField
 							name="etymology"
