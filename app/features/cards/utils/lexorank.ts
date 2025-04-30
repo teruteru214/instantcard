@@ -29,15 +29,18 @@ export const getMiddlePosition = (
 	}
 };
 
-export const generateInitialPositions = (words: string[]): WordData[] => {
+export const generateInitialPositions = (
+	words: { word: string; input: boolean }[],
+): WordData[] => {
 	let currentRank = LexoRank.min();
-	return words.map((word, index) => {
-		const wordData = {
-			word,
+	return words.map((wordData, index) => {
+		const newWordData = {
+			word: wordData.word,
 			position: currentRank.toString(),
 			word_tag_id: index + 1,
+			input: wordData.input,
 		};
 		currentRank = currentRank.genNext();
-		return wordData;
+		return newWordData;
 	});
 };

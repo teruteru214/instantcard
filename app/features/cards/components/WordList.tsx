@@ -10,7 +10,7 @@ import {
 	SortableContext,
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import NoCard from "~/components/global/NoCard";
 import type { WordData } from "../types";
 import {
@@ -91,6 +91,14 @@ const WordList = ({ initialWords }: WordListProps) => {
 		}
 	};
 
+	const handleInputToggle = useCallback((targetWord: string) => {
+		setWords((prevWords) =>
+			prevWords.map((w) =>
+				w.word === targetWord ? { ...w, input: !w.input } : w,
+			),
+		);
+	}, []);
+
 	return (
 		<>
 			{words.length > 0 ? (
@@ -114,7 +122,9 @@ const WordList = ({ initialWords }: WordListProps) => {
 									<WordCard
 										key={wordData.word}
 										word={wordData.word}
+										input={wordData.input}
 										isDragging={activeWord?.word === wordData.word}
+										onInputToggle={handleInputToggle} // ← 追加
 									/>
 								))}
 							</div>
