@@ -1,20 +1,38 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Trash2 } from "lucide-react";
+import {
+	Book,
+	GripVertical,
+	Lightbulb,
+	LightbulbOff,
+	Trash2,
+} from "lucide-react";
 import WordDetails from "~/components/global/WordDetails";
+import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import DeleteModal from "./DeleteModal";
 
 interface WordCardProps {
 	word: string;
+	input: boolean;
 	isDragging?: boolean;
+	onInputToggle?: (word: string) => void;
 }
 
-const WordCard = ({ word, isDragging = false }: WordCardProps) => {
+const WordCard = ({
+	word,
+	input,
+	isDragging = false,
+	onInputToggle,
+}: WordCardProps) => {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({
 			id: word,
 		});
+
+	const handleInputToggle = () => {
+		onInputToggle?.(word);
+	};
 
 	return (
 		<div
@@ -44,6 +62,28 @@ const WordCard = ({ word, isDragging = false }: WordCardProps) => {
 					word={word}
 				/>
 			</Card>
+			<Button
+				className="hidden md:flex ml-2 text-sm" // この行を変更
+				variant={input ? "orange" : "outline"}
+				size="sm"
+				onClick={handleInputToggle}
+			>
+				{input ? (
+					<Lightbulb className="w-4 h-4" />
+				) : (
+					<LightbulbOff className="w-4 h-4" />
+				)}
+				{input ? "input済" : "input中"}
+			</Button>
+			<WordDetails
+				triggerElement={
+					<Book
+						aria-label="辞書"
+						className="ml-2 h-5 w-5 text-gray-400 hover:text-gray-500 cursor-pointer"
+					/>
+				}
+				word={word}
+			/>
 			<DeleteModal
 				word={word}
 				triggerElement={

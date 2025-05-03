@@ -23,6 +23,8 @@ const buttonVariants = cva(
 				white: "border bg-white text-black hover:bg-gray-100",
 				outline:
 					"border border-input bg-transparent text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+				orange:
+					"border bg-orange-500 text-white hover:bg-orange-600 disabled:bg-orange-300",
 			},
 			size: {
 				default: "h-10 px-4 py-2",
