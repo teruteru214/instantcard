@@ -28,14 +28,13 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 			pronunciation: wordDetail.pronunciation || "",
 			examples: wordDetail.examples || [],
 			collocations: wordDetail.collocations || [],
-			trend: wordDetail.trend || "",
 			derivations: wordDetail.derivations || [],
 			phrasal_verbs: wordDetail.phrasal_verbs || [],
 			synonyms: wordDetail.synonyms || [],
 			antonyms: wordDetail.antonyms || [],
 			types: wordDetail.types || [],
 			etymology: wordDetail.etymology || "",
-			other: wordDetail.other || "",
+			note: wordDetail.other || "",
 		},
 		mode: "onChange",
 	});
@@ -157,23 +156,6 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 								)}
 							/>
 						</div>
-
-						<FormField
-							name="trend"
-							control={form.control}
-							render={({ field }) => (
-								<FormItem>
-									<Label>TOIECでの出題傾向</Label>
-									<FormControl>
-										<Textarea
-											{...field}
-											placeholder="TOIECでの出題傾向を入力"
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
 
 						<div className="border-t border-gray-200 pt-4">
 							<FormField
@@ -306,11 +288,11 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 						/>
 
 						<FormField
-							name="other"
+							name="note"
 							control={form.control}
 							render={({ field }) => (
 								<FormItem>
-									<Label>その他</Label>
+									<Label>ノート</Label>
 									<FormControl>
 										<Textarea {...field} placeholder="補足情報やメモを入力" />
 									</FormControl>

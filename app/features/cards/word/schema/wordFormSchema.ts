@@ -41,10 +41,6 @@ export const formSchema = z.object({
 		.optional(),
 	examples: z.array(textPairLargeSchema).max(5).optional(),
 	collocations: z.array(textPairLargeSchema).max(5).optional(),
-	trend: z
-		.string()
-		.max(500, { message: "TOIECの出題傾向は500文字以内で入力してください" })
-		.optional(),
 	derivations: z.array(textPairSchema).max(5).optional(),
 	phrasal_verbs: z.array(textPairSchema).max(5).optional(),
 	synonyms: z.array(textPairSchema).max(5).optional(),
@@ -54,7 +50,7 @@ export const formSchema = z.object({
 		.string()
 		.max(500, { message: "語源は500文字以内で入力してください" })
 		.optional(),
-	other: z
+	note: z
 		.string()
 		.max(500, { message: "その他の情報は500文字以内で入力してください" })
 		.optional(),
