@@ -1,4 +1,5 @@
 import DeleteAccount from "./components/DeleteAccount";
+import NotePrompt from "./components/NotePrompt";
 import ProfileImageSection from "./components/ProfileImageSetting";
 import ProfileNameSetting from "./components/ProfileNameSetting";
 import SpeakerSetting from "./components/SpeakerSetting";
@@ -12,6 +13,8 @@ const SettingsPage = () => {
 		name: "てる太郎",
 		speaker: "en-US-Standard-C" as SpeakerId,
 		cardCount: 6,
+		note_prompt:
+			"以下の英単語を使用して、日常生活で使える例文を3つ作成してください。各例文には、単語の意味と使い方の説明を含めてください。対象読者は英語学習初心者です。",
 	};
 
 	return (
@@ -26,6 +29,8 @@ const SettingsPage = () => {
 				<TrashSection cardCount={userData.cardCount} />
 
 				<TagSection />
+
+				<NotePrompt note_prompt={userData.note_prompt} />
 
 				<DeleteAccount />
 			</main>
