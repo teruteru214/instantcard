@@ -9,9 +9,9 @@ interface NotePromptProps {
 	note_prompt: string;
 }
 
-const NotePrompt = ({ note_prompt: initialName }: NotePromptProps) => {
+const NotePrompt = ({ note_prompt: initialPrompt }: NotePromptProps) => {
 	const [isEditing, setIsEditing] = useState(false);
-	const [displayName, setDisplayName] = useState(initialName);
+	const [displayPrompt, setDisplayPrompt] = useState(initialPrompt);
 	const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
 	useEffect(() => {
@@ -27,12 +27,12 @@ const NotePrompt = ({ note_prompt: initialName }: NotePromptProps) => {
 		setValue,
 	} = useForm<{ note_prompt: string }>({
 		resolver: zodResolver(NotePromptSchema),
-		defaultValues: { note_prompt: displayName },
+		defaultValues: { note_prompt: displayPrompt },
 	});
 
 	const onSubmit = (data: { note_prompt: string }) => {
 		console.log("保存するデータ:", data);
-		setDisplayName(data.note_prompt);
+		setDisplayPrompt(data.note_prompt);
 		setIsEditing(false);
 	};
 
@@ -72,17 +72,17 @@ const NotePrompt = ({ note_prompt: initialName }: NotePromptProps) => {
 								type="button"
 								onClick={() => {
 									setIsEditing(false);
-									setValue("note_prompt", displayName);
+									setValue("note_prompt", displayPrompt);
 								}}
 								className="text-gray-400 hover:text-gray-500"
-								aria-label="名前の編集をキャンセル"
+								aria-label="プロンプトの編集をキャンセル"
 							>
 								キャンセル
 							</Button>
 							<Button
 								variant="default"
 								type="submit"
-								aria-label="変更した名前を保存"
+								aria-label="変更したプロンプトを保存"
 							>
 								保存する
 							</Button>
@@ -90,10 +90,10 @@ const NotePrompt = ({ note_prompt: initialName }: NotePromptProps) => {
 					</form>
 				) : (
 					<>
-						<p className="text-gray-500">
+						<p className="text-gray-500 mt-2">
 							英単語作成時に、AIが生成する学習ノート内の表示形式をあなた自身がカスタマイズできます。例文や語源情報など、AIに作成させたい情報を自由に設定できます。
 						</p>
-						<Button variant="outline" onClick={startEditing}>
+						<Button variant="outline" onClick={startEditing} className="mt-4">
 							変更する
 						</Button>
 					</>
