@@ -27,6 +27,7 @@ const Result = ({ result }: ResultProps) => {
 	const navigate = useNavigate();
 	const correctCount = result.filter((item) => item.isCorrect).length;
 	const percentage = Math.round((correctCount / result.length) * 100);
+	const [isDiscardMode, setIsDiscardMode] = useState(false);
 
 	const [animatedValue, setAnimatedValue] = useState(0);
 
@@ -39,6 +40,10 @@ const Result = ({ result }: ResultProps) => {
 	}, [percentage]);
 
 	const { variant, emoji } = getBadgeVariant(correctCount, result.length);
+
+	const handleInputToggle = () => {
+		setIsDiscardMode(!isDiscardMode);
+	};
 
 	return (
 		<div className="my-7 space-y-4">
@@ -102,8 +107,13 @@ const Result = ({ result }: ResultProps) => {
 				<Button className="w-64" size="giant" onClick={() => navigate(0)}>
 					再チャレンジ
 				</Button>
-				<Button className="w-64" size="giant">
-					正解したカードを捨てる
+				<Button
+					className="w-64"
+					size="giant"
+					variant={isDiscardMode ? "destructive" : "default"}
+					onClick={handleInputToggle}
+				>
+					{isDiscardMode ? "破棄モードを解除" : "正解したカードを捨てる"}
 				</Button>
 			</div>
 		</div>

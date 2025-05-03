@@ -23,4 +23,5 @@ export interface WordDetail {
 	etymology?: string;
 	other?: string;
 	img?: string;
+	input: boolean;
 }

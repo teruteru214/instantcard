@@ -55,6 +55,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 					<EditHeader
 						tags={wordDetail.tags || []}
 						word={wordDetail.word}
+						input={wordDetail.input}
 						isDisabled={!form.formState.isValid || !form.formState.isDirty}
 						onSubmit={() => onSubmit(form.getValues())}
 					/>
