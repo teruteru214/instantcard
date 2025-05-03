@@ -22,7 +22,6 @@ const mockData: WordDetail = {
 		{ id: 1, text: "eat an apple", translation: "リンゴを食べる" },
 		{ id: 2, text: "apple pie", translation: "アップルパイ" },
 	],
-	trend: "TOEICの出題傾向として、果物や食べ物に関する語彙が頻繁に出題される。",
 	derivations: [
 		{ id: 1, text: "apple cider", translation: "リンゴ酒" },
 		{ id: 2, text: "apple tree", translation: "リンゴの木" },
@@ -39,7 +38,7 @@ const mockData: WordDetail = {
 	types: [1],
 	etymology:
 		"「apple」という単語は古英語の「æppel」に由来し、さらにゲルマン語の「*aplaz」にまで遡ることができます。インド・ヨーロッパ語族の多くの言語に類似した単語が存在し、共通の語源を持っています。例えば、ドイツ語の「Apfel」、オランダ語の「appel」、スウェーデン語の「äpple」などがあります。古代から人類の文化と密接に関わってきた果物であり、聖書の「禁断の果実」としても象徴的に使われることがあります（実際には聖書では具体的な果物の種類は明記されていません）。また、ニュートンのリンゴの逸話や、コンピュータ会社Appleの名前の由来としても知られています。",
-	other: "リンゴは世界中で栽培され、さまざまな品種がある。",
+	note: "リンゴは世界中で栽培され、さまざまな品種がある。",
 	input: false,
 };
 

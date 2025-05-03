@@ -34,7 +34,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 			antonyms: wordDetail.antonyms || [],
 			types: wordDetail.types || [],
 			etymology: wordDetail.etymology || "",
-			note: wordDetail.other || "",
+			note: wordDetail.note || "",
 		},
 		mode: "onChange",
 	});
