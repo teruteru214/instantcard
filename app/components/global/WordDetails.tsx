@@ -49,8 +49,6 @@ const mockWordData: WordData = {
 		{ text: "apple sauce", translation: "アップルソース" },
 	],
 	frequency: 8,
-	trend:
-		"TOEICでは食品や健康関連の話題で登場することが多い。特にリスニングパートで 'apple juice' や 'apple orchard' などのフレーズが出題される傾向がある。",
 	derivations: [
 		{ text: "applewood", translation: "リンゴの木材" },
 		{ text: "apple-like", translation: "リンゴのような" },
@@ -70,7 +68,7 @@ const mockWordData: WordData = {
 	antonyms: [{ text: "vegetable", translation: "野菜" }],
 	types: [{ name: "noun" }],
 	etymology: "古英語 'æppel' から派生し、ゲルマン語派の言葉に由来する。",
-	other: "Apple は IT 企業 'Apple Inc.' のブランド名としても広く知られている。",
+	note: "Apple は IT 企業 'Apple Inc.' のブランド名としても広く知られている。",
 };
 
 const WordDetails = ({ triggerElement, word }: WordDetailsProps) => {

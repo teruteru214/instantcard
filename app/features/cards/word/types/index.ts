@@ -14,13 +14,13 @@ export interface WordDetail {
 	pronunciation?: string;
 	examples?: TextPair[];
 	collocations?: TextPair[];
-	trend?: string;
 	derivations?: TextPair[];
 	phrasal_verbs?: TextPair[];
 	synonyms?: TextPair[];
 	antonyms?: TextPair[];
 	types?: number[];
 	etymology?: string;
-	other?: string;
+	note?: string;
 	img?: string;
+	input: boolean;
 }

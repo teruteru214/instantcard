@@ -15,12 +15,11 @@ export interface WordData {
 	examples?: { text: string; translation: string }[];
 	collocations?: { text: string; translation: string }[];
 	frequency: number;
-	trend?: string;
 	derivations?: { text: string; translation: string }[];
 	phrasalVerbs?: { text: string; translation: string }[];
 	synonyms?: { text: string; translation: string }[];
 	antonyms?: { text: string; translation: string }[];
 	types?: { name: string }[];
 	etymology?: string;
-	other?: string;
+	note?: string;
 }

@@ -1,5 +1,6 @@
 import { useNavigate } from "@remix-run/react";
-import { ArrowLeft, Tags, Trash2 } from "lucide-react";
+import { ArrowLeft, Lightbulb, LightbulbOff, Tags, Trash2 } from "lucide-react";
+import { useCallback, useState } from "react";
 
 import TagsDropdownMenu from "~/components/global/TagsDropDown";
 import { Button } from "~/components/ui/button";
@@ -9,12 +10,29 @@ import DeleteModal from "./DeleteModal";
 interface EditHeaderProps {
 	tags: Tag[];
 	word: string;
+	input: boolean; // ← 初期値として使用
 	isDisabled: boolean;
-	onSubmit: () => void;
+	onSubmit: (input: boolean) => void;
 }
 
-const EditHeader = ({ tags, word, isDisabled, onSubmit }: EditHeaderProps) => {
+const EditHeader = ({
+	tags,
+	word,
+	input: initialInput,
+	isDisabled,
+	onSubmit,
+}: EditHeaderProps) => {
 	const navigate = useNavigate();
+
+	const [input, setInput] = useState<boolean>(initialInput);
+
+	const handleInputToggle = useCallback(() => {
+		setInput((prev) => !prev);
+	}, []);
+
+	const handleSubmit = () => {
+		onSubmit(input);
+	};
 
 	return (
 		<div className="sticky top-0 left-0 right-0 z-50 bg-white py-3 flex items-center justify-between">
@@ -31,15 +49,29 @@ const EditHeader = ({ tags, word, isDisabled, onSubmit }: EditHeaderProps) => {
 					variant="black"
 					size="sm"
 					type="submit"
-					onClick={onSubmit}
-					disabled={isDisabled} // 直接判定
+					onClick={handleSubmit}
+					disabled={isDisabled}
 					className="text-sm"
 				>
 					保存する
 				</Button>
 			</div>
 
-			<div className="space-x-2">
+			<div className="flex justify-end items-center space-x-2">
+				<Button
+					className="text-sm"
+					variant={input ? "orange" : "outline"}
+					size="sm"
+					onClick={handleInputToggle}
+				>
+					{input ? (
+						<Lightbulb className="w-4 h-4" />
+					) : (
+						<LightbulbOff className="w-4 h-4" />
+					)}
+					{input ? "input済" : "input中"}
+				</Button>
+
 				<TagsDropdownMenu
 					tags={tags}
 					triggerElement={
@@ -52,6 +84,7 @@ const EditHeader = ({ tags, word, isDisabled, onSubmit }: EditHeaderProps) => {
 						</Button>
 					}
 				/>
+
 				<DeleteModal
 					word={word}
 					triggerElement={
