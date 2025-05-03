@@ -1,5 +1,5 @@
 import { useNavigate } from "@remix-run/react";
-import { Circle, X } from "lucide-react";
+import { Book, Circle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import WordDetails from "~/components/global/WordDetails";
 import { Badge } from "~/components/ui/badge";
@@ -60,6 +60,7 @@ const Result = ({ result }: ResultProps) => {
 						<TableHead className="w-3/12 sm:w-1/12">正否</TableHead>
 						<TableHead>英単語・フレーズ</TableHead>
 						<TableHead>正解</TableHead>
+						<TableHead className="w-3/12 sm:w-1/12 text-center">辞書</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -85,6 +86,11 @@ const Result = ({ result }: ResultProps) => {
 										</span>
 									</TableCell>
 									<TableCell>{item.correctAnswer}</TableCell>
+									<TableCell className="text-center p-0 w-12">
+										<div className="flex justify-center items-center h-full">
+											<Book className="w-4 h-4 text-gray-400 hover:text-gray-500" />
+										</div>
+									</TableCell>
 								</TableRow>
 							}
 						/>
