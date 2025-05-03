@@ -5,13 +5,13 @@ export const frequencyLabel = (
 	variant: "destructive" | "info" | "good" | "outline";
 } => {
 	if (frequency >= 8) {
-		return { label: "🥇TOEICによく出る", variant: "destructive" };
+		return { label: "🥇英語圏で頻繁に使用", variant: "destructive" };
 	}
 	if (frequency >= 5) {
-		return { label: "🥈TOEICで時々出る", variant: "info" };
+		return { label: "🥈英語圏で日常的に使用", variant: "info" };
 	}
 	if (frequency >= 3) {
-		return { label: "🥉TOEICではあまり見かけない", variant: "good" };
+		return { label: "🥉英語圏で時々使用", variant: "good" };
 	}
-	return { label: "❌TOEICではほぼ出ない", variant: "outline" };
+	return { label: "❌英語圏でほとんど使用しない", variant: "outline" };
 };

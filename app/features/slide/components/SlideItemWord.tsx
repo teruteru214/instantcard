@@ -1,4 +1,4 @@
-import { Info } from "lucide-react";
+import { Book } from "lucide-react";
 import Speech from "~/components/global/Speech";
 import WordDetails from "~/components/global/WordDetails";
 import { Button } from "~/components/ui/button";
@@ -23,7 +23,7 @@ const SlideItemWord = ({
 						word={word}
 						triggerElement={
 							<Button variant="ghost" size="icon">
-								<Info />
+								<Book />
 							</Button>
 						}
 					/>

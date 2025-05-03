@@ -67,19 +67,12 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 			{data.frequency && (
 				<WordAccordion
 					id="frequency"
-					title="TOIECの頻出度"
+					title="英語圏での使用頻度"
 					content={
 						<Badge variant={frequencyLabel(data.frequency).variant} size="sm">
 							{frequencyLabel(data.frequency).label}
 						</Badge>
 					}
-				/>
-			)}
-			{data.trend && (
-				<WordAccordion
-					id="trend"
-					title="TOIECの出題傾向"
-					content={<p>{data.trend}</p>}
 				/>
 			)}
 			{data.derivations && (
@@ -129,9 +122,9 @@ const WordAccordions = ({ word, data }: WordAccordionsProps) => {
 				content={data.etymology ? <p>{data.etymology}</p> : <p>なし</p>}
 			/>
 			<WordAccordion
-				id="other"
-				title="その他"
-				content={data.other ? <p>{data.other}</p> : <p>なし</p>}
+				id="note"
+				title="ノート"
+				content={data.note ? <p>{data.note}</p> : <p>なし</p>}
 			/>
 			<WordAccordion
 				id="image-section"
