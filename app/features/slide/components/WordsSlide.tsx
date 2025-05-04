@@ -31,7 +31,6 @@ const WordsSlide = ({
 		toggleLoop,
 		toggleImages,
 		setPlaybackSpeed,
-		handleShuffle,
 		handleSlideTouch,
 	} = useSlideState(data);
 
@@ -55,8 +54,10 @@ const WordsSlide = ({
 	}
 
 	return (
-		<div className="flex flex-col justify-center items-center">
-			<div className={isSizing ? "w-10/12" : "w-9/12"}>
+		<div
+			className={`flex flex-col justify-center items-center ${isSizing ? "w-full h-screen fixed top-0 left-0 z-50 bg-background" : ""}`}
+		>
+			<div className="w-9/12">
 				<Carousel
 					opts={{ loop: slide.isLooping }}
 					plugins={plugins}
@@ -92,7 +93,6 @@ const WordsSlide = ({
 					toggleImages={toggleImages}
 					isLooping={slide.isLooping}
 					toggleLoop={toggleLoop}
-					handleShuffle={handleShuffle}
 					isSizing={isSizing}
 					toggleSizing={toggleSizing}
 				/>
