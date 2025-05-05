@@ -1,5 +1,5 @@
 import { Bot, CheckSquare, Square } from "lucide-react";
-import {} from "~/components/ui/accordion";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { LabeledCheckbox } from "~/components/ui/checkbox";
 import {
@@ -9,26 +9,34 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { aiOptions } from "../config/aiOptions";
+import { defaultAiOptions } from "../config/aiOptions";
 
 interface AiSettingsProps {
-	value: string[];
-	onChange: (value: string[]) => void;
 	triggerElement?: React.ReactNode;
+	onOptionsSelected?: (options: string[]) => void;
 }
 
-const AiSettings = ({ value, onChange, triggerElement }: AiSettingsProps) => {
-	const isAllSelected = value.length === aiOptions.length;
+const AiSettings = ({ triggerElement, onOptionsSelected }: AiSettingsProps) => {
+	const [selectedOptions, setSelectedOptions] =
+		useState<string[]>(defaultAiOptions);
+
+	const isAllSelected = selectedOptions.length === aiOptions.length;
 
 	const toggleAllOptions = () => {
-		onChange(isAllSelected ? [] : [...aiOptions]);
+		const newOptions = isAllSelected ? [] : [...aiOptions];
+		setSelectedOptions(newOptions);
+		onOptionsSelected?.(newOptions);
 	};
 
 	const toggleAiOption = (optionLabel: string, checked: boolean) => {
+		let newOptions: string[];
 		if (checked) {
-			onChange([...value, optionLabel]);
+			newOptions = [...selectedOptions, optionLabel];
 		} else {
-			onChange(value.filter((opt) => opt !== optionLabel));
+			newOptions = selectedOptions.filter((opt) => opt !== optionLabel);
 		}
+		setSelectedOptions(newOptions);
+		onOptionsSelected?.(newOptions);
 	};
 
 	const buttonLabel = isAllSelected ? "全て解除" : "全て選択";
@@ -61,7 +69,7 @@ const AiSettings = ({ value, onChange, triggerElement }: AiSettingsProps) => {
 						<LabeledCheckbox
 							key={option}
 							label={option}
-							checked={value.includes(option)}
+							checked={selectedOptions.includes(option)}
 							onCheckedChange={(checked: boolean) =>
 								toggleAiOption(option, checked)
 							}

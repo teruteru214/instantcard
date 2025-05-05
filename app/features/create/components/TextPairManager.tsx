@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { Trash2 } from "lucide-react";
+import { useCallback } from "react";
 import {
 	type Control,
 	Controller,
@@ -54,7 +55,7 @@ const TextPairManager = ({
 
 	const items = useWatch({ control, name }) || initialData || [];
 
-	const handleAdd = () => {
+	const handleAdd = useCallback(() => {
 		if (items.length < 5) {
 			setValue(
 				name,
@@ -64,15 +65,18 @@ const TextPairManager = ({
 				},
 			);
 		}
-	};
+	}, [items, name, setValue]);
 
-	const handleRemove = (index: number) => {
-		setValue(
-			name,
-			items.filter((_, i) => i !== index),
-			{ shouldValidate: true },
-		);
-	};
+	const handleRemove = useCallback(
+		(index: number) => {
+			setValue(
+				name,
+				items.filter((_, i) => i !== index),
+				{ shouldValidate: true },
+			);
+		},
+		[items, name, setValue],
+	);
 
 	return (
 		<div className="bg-gray-100 p-4 rounded-md space-y-4">

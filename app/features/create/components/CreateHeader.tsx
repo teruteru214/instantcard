@@ -3,23 +3,19 @@ import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import type { Tag } from "~/types/word";
-import { defaultAiOptions } from "../config/aiOptions";
 import AiSettings from "./AiSettings";
 import CreateTagsDropDown from "./CreateTagsDropDown";
 
 interface CreateHeaderProps {
 	tags: Tag[];
-	word: string;
 	isDisabled: boolean;
 	onSubmit: (data: { selectedTags: Tag[] }) => void;
 }
 
 const CreateHeader = ({ tags, isDisabled, onSubmit }: CreateHeaderProps) => {
 	const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
-	const [aiOptions, setAiOptions] = useState<string[]>(defaultAiOptions);
 
 	const handleSubmit = () => {
-		// 選択されたタグのみを含めてonSubmitを呼び出す
 		onSubmit({
 			selectedTags: selectedTags.filter((tag) => tag.isChecked),
 		});
@@ -55,8 +51,6 @@ const CreateHeader = ({ tags, isDisabled, onSubmit }: CreateHeaderProps) => {
 					}
 				/>
 				<AiSettings
-					value={aiOptions}
-					onChange={setAiOptions}
 					triggerElement={
 						<Button
 							variant="ghost"

@@ -92,7 +92,6 @@ const WordForm = ({ initialTags }: { initialTags: Tag[] }) => {
 				<form onSubmit={(e) => e.preventDefault()}>
 					<CreateHeader
 						tags={initialTags}
-						word={word || ""}
 						isDisabled={!isFormValid}
 						onSubmit={handleFormSubmit}
 					/>
@@ -153,132 +152,35 @@ const WordForm = ({ initialTags }: { initialTags: Tag[] }) => {
 							)}
 						/>
 
-						<div>
-							<FormField
-								name="examples"
-								control={form.control}
-								render={({ field }) => (
-									<FormItem>
-										<Label className="mb-2">例文</Label>
-										<FormControl>
-											<TextPairManager
-												initialData={field.value || []}
-												name="examples"
-												control={form.control}
-												setValue={form.setValue}
-												errors={form.formState.errors}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
-
-						<div className="border-t border-gray-200 pt-4">
-							<FormField
-								name="collocations"
-								control={form.control}
-								render={({ field }) => (
-									<FormItem>
-										<Label className="mb-2">コロケーション</Label>
-										<FormControl>
-											<TextPairManager
-												initialData={field.value || []}
-												name="collocations"
-												control={form.control}
-												setValue={form.setValue}
-												errors={form.formState.errors}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
-
-						<div className="border-t border-gray-200 pt-4">
-							<FormField
-								name="derivations"
-								control={form.control}
-								render={({ field }) => (
-									<FormItem>
-										<Label className="mb-2">派生語</Label>
-										<FormControl>
-											<TextPairManager
-												initialData={field.value || []}
-												name="derivations"
-												control={form.control}
-												setValue={form.setValue}
-												errors={form.formState.errors}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
-
-						<div className="border-t border-gray-200 pt-4">
-							<FormField
-								name="phrasal_verbs"
-								control={form.control}
-								render={({ field }) => (
-									<FormItem>
-										<Label className="mb-2">句動詞</Label>
-										<FormControl>
-											<TextPairManager
-												initialData={field.value || []}
-												name="phrasal_verbs"
-												control={form.control}
-												setValue={form.setValue}
-												errors={form.formState.errors}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
-
-						<div className="border-t border-gray-200 pt-4">
-							<FormField
-								name="synonyms"
-								control={form.control}
-								render={({ field }) => (
-									<FormItem>
-										<Label className="mb-2">類義語</Label>
-										<FormControl>
-											<TextPairManager
-												initialData={field.value || []}
-												name="synonyms"
-												control={form.control}
-												setValue={form.setValue}
-												errors={form.formState.errors}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
-
-						<div className="border-t border-gray-200 pt-4">
-							<FormField
-								name="antonyms"
-								control={form.control}
-								render={({ field }) => (
-									<FormItem>
-										<Label className="mb-2">対義語</Label>
-										<FormControl>
-											<TextPairManager
-												initialData={field.value || []}
-												name="antonyms"
-												control={form.control}
-												setValue={form.setValue}
-												errors={form.formState.errors}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
+						{[
+							{ name: "collocations" as const, label: "コロケーション" },
+							{ name: "derivations" as const, label: "派生語" },
+							{ name: "phrasal_verbs" as const, label: "句動詞" },
+							{ name: "synonyms" as const, label: "類義語" },
+							{ name: "antonyms" as const, label: "対義語" },
+						].map(({ name, label }) => (
+							<div key={name} className="border-t border-gray-200 pt-4">
+								<FormField
+									name={name}
+									control={form.control}
+									render={({ field }) => (
+										<FormItem>
+											<Label className="mb-2">{label}</Label>
+											<FormControl>
+												<TextPairManager
+													initialData={field.value || []}
+													name={name}
+													control={form.control}
+													setValue={form.setValue}
+													errors={form.formState.errors}
+												/>
+											</FormControl>
+											{name === "antonyms" && <FormMessage />}
+										</FormItem>
+									)}
+								/>
+							</div>
+						))}
 
 						<div className="border-t border-gray-200 pt-4">
 							<FormField
@@ -344,7 +246,7 @@ const WordForm = ({ initialTags }: { initialTags: Tag[] }) => {
 
 			<div className="mt-4">
 				<Label>イメージ</Label>
-				<ImageSetting word={form.getValues("word") || ""} />
+				<ImageSetting word={word || ""} />
 			</div>
 		</>
 	);
