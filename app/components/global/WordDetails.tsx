@@ -20,7 +20,7 @@ interface WordDetailsProps {
 const mockWordData: WordData = {
 	translation: "リンゴ",
 	meaning:
-		"A round fruit with red, green, or yellow skin and a crisp, juicy flesh.",
+		"「apple」は単に「りんご」を意味する語にとどまらず、さまざまな文化的・象徴的な意味を持つ単語です。例えば、「the apple of one's eye」は「目に入れても痛くないほど大切な存在」を指し、家族や恋人など特別な人を表現する際によく使われます。また、聖書に登場する「禁断の果実」も一般的にリンゴとして描かれ、そこから「apple」は誘惑やタブーの象徴ともなりました。さらに、「The Big Apple」はニューヨーク市の愛称であり、夢や成功、都会の魅力を象徴しています。ことわざ「An apple a day keeps the doctor away」は、りんごが健康の象徴であることを示しています。このように、appleという単語には、単なる果物以上の奥深い意味と物語が込められているのです。",
 	pronunciation: "ˈæp.l̩ （アプル：「ア」と「プ」をはっきり発音）",
 	examples: [
 		{ text: "She ate a red apple.", translation: "彼女は赤いリンゴを食べた。" },
