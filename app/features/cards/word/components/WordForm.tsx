@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import ImageSetting from "~/components/global/ImageSetting";
+import MultiSelect from "~/components/global/parts/MultiSelect";
+
 import {
 	Form,
 	FormControl,
@@ -11,11 +13,13 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import { typeOptions } from "../config/typeOption";
-import { type WordFormData, formSchema } from "../schema/wordFormSchema";
-import type { WordDetail } from "../types";
+import {
+	type WordFormData,
+	formSchema,
+} from "~/features/cards/word/schema/wordFormSchema";
+import type { WordDetail } from "~/types/word";
+import { typeOptions } from "../../../../config/typeOption";
 import EditHeader from "./EditHeader";
-import MultiSelect from "./MultiSelect";
 import TextPairManager from "./TextPairManager";
 
 const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {

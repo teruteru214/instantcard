@@ -7,7 +7,6 @@ import {
 	Minimize2,
 	Pause,
 	Play,
-	Shuffle,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
@@ -33,7 +32,6 @@ interface SlideControlsProps {
 	toggleImages: () => void;
 	isLooping: boolean;
 	toggleLoop: () => void;
-	handleShuffle: () => void;
 	isSizing: boolean;
 	toggleSizing: () => void;
 }
@@ -47,7 +45,6 @@ export const SlideControls = ({
 	toggleImages,
 	isLooping,
 	toggleLoop,
-	handleShuffle,
 	isSizing,
 	toggleSizing,
 }: SlideControlsProps) => {
@@ -78,67 +75,60 @@ export const SlideControls = ({
 				</Tooltip>
 			</TooltipProvider>
 
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button size="icon">
-						<Hourglass />
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent className="w-72">
-					<DropdownMenuLabel>
-						スライド1枚あたりの表示時間を設定
-					</DropdownMenuLabel>
-					<PlaybackSpeedControl
-						playbackSpeed={playbackSpeed}
-						setPlaybackSpeed={setPlaybackSpeed}
-					/>
-				</DropdownMenuContent>
-			</DropdownMenu>
+			{!isSizing && (
+				<>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button size="icon">
+								<Hourglass />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent className="w-72">
+							<DropdownMenuLabel>
+								スライド1枚あたりの表示時間を設定
+							</DropdownMenuLabel>
+							<PlaybackSpeedControl
+								playbackSpeed={playbackSpeed}
+								setPlaybackSpeed={setPlaybackSpeed}
+							/>
+						</DropdownMenuContent>
+					</DropdownMenu>
 
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTriggerNoButton>
-						<Button
-							size="icon"
-							variant={showImages ? "black" : "default"}
-							onClick={toggleImages}
-						>
-							{showImages ? <Image /> : <ImageOff />}
-						</Button>
-					</TooltipTriggerNoButton>
-					<TooltipContent side="bottom">
-						{showImages ? "画像表示" : "画像非表示"}
-					</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTriggerNoButton>
+								<Button
+									size="icon"
+									variant={showImages ? "black" : "default"}
+									onClick={toggleImages}
+								>
+									{showImages ? <Image /> : <ImageOff />}
+								</Button>
+							</TooltipTriggerNoButton>
+							<TooltipContent side="bottom">
+								{showImages ? "画像表示" : "画像非表示"}
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTriggerNoButton>
-						<Button
-							size="icon"
-							variant={isLooping ? "black" : "default"}
-							onClick={toggleLoop}
-						>
-							<InfinityIcon />
-						</Button>
-					</TooltipTriggerNoButton>
-					<TooltipContent side="bottom">
-						ループ: {isLooping ? "オン" : "オフ"}
-					</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
-
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTriggerNoButton>
-						<Button size="icon" onClick={handleShuffle}>
-							<Shuffle />
-						</Button>
-					</TooltipTriggerNoButton>
-					<TooltipContent side="bottom">スライドをシャッフル</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTriggerNoButton>
+								<Button
+									size="icon"
+									variant={isLooping ? "black" : "default"}
+									onClick={toggleLoop}
+								>
+									<InfinityIcon />
+								</Button>
+							</TooltipTriggerNoButton>
+							<TooltipContent side="bottom">
+								ループ: {isLooping ? "オン" : "オフ"}
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+				</>
+			)}
 
 			<TooltipProvider>
 				<Tooltip>

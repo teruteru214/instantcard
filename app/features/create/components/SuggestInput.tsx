@@ -4,7 +4,7 @@ import { cn } from "~/lib/utils";
 
 import { useDebounce } from "~/hooks/useDebounce";
 import type { Word } from "~/types/word";
-import type { CardFormData } from "../schema/cardFormSchema";
+import type { WordFormData } from "../schema/wordFormSchema";
 
 interface SuggestState {
 	suggestions: Word[];
@@ -13,7 +13,7 @@ interface SuggestState {
 }
 
 interface SuggestInputProps {
-	field: ControllerRenderProps<CardFormData, "word">;
+	field: ControllerRenderProps<WordFormData, "word">;
 }
 
 const SuggestInput = ({ field }: SuggestInputProps) => {
@@ -84,7 +84,28 @@ const SuggestInput = ({ field }: SuggestInputProps) => {
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "ArrowDown") {
+		// Ctrl+N (次の候補へ)
+		if (e.ctrlKey && e.key === "n") {
+			e.preventDefault();
+			setSuggestState((prev) => ({
+				...prev,
+				selectedIndex:
+					prev.selectedIndex < prev.suggestions.length - 1
+						? prev.selectedIndex + 1
+						: 0,
+			}));
+		}
+		// Ctrl+P (前の候補へ)
+		else if (e.ctrlKey && e.key === "p") {
+			e.preventDefault();
+			setSuggestState((prev) => ({
+				...prev,
+				selectedIndex:
+					prev.selectedIndex > 0
+						? prev.selectedIndex - 1
+						: prev.suggestions.length - 1,
+			}));
+		} else if (e.key === "ArrowDown") {
 			e.preventDefault();
 			setSuggestState((prev) => ({
 				...prev,
@@ -110,9 +131,9 @@ const SuggestInput = ({ field }: SuggestInputProps) => {
 			) {
 				handleOptionSelect(
 					suggestState.suggestions[suggestState.selectedIndex].word,
+					false,
 				);
 			}
-			inputRef.current?.blur();
 		} else if (e.key === "Escape") {
 			e.preventDefault();
 			setInputValue("");
@@ -122,11 +143,13 @@ const SuggestInput = ({ field }: SuggestInputProps) => {
 		}
 	};
 
-	const handleOptionSelect = (word: string) => {
+	const handleOptionSelect = (word: string, shouldBlur = true) => {
 		setInputValue(word);
 		field.onChange(word);
 		setSuggestState({ suggestions: [], isOpen: false, selectedIndex: -1 });
-		inputRef.current?.blur();
+		if (shouldBlur) {
+			inputRef.current?.blur();
+		}
 	};
 
 	return (

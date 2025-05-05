@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { SlideWord } from "../types";
-import { shuffleSlides } from "../utils/shuffle";
 
 interface SlideState {
 	isPlaying: boolean;
@@ -16,7 +15,6 @@ interface UseSlideStateReturn {
 	toggleLoop: () => void;
 	toggleImages: () => void;
 	setPlaybackSpeed: (speed: number) => void;
-	handleShuffle: () => void;
 	handleSlideTouch: () => void;
 }
 
@@ -47,13 +45,6 @@ export const useSlideState = (
 		setSlide((prev) => ({ ...prev, playbackSpeed: speed }));
 	};
 
-	const handleShuffle = () => {
-		setSlide((prev) => ({
-			...prev,
-			data: shuffleSlides(prev.data),
-		}));
-	};
-
 	const handleSlideTouch = () => {
 		setSlide((prev) => ({ ...prev, isPlaying: false }));
 	};
@@ -64,7 +55,6 @@ export const useSlideState = (
 		toggleLoop,
 		toggleImages,
 		setPlaybackSpeed,
-		handleShuffle,
 		handleSlideTouch,
 	};
 };

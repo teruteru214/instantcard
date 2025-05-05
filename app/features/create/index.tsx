@@ -1,4 +1,4 @@
-import CardForm from "./components/CardForm";
+import WordForm from "./components/WordForm";
 
 const CreatePage = () => {
 	const initialTags = [
@@ -7,8 +7,8 @@ const CreatePage = () => {
 	];
 
 	return (
-		<div className="mt-5 mb-[35rem]">
-			<CardForm initialTags={initialTags} />
+		<div>
+			<WordForm initialTags={initialTags} />
 		</div>
 	);
 };
