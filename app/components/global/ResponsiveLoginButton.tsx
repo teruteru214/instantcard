@@ -8,7 +8,7 @@ const ResponsiveLoginButton = () => (
 			<LoginModal
 				trigger={
 					<Button size="giant" aria-label="ログインモーダルを開く">
-						カードを作る
+						今すぐ試してみる
 					</Button>
 				}
 			/>
@@ -17,7 +17,7 @@ const ResponsiveLoginButton = () => (
 			<LoginSheet
 				trigger={
 					<Button size="giant" aria-label="ログインモーダルを開く">
-						カードを作る
+						今すぐ試してみる
 					</Button>
 				}
 			/>
