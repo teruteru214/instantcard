@@ -47,6 +47,7 @@ export default function Index() {
 					src="/home.webp"
 					alt="Enlex アプリのスクリーンショット"
 					className="rounded-lg shadow-xl"
+					loading="lazy"
 				/>
 			</section>
 
@@ -73,6 +74,7 @@ export default function Index() {
 							src="/create.webp"
 							alt="英単語カード作成機能のスクリーンショット"
 							className="rounded-lg shadow-lg"
+							loading="lazy"
 						/>
 					</div>
 
@@ -102,6 +104,7 @@ export default function Index() {
 							src="/cards.webp"
 							alt="カード管理機能のスクリーンショット"
 							className="rounded-lg shadow-lg"
+							loading="lazy"
 						/>
 					</div>
 
@@ -139,6 +142,7 @@ export default function Index() {
 										src="/slide.webp"
 										alt="スライド機能のスクリーンショット"
 										className="object-contain w-full h-full"
+										loading="lazy"
 									/>
 								</div>
 							</div>
@@ -159,6 +163,7 @@ export default function Index() {
 										src="/quiz.webp"
 										alt="クイズ機能のスクリーンショット"
 										className="object-contain w-full h-full"
+										loading="lazy"
 									/>
 								</div>
 							</div>
@@ -177,9 +182,9 @@ export default function Index() {
 						自分のペースで反復学習できるスライドモードと、理解度を確認できるクイズモードで、
 						確実な記憶定着をサポート。スキマ時間を活用した継続的な学習で、着実に語彙力を強化できます。
 					</p>
-					<div className="flex justify-center">
-						<ResponsiveLoginButton />
-					</div>
+				</div>
+				<div className="flex justify-center">
+					<ResponsiveLoginButton />
 				</div>
 			</section>
 		</div>
