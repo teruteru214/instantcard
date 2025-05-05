@@ -17,9 +17,9 @@ const TagsDropdownMenu = ({ triggerElement, tags }: TagsProps) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>{triggerElement}</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-80">
+			<DropdownMenuContent className="p-3">
 				<DropdownMenuLabel>タグを付与する</DropdownMenuLabel>
-				<div className="p-2">
+				<div className="mt-2">
 					<TagsForm initialTags={tags} />
 					{tags.length > 0 && (
 						<div className="mt-2">

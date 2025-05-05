@@ -9,8 +9,8 @@ import {
 } from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import type { WordFormData } from "../schema/wordFormSchema";
-import type { TextPair } from "../types";
+import type { WordFormData } from "~/features/cards/word/schema/wordFormSchema";
+import type { TextPair } from "~/types/word";
 
 type TextPairFieldName = keyof Pick<
 	WordFormData,
