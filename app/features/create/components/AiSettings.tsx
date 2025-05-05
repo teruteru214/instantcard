@@ -62,9 +62,9 @@ const AiSettings = ({ triggerElement, onOptionsSelected }: AiSettingsProps) => {
 			<DropdownMenuTrigger asChild>
 				{triggerElement || defaultTrigger}
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="p-2">
+			<DropdownMenuContent className="p-2 w-[calc(100vw-32px)] max-w-[350px]">
 				<DropdownMenuLabel>AIで生成する項目</DropdownMenuLabel>
-				<div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+				<div className="grid grid-cols-1 xs:grid-cols-2 gap-2 mt-2">
 					{aiOptions.map((option) => (
 						<LabeledCheckbox
 							key={option}
