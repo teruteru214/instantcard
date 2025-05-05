@@ -1,5 +1,5 @@
+import type { WordDetail } from "~/types/word";
 import WordForm from "./components/WordForm";
-import type { WordDetail } from "./types";
 
 const mockData: WordDetail = {
 	tags: [

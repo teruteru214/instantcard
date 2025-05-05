@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type SubmitHandler, useForm } from "react-hook-form";
+import { type FieldErrors, useForm, useWatch } from "react-hook-form";
 import ImageSetting from "~/components/global/ImageSetting";
 import MultiSelect from "~/components/global/parts/MultiSelect";
-
 import {
 	Form,
 	FormControl,
@@ -13,55 +12,89 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import {
-	type WordFormData,
-	formSchema,
-} from "~/features/cards/word/schema/wordFormSchema";
-import type { WordDetail } from "~/types/word";
-import { typeOptions } from "../../../../config/typeOption";
-import EditHeader from "./EditHeader";
+import { typeOptions } from "~/config/typeOption";
+
+import type { Tag } from "~/types/word";
+import { type WordFormData, formSchema } from "../schema/wordFormSchema";
+import CreateHeader from "./CreateHeader";
+import SuggestInput from "./SuggestInput";
 import TextPairManager from "./TextPairManager";
 
-const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
+const WordForm = ({ initialTags }: { initialTags: Tag[] }) => {
 	const form = useForm<WordFormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			word: wordDetail.word || "",
-			translation: wordDetail.translation || "",
-			meaning: wordDetail.meaning || "",
-			pronunciation: wordDetail.pronunciation || "",
-			examples: wordDetail.examples || [],
-			collocations: wordDetail.collocations || [],
-			derivations: wordDetail.derivations || [],
-			phrasal_verbs: wordDetail.phrasal_verbs || [],
-			synonyms: wordDetail.synonyms || [],
-			antonyms: wordDetail.antonyms || [],
-			types: wordDetail.types || [],
-			etymology: wordDetail.etymology || "",
-			note: wordDetail.note || "",
+			word: "",
+			translation: "",
+			meaning: "",
+			pronunciation: "",
+			examples: [],
+			collocations: [],
+			derivations: [],
+			phrasal_verbs: [],
+			synonyms: [],
+			antonyms: [],
+			types: [],
+			etymology: "",
+			note: "",
 		},
-		mode: "onChange",
+		mode: "onSubmit",
+		reValidateMode: "onSubmit",
 	});
 
-	const onSubmit: SubmitHandler<WordFormData> = (data) => {
-		const changedData = Object.fromEntries(
-			(Object.keys(data) as Array<keyof WordFormData>)
-				.filter((key) => form.getValues(key) !== data[key])
-				.map((key) => [key, data[key]]),
-		);
-		console.log("Changed Data:", changedData);
+	const word = useWatch({
+		control: form.control,
+		name: "word",
+	});
+
+	const translation = useWatch({
+		control: form.control,
+		name: "translation",
+	});
+
+	const isFormValid = !!word && !!translation;
+
+	const handleError = (errors: FieldErrors<WordFormData>) => {
+		console.error("バリデーションエラー:", errors);
+	};
+
+	const handleFormSubmit = (headerData: { selectedTags: Tag[] }) => {
+		form.trigger().then((isValid) => {
+			if (isValid) {
+				const formData = form.getValues();
+				// フォームデータとタグを合わせる
+				const submitData = {
+					...formData,
+					tags: headerData.selectedTags,
+				};
+				console.log("完全な送信データ:", submitData);
+				// 実際の送信処理はここで行う
+			} else {
+				// エラーメッセージを強制的に表示するためにフォーム全体を検証
+				for (const field of Object.keys(form.formState.errors)) {
+					console.log(`エラーがあるフィールド: ${field}`);
+				}
+				// TextPair関連のフィールドも明示的に検証
+				form.trigger("examples");
+				form.trigger("collocations");
+				form.trigger("derivations");
+				form.trigger("phrasal_verbs");
+				form.trigger("synonyms");
+				form.trigger("antonyms");
+				handleError(form.formState.errors);
+			}
+		});
 	};
 
 	return (
 		<>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<EditHeader
-						tags={wordDetail.tags || []}
-						word={wordDetail.word}
-						input={wordDetail.input}
-						isDisabled={!form.formState.isValid || !form.formState.isDirty}
-						onSubmit={() => onSubmit(form.getValues())}
+				<form onSubmit={(e) => e.preventDefault()}>
+					<CreateHeader
+						tags={initialTags}
+						word={word || ""}
+						isDisabled={!isFormValid}
+						onSubmit={handleFormSubmit}
 					/>
 					<div className="mt-3 space-y-4">
 						<FormField
@@ -71,7 +104,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 								<FormItem>
 									<Label indispensable>英単語</Label>
 									<FormControl>
-										<Input type="text" {...field} placeholder="英単語を入力" />
+										<SuggestInput field={field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -311,7 +344,7 @@ const WordForm = ({ wordDetail }: { wordDetail: WordDetail }) => {
 
 			<div className="mt-4">
 				<Label>イメージ</Label>
-				<ImageSetting word={wordDetail.word} />
+				<ImageSetting word={form.getValues("word") || ""} />
 			</div>
 		</>
 	);

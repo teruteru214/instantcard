@@ -3,7 +3,6 @@ export const aiOptions = [
 	"発音のコツ",
 	"例文",
 	"コロケーション",
-	"TOEICでの出題傾向",
 	"派生語",
 	"類義語",
 	"句動詞",
@@ -11,7 +10,7 @@ export const aiOptions = [
 	"対義語",
 	"文法の種類",
 	"語源",
-	"その他(重要事項)",
+	"ノート",
 ];
 
 export const defaultAiOptions = [
@@ -19,7 +18,6 @@ export const defaultAiOptions = [
 	"発音のコツ",
 	"例文",
 	"コロケーション",
-	"TOEICでの出題傾向",
 	"派生語",
 	"類義語",
 	"句動詞",
