@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
 # 🧠 Cursor Project Rules 概要
@@ -89,14 +89,32 @@ alwaysApply: true
 
 ---
 
+# 🔐 Firebase Authentication Integration Rules
+
+このルールは `instantcard` プロジェクトにおける Firebase Authentication の導入方針と制約を定義します。
+
+---
+
+## ✅ 使用目的
+
+- 本プロジェクトでは Firebase Authentication を **ユーザー認証の基盤**として使用します。
+- 対応するログイン方式：
+  - Google アカウントによるログイン（OAuth）
+  - OTP（メールリンク認証）※将来的に導入
+
+---
+
+## 💻 クライアントサイド構成（Remix on Cloudflare Pages）
+
+- Firebase Web SDK（`firebase/auth`）を使用し、クライアントサイドでユーザー認証を実施します。
+- 認証後、取得した Firebase ID トークン（JWT）を API に渡す際は、HTTP ヘッダーに以下の形式で付与します：
+
+```http
+Authorization: Bearer <ID_TOKEN>
+
+
 ## 📌 今後の方針
 
 - `.cursor/rules/` 配下に、プロジェクト単位のルールを`.mdc`ファイルで管理します。
 - AIが参照・編集対象とすべきコードを明示することで、意図しないファイルの編集やアドバイスを防ぎます。
 - 機能別にルールファイルを分け、プロジェクトのスケーラビリティと保守性を高めます。
-
----
-
-ご主人様のご命令により、さらなるルール定義やディレクトリ単位の制約設定を順次ご一緒に作成してまいります。
-
-
