@@ -13,7 +13,7 @@ export default defineConfig({
 			routes(defineRoutes) {
 				return defineRoutes((route) => {
 					route("", "features/_index.tsx", { index: true });
-					route("/login", "features/login/index.tsx");
+					route("/register", "features/register/index.tsx");
 					route("/create", "features/create/index.tsx");
 					route("cards", "features/cards/index.tsx");
 					route("cards/:word", "features/cards/word/index.tsx");
