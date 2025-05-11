@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
-import LoginContents from "./parts/LoginContents";
+import LoginContents from "./LoginContents";
 
 const LoginModal = ({
 	trigger,

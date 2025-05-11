@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
-import LoginModal from "./LoginModal";
-import LoginSheet from "./LoginSheet";
+import LoginModal from "./part/LoginModal";
+import LoginSheet from "./part/LoginSheet";
 
 const ResponsiveLoginButton = () => (
 	<>
@@ -16,7 +16,7 @@ const ResponsiveLoginButton = () => (
 		<div className="block sm:hidden">
 			<LoginSheet
 				trigger={
-					<Button size="giant" aria-label="ログインモーダルを開く">
+					<Button size="giant" aria-label="ログインシートを開く">
 						今すぐ試してみる
 					</Button>
 				}
