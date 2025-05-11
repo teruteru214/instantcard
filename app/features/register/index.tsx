@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@remix-run/react";
-import { useState } from "react";
+import { Link, useNavigate } from "@remix-run/react";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -12,12 +13,36 @@ import {
 	FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { auth } from "~/config/initFirebase";
+import { authCookie } from "~/utils/auth";
 import { nameSchema } from "./schema/name";
 
 type FormValues = z.infer<typeof nameSchema>;
 
+interface RegisterResponse {
+	token: string;
+}
+
 const RegisterPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			if (!user) {
+				// 未認証の場合はログインページへ
+				navigate("/");
+				return;
+			}
+
+			// 既存ユーザーの場合はカード一覧へ
+			if (!user.metadata.creationTime) {
+				navigate("/cards");
+			}
+		});
+
+		return () => unsubscribe();
+	}, [navigate]);
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(nameSchema),
@@ -29,11 +54,36 @@ const RegisterPage = () => {
 	const onSubmit = async (data: FormValues) => {
 		setIsSubmitting(true);
 		try {
-			// ここでAPIリクエストなどの処理を行う
-			console.log("名前を登録しました:", data.name);
-			// 成功した場合はリダイレクトや成功メッセージを表示
+			// 現在のユーザーからIDトークンを取得
+			const user = auth.currentUser;
+			if (!user) {
+				throw new Error("認証が必要です");
+			}
+
+			const token = await user.getIdToken();
+
+			// ユーザー登録APIを呼び出し
+			const response = await fetch("/workers/auth/google-register", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify({ name: data.name }),
+			});
+
+			if (!response.ok) {
+				throw new Error("登録に失敗しました");
+			}
+
+			const { token: jwtToken } = (await response.json()) as RegisterResponse;
+			await authCookie.serialize(jwtToken);
+
+			// 登録成功後はカード一覧ページへ
+			navigate("/cards");
 		} catch (error) {
 			console.error("登録中にエラーが発生しました", error);
+			// TODO: エラー通知の実装
 		} finally {
 			setIsSubmitting(false);
 		}
