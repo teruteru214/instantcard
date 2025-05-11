@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import ResponsiveLoginButton from "~/components/global/ResponsiveLoginButton";
+import ResponsiveLoginButton from "~/components/auth/ResponsiveLoginButton";
 
 export const meta: MetaFunction = () => {
 	return [

@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
-import LoginModal from "./LoginModal";
-import LoginSheet from "./LoginSheet";
+import LoginModal from "./part/LoginModal";
+import LoginSheet from "./part/LoginSheet";
 
 const ResponsiveLoginButton = () => (
 	<>
