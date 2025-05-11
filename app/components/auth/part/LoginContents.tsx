@@ -15,9 +15,7 @@ const LoginContents = () => {
 
 	const handleGoogleLogin = async () => {
 		try {
-			const { isNewUser, token } = await signInWithGoogle(auth);
-			console.log(isNewUser);
-			console.log(token);
+			const { isNewUser } = await signInWithGoogle(auth);
 			// 新規ユーザーの場合は/registerへ、既存ユーザーは/dashboardへ
 			if (isNewUser) {
 				navigate("/register");

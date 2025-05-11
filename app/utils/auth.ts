@@ -29,7 +29,8 @@ export const authCookie = createCookie("firebase_token", {
 	secure: true,
 	sameSite: "lax",
 	path: "/",
-	maxAge: 60 * 60 * 24 * 90,
+	maxAge: 60 * 60 * 24 * 14,
+	httpOnly: true,
 });
 
 // Googleログイン
