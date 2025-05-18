@@ -16,7 +16,6 @@ interface GoogleProfile {
 }
 
 interface AdditionalUserInfo {
-	isNewUser: boolean;
 	providerId: string | null;
 	profile: GoogleProfile | null;
 }
@@ -34,9 +33,7 @@ export const authCookie = createCookie("firebase_token", {
 });
 
 // Googleログイン
-export const signInWithGoogle = async (
-	auth: Auth,
-): Promise<{ token: string; isNewUser: boolean }> => {
+export const signInWithGoogle = async (auth: Auth): Promise<void> => {
 	try {
 		const provider = new GoogleAuthProvider();
 		const result = (await signInWithPopup(
@@ -44,9 +41,8 @@ export const signInWithGoogle = async (
 			provider,
 		)) as ExtendedUserCredential;
 		const token = await result.user.getIdToken();
-		const isNewUser = result.additionalUserInfo?.isNewUser ?? false;
 
-		return { token, isNewUser };
+		await authCookie.serialize(token);
 	} catch (error) {
 		console.error("Googleログインエラー:", error);
 		throw error;
