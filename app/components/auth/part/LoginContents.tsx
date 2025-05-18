@@ -21,21 +21,38 @@ const LoginContents = () => {
 
 			const token = await authCookie.parse(document.cookie);
 
-			const existingUserResponse = await fetch("/api/auth/find-user", {
+			if (!token) {
+				throw new Error("認証トークンが見つかりません");
+			}
+
+			const controller = new AbortController();
+			const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+			const existingUserResponse = await fetch("/workers/auth/find-user", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({ token }),
+				signal: controller.signal,
 			});
+
+			clearTimeout(timeoutId);
 
 			if (existingUserResponse.ok) {
 				navigate("/cards");
 			} else {
-				navigate("/register");
+				if (existingUserResponse.status === 404) {
+					navigate("/register");
+				} else {
+					throw new Error(
+						`サーバーエラーが発生しました (${existingUserResponse.status})`,
+					);
+				}
 			}
 		} catch (error) {
 			console.error("Googleログインエラー:", error);
+			alert("ログイン処理中にエラーが発生しました。もう一度お試しください。");
 		} finally {
 			setIsLoading(false);
 		}
@@ -72,11 +89,12 @@ const LoginContents = () => {
 							className="w-full relative"
 							onClick={handleGoogleLogin}
 							disabled={isLoading}
+							aria-busy={isLoading}
 						>
 							<div className="flex items-center justify-center">
 								{isLoading && (
 									<svg
-										className="animate-spin absolute left-4 h-5 w-5 text-gray-500"
+										className="animate-spin absolute left-4 h-5 w-5 text-gray-600"
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
 										viewBox="0 0 24 24"
@@ -98,7 +116,7 @@ const LoginContents = () => {
 									</svg>
 								)}
 								<svg
-									className="w-5 h-5 mr-2"
+									className="w-5 h-5 mr-2.5"
 									viewBox="0 0 24 24"
 									fill="none"
 									xmlns="http://www.w3.org/2000/svg"

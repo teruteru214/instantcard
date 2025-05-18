@@ -42,6 +42,7 @@ export const signInWithGoogle = async (auth: Auth): Promise<void> => {
 		)) as ExtendedUserCredential;
 		const token = await result.user.getIdToken();
 
+		// Tokenをcookieに保存（14日間有効）
 		await authCookie.serialize(token);
 	} catch (error) {
 		console.error("Googleログインエラー:", error);

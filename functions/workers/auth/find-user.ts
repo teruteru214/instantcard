@@ -7,20 +7,21 @@ interface RequestBody {
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
-	// POSTリクエストのみ許可
 	if (context.request.method !== "POST") {
 		return new Response("Method not allowed", { status: 405 });
 	}
 
 	try {
-		// リクエストボディからトークンを取得
 		const { token } = (await context.request.json()) as RequestBody;
 
 		if (!token) {
 			return new Response("Token is required", { status: 400 });
 		}
 
-		// バックエンドAPIにリクエストを転送
+		if (typeof token !== "string" || token.length < 10) {
+			return new Response("Invalid token format", { status: 400 });
+		}
+
 		const existingUserResponse = await fetch(
 			`${context.env.BACKEND_API_URL}/workers/auth/find-user`,
 			{
@@ -35,10 +36,15 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 		const data = await existingUserResponse.json();
 		return new Response(JSON.stringify(data), {
 			status: existingUserResponse.status,
-			headers: existingUserResponse.headers,
+			headers: {
+				...existingUserResponse.headers,
+				"X-Content-Type-Options": "nosniff",
+				"X-Frame-Options": "DENY",
+			},
 		});
 	} catch (error) {
-		console.error("Error in find-user:", error);
+		const requestId = crypto.randomUUID();
+		console.error(`Error in find-user [${requestId}]:`, error);
 		return new Response("Internal server error", { status: 500 });
 	}
 };
