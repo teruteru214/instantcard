@@ -54,20 +54,18 @@ const RegisterPage = () => {
 	const onSubmit = async (data: FormValues) => {
 		setIsSubmitting(true);
 		try {
-			// 現在のユーザーからIDトークンを取得
-			const user = auth.currentUser;
-			if (!user) {
+			// 既存のJWTトークンを取得
+			const existingToken = await authCookie.parse(document.cookie);
+			if (!existingToken) {
 				throw new Error("認証が必要です");
 			}
 
-			const token = await user.getIdToken();
-
 			// ユーザー登録APIを呼び出し
-			const response = await fetch("/workers/auth/google-register", {
+			const response = await fetch("/workers/auth/create-google-user", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${existingToken}`,
 				},
 				body: JSON.stringify({ name: data.name }),
 			});
@@ -127,10 +125,36 @@ const RegisterPage = () => {
 
 						<Button
 							type="submit"
-							className="w-full h-12 text-lg font-medium"
+							className="w-full h-12 text-lg font-medium relative"
 							disabled={isSubmitting}
+							aria-busy={isSubmitting}
 						>
-							{isSubmitting ? "登録中..." : "アカウントを作成"}
+							<div className="flex items-center justify-center">
+								{isSubmitting && (
+									<svg
+										className="animate-spin absolute left-4 h-5 w-5 text-gray-600"
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+									>
+										<title>読み込み中</title>
+										<circle
+											className="opacity-25"
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="currentColor"
+											strokeWidth="4"
+										/>
+										<path
+											className="opacity-75"
+											fill="currentColor"
+											d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+										/>
+									</svg>
+								)}
+								アカウントを作成
+							</div>
 						</Button>
 					</form>
 				</Form>
