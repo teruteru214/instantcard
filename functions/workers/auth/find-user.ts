@@ -1,10 +1,7 @@
 import type { PagesFunction } from "@cloudflare/workers-types";
 import { Response } from "@cloudflare/workers-types";
-import type { Env } from "types/env";
-
-interface RequestBody {
-	token: string;
-}
+import type { Env } from "types/workers";
+import { authCookie } from "~/utils/auth";
 
 export const onRequest: PagesFunction<Env> = async (context) => {
 	if (context.request.method !== "POST") {
@@ -12,7 +9,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 	}
 
 	try {
-		const { token } = (await context.request.json()) as RequestBody;
+		const token = await authCookie.parse(context.request.headers.get("Cookie"));
 
 		if (!token) {
 			return new Response("Token is required", { status: 400 });
