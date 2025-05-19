@@ -8,6 +8,10 @@ export interface RequestBody {
 export const onRequest: PagesFunction<Env> = async (context) => {
 	const { request, env } = context;
 
+	if (request.method !== "POST") {
+		return new Response("許可されていないメソッドです", { status: 405 });
+	}
+
 	const token = await authCookie.parse(request.headers.get("Cookie"));
 
 	if (!token) {
