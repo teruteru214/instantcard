@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 
 export interface User {
-	id: string;
+	id: number;
 	name: string;
 	img?: string;
 	speaker?: string;
