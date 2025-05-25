@@ -1,10 +1,12 @@
 import { useNavigate } from "@remix-run/react";
+import { useSetAtom } from "jotai";
 import { useState } from "react";
 import ButtonLoadingSpinner from "~/components/global/ButtonLoadingSpinner";
 
 import { Button } from "~/components/ui/button";
 import { DialogDescription, DialogHeader } from "~/components/ui/dialog";
 import { auth } from "~/config/initFirebase";
+import { type User, userAtom } from "~/store/userAtom";
 import { authCookie, signInWithGoogle } from "~/utils/auth";
 
 interface ViewState {
@@ -15,6 +17,7 @@ const LoginContents = () => {
 	const [view, setView] = useState<ViewState>({ state: "default" });
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
+	const setUser = useSetAtom(userAtom);
 
 	const handleGoogleLogin = async () => {
 		try {
@@ -42,6 +45,8 @@ const LoginContents = () => {
 			clearTimeout(timeoutId);
 
 			if (existingUserResponse.ok) {
+				const userData = (await existingUserResponse.json()) as User;
+				setUser(userData);
 				navigate("/cards");
 			} else {
 				if (existingUserResponse.status === 404) {

@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { onAuthStateChanged } from "firebase/auth";
+import { useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -16,6 +17,8 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { auth } from "~/config/initFirebase";
+import { type User, userAtom } from "~/store/userAtom";
+
 import { authCookie } from "~/utils/auth";
 import { nameSchema } from "./schema/name";
 
@@ -28,6 +31,7 @@ interface RegisterResponse {
 const RegisterPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
+	const setUser = useSetAtom(userAtom);
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -82,6 +86,20 @@ const RegisterPage = () => {
 			const { token: jwtToken } =
 				(await registerUserResponse.json()) as RegisterResponse;
 			await authCookie.serialize(jwtToken);
+
+			// ユーザー情報を取得して状態を更新
+			const userResponse = await fetch("/workers/auth/find-user", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ token: jwtToken }),
+			});
+
+			if (userResponse.ok) {
+				const userData = (await userResponse.json()) as User;
+				setUser(userData);
+			}
 
 			// 登録成功後はカード一覧ページへ
 			navigate("/cards");
@@ -142,13 +160,6 @@ const RegisterPage = () => {
 						</Button>
 					</form>
 				</Form>
-
-				<div className="mt-6 text-center text-sm text-gray-500">
-					すでにアカウントをお持ちですか？{" "}
-					<Link to="/" className="font-medium text-blue-600 hover:underline">
-						ログイン
-					</Link>
-				</div>
 			</div>
 		</div>
 	);

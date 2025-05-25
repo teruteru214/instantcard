@@ -1,4 +1,5 @@
 import type { Env } from "types/workers";
+import type { User } from "~/store/userAtom";
 import { authCookie } from "~/utils/auth";
 
 export interface RequestBody {
@@ -37,8 +38,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 			},
 		);
 
-		const userDto = await response.json();
-		return new Response(JSON.stringify(userDto), {
+		const user: User = await response.json();
+		return new Response(JSON.stringify(user), {
 			status: response.status,
 			headers: {
 				...response.headers,
