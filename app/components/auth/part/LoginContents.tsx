@@ -1,12 +1,14 @@
 import { useNavigate } from "@remix-run/react";
 import { useSetAtom } from "jotai";
 import { useState } from "react";
+import { UserSchema } from "schema/user";
 import ButtonLoadingSpinner from "~/components/global/ButtonLoadingSpinner";
 
 import { Button } from "~/components/ui/button";
 import { DialogDescription, DialogHeader } from "~/components/ui/dialog";
 import { auth } from "~/config/initFirebase";
-import { type User, userAtom } from "~/store/userAtom";
+
+import { userAtom } from "~/store/userAtom";
 import { authCookie, signInWithGoogle } from "~/utils/auth";
 
 interface ViewState {
@@ -45,7 +47,19 @@ const LoginContents = () => {
 			clearTimeout(timeoutId);
 
 			if (existingUserResponse.ok) {
-				const userData = (await existingUserResponse.json()) as User;
+				const json = await existingUserResponse.json();
+				const result = UserSchema.safeParse(json);
+
+				if (!result.success) {
+					console.error("Invalid user data:", result.error);
+					throw new Error("Invalid user data received from server");
+				}
+
+				const userData = {
+					...result.data,
+					img: result.data.img ?? undefined,
+					speaker: result.data.speaker ?? undefined,
+				};
 				setUser(userData);
 				navigate("/cards");
 			} else {

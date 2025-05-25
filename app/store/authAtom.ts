@@ -1,8 +1,8 @@
 // app/store/authAtom.ts
 import { atom } from "jotai";
 import { loadable } from "jotai/utils";
+import { UserSchema } from "schema/user";
 import { authCookie } from "~/utils/auth";
-import type { User } from "./userAtom";
 
 const authAtom = atom(async () => {
 	if (typeof document === "undefined") return null;
@@ -24,7 +24,22 @@ const authAtom = atom(async () => {
 		clearTimeout(timeoutId);
 
 		if (!response.ok) return null;
-		return response.json() as Promise<User>;
+
+		const json = await response.json();
+		const result = UserSchema.safeParse(json);
+
+		if (!result.success) {
+			console.error("Invalid user data:", result.error);
+			return null;
+		}
+
+		const userData = {
+			...result.data,
+			img: result.data.img ?? undefined,
+			speaker: result.data.speaker ?? undefined,
+		};
+
+		return userData;
 	} catch (error) {
 		console.error("Authentication check failed:", error);
 		return null;

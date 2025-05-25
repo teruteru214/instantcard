@@ -17,8 +17,9 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { auth } from "~/config/initFirebase";
-import { type User, userAtom } from "~/store/userAtom";
+import { userAtom } from "~/store/userAtom";
 
+import { UserSchema } from "schema/user";
 import { authCookie } from "~/utils/auth";
 import { nameSchema } from "./schema/name";
 
@@ -89,7 +90,6 @@ const RegisterPage = () => {
 				(await registerUserResponse.json()) as RegisterResponse;
 			await authCookie.serialize(jwtToken);
 
-			// ユーザー情報を取得して状態を更新
 			const userResponse = await fetch("/workers/auth/find-user", {
 				method: "POST",
 				headers: {
@@ -99,7 +99,19 @@ const RegisterPage = () => {
 			});
 
 			if (userResponse.ok) {
-				const userData = (await userResponse.json()) as User;
+				const json = await userResponse.json();
+				const result = UserSchema.safeParse(json);
+
+				if (!result.success) {
+					console.error("Invalid user data:", result.error);
+					throw new Error("Invalid user data received from server");
+				}
+
+				const userData = {
+					...result.data,
+					img: result.data.img ?? undefined,
+					speaker: result.data.speaker ?? undefined,
+				};
 				setUser(userData);
 			}
 

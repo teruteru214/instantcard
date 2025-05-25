@@ -1,4 +1,4 @@
-import type { User } from "~/store/userAtom";
+import type { User } from "schema/user";
 
 export interface AuthError {
 	code: string;
