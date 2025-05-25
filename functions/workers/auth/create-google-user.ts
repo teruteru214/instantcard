@@ -37,8 +37,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 			},
 		);
 
-		const data = await response.json();
-		return new Response(JSON.stringify(data), {
+		const userDto = await response.json();
+		return new Response(JSON.stringify(userDto), {
 			status: response.status,
 			headers: {
 				...response.headers,

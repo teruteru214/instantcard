@@ -63,20 +63,24 @@ const RegisterPage = () => {
 			}
 
 			// ユーザー登録APIを呼び出し
-			const response = await fetch("/workers/auth/create-google-user", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${existingToken}`,
+			const registerUserResponse = await fetch(
+				"/workers/auth/create-google-user",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${existingToken}`,
+					},
+					body: JSON.stringify({ name: data.name }),
 				},
-				body: JSON.stringify({ name: data.name }),
-			});
+			);
 
-			if (!response.ok) {
+			if (!registerUserResponse.ok) {
 				throw new Error("登録に失敗しました");
 			}
 
-			const { token: jwtToken } = (await response.json()) as RegisterResponse;
+			const { token: jwtToken } =
+				(await registerUserResponse.json()) as RegisterResponse;
 			await authCookie.serialize(jwtToken);
 
 			// 登録成功後はカード一覧ページへ

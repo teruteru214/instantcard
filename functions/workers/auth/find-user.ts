@@ -30,8 +30,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 			},
 		);
 
-		const data = await existingUserResponse.json();
-		return new Response(JSON.stringify(data), {
+		const userDto = await existingUserResponse.json();
+		return new Response(JSON.stringify(userDto), {
 			status: existingUserResponse.status,
 			headers: {
 				...existingUserResponse.headers,
