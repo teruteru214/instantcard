@@ -80,6 +80,8 @@ const RegisterPage = () => {
 			);
 
 			if (!registerUserResponse.ok) {
+				const errorData = await registerUserResponse.text();
+				console.error("Registration failed:", errorData);
 				throw new Error("登録に失敗しました");
 			}
 
