@@ -1,3 +1,5 @@
+import type { PagesFunction } from "@cloudflare/workers-types";
+import { Response } from "@cloudflare/workers-types";
 import type { Env } from "types/workers";
 import type { User } from "~/store/userAtom";
 import { authCookie } from "~/utils/auth";
