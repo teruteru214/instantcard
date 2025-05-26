@@ -1,8 +1,14 @@
 import { useNavigate } from "@remix-run/react";
+import { useSetAtom } from "jotai";
 import { useState } from "react";
+import { UserSchema } from "schema/user";
+import ButtonLoadingSpinner from "~/components/global/ButtonLoadingSpinner";
+
 import { Button } from "~/components/ui/button";
 import { DialogDescription, DialogHeader } from "~/components/ui/dialog";
 import { auth } from "~/config/initFirebase";
+
+import { userAtom } from "~/store/userAtom";
 import { authCookie, signInWithGoogle } from "~/utils/auth";
 
 interface ViewState {
@@ -13,6 +19,7 @@ const LoginContents = () => {
 	const [view, setView] = useState<ViewState>({ state: "default" });
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
+	const setUser = useSetAtom(userAtom);
 
 	const handleGoogleLogin = async () => {
 		try {
@@ -40,6 +47,20 @@ const LoginContents = () => {
 			clearTimeout(timeoutId);
 
 			if (existingUserResponse.ok) {
+				const json = await existingUserResponse.json();
+				const result = UserSchema.safeParse(json);
+
+				if (!result.success) {
+					console.error("Invalid user data:", result.error);
+					throw new Error("Invalid user data received from server");
+				}
+
+				const userData = {
+					...result.data,
+					img: result.data.img ?? undefined,
+					speaker: result.data.speaker ?? undefined,
+				};
+				setUser(userData);
 				navigate("/cards");
 			} else {
 				if (existingUserResponse.status === 404) {
@@ -92,29 +113,7 @@ const LoginContents = () => {
 							aria-busy={isLoading}
 						>
 							<div className="flex items-center justify-center">
-								{isLoading && (
-									<svg
-										className="animate-spin absolute left-4 h-5 w-5 text-gray-600"
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-									>
-										<title>読み込み中</title>
-										<circle
-											className="opacity-25"
-											cx="12"
-											cy="12"
-											r="10"
-											stroke="currentColor"
-											strokeWidth="4"
-										/>
-										<path
-											className="opacity-75"
-											fill="currentColor"
-											d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-										/>
-									</svg>
-								)}
+								{isLoading && <ButtonLoadingSpinner />}
 								<svg
 									className="w-5 h-5 mr-2.5"
 									viewBox="0 0 24 24"

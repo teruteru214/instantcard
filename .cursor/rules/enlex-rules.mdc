@@ -18,31 +18,44 @@ alwaysApply: true
 ├─ .github
 ├─ .wrangler          ← 読み取り禁止
 ├─ app
-│  └─ components
-│     ├─ global   ← 全体で再利用する汎用コンポーネント群
-│     ├─ layout   ← 特定のレイアウトに紐づいた構造的コンポーネント
-│     └─ ui       ← shadcn/ui由来のUIコンポーネント（再生成禁止）
-├─ features
-│  ├─ cards
-│  │  └─ words
-│  ├─ create
-│  ├─ login
-│  ├─ quiz
-│  ├─ settings
-│  │  ├─ delete-account
-│  │  ├─ tags
-│  │  └─ trash
-│  ├─ slide
-│  ├─ not-found.tsx
-│  └─ _index.tsx
-├─ hooks       ← カスタムフック群（useで始まる関数）
-├─ lib
-├─ types       ← interfaceベースの型定義（交差に強く、読み込み高速）
-├─ utils       ← 汎用ユーティリティ関数群
+│  ├─ components
+│  │  ├─ global   ← 全体で再利用する汎用コンポーネント群
+│  │  ├─ layout   ← 特定のレイアウトに紐づいた構造的コンポーネント
+│  │  └─ ui       ← shadcn/ui由来のUIコンポーネント（再生成禁止）
+│  ├─ config
+│  ├─ features
+│  │  ├─ cards
+│  │  │  └─ words
+│  │  ├─ create
+│  │  ├─ login
+│  │  ├─ quiz
+│  │  ├─ settings
+│  │  │  ├─ delete-account
+│  │  │  ├─ tags
+│  │  │  └─ trash
+│  │  ├─ slide
+│  │  ├─ not-found.tsx
+│  │  └─ _index.tsx
+│  ├─ hooks       ← カスタムフック群（useで始まる関数）
+│  ├─ lib
+│  ├─ types       ← interfaceベースの型定義（交差に強く、読み込み高速）
+│  ├─ utils       ← 汎用ユーティリティ関数群
+│  ├─ entry.client.tsx
+│  ├─ entry.server.tsx
+│  ├─ root.tsx
+│  ├─ tailwind.css
+│  └─ index.html
 ├─ functions   ← APIエンドポイント群。RemixのSSRとは無関係に動作
 ├─ public
 ├─ tests
-...
+├─ biome.json
+├─ bunfig.toml
+├─ components.json
+├─ lefthook.yml
+├─ postcss.config.js
+├─ tailwind.config.ts
+├─ tsconfig.json
+└─ vite.config.ts
 ```
 
 - `features/` 配下は各画面機能単位でディレクトリが分かれており、それぞれが独自の `root` 構成と責任範囲を持つ設計になっています。

@@ -1,3 +1,6 @@
+import type { PagesFunction } from "@cloudflare/workers-types";
+import { Response } from "@cloudflare/workers-types";
+import { UserSchema } from "schema/user";
 import type { Env } from "types/workers";
 import { authCookie } from "~/utils/auth";
 
@@ -37,8 +40,21 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 			},
 		);
 
-		const data = await response.json();
-		return new Response(JSON.stringify(data), {
+		const json = await response.json();
+		const result = UserSchema.safeParse(json);
+
+		if (!result.success) {
+			console.error("Invalid user data:", result.error);
+			return new Response("Invalid user data", { status: 400 });
+		}
+
+		const userData = {
+			...result.data,
+			img: result.data.img ?? undefined,
+			speaker: result.data.speaker ?? undefined,
+		};
+
+		return new Response(JSON.stringify(userData), {
 			status: response.status,
 			headers: {
 				...response.headers,

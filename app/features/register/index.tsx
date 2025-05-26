@@ -1,9 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { onAuthStateChanged } from "firebase/auth";
+import { useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
+
+import ButtonLoadingSpinner from "~/components/global/ButtonLoadingSpinner";
 import { Button } from "~/components/ui/button";
 import {
 	Form,
@@ -14,6 +17,9 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { auth } from "~/config/initFirebase";
+import { userAtom } from "~/store/userAtom";
+
+import { UserSchema } from "schema/user";
 import { authCookie } from "~/utils/auth";
 import { nameSchema } from "./schema/name";
 
@@ -26,6 +32,7 @@ interface RegisterResponse {
 const RegisterPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
+	const setUser = useSetAtom(userAtom);
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -61,21 +68,52 @@ const RegisterPage = () => {
 			}
 
 			// ユーザー登録APIを呼び出し
-			const response = await fetch("/workers/auth/create-google-user", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${existingToken}`,
+			const registerUserResponse = await fetch(
+				"/workers/auth/create-google-user",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${existingToken}`,
+					},
+					body: JSON.stringify({ name: data.name }),
 				},
-				body: JSON.stringify({ name: data.name }),
-			});
+			);
 
-			if (!response.ok) {
+			if (!registerUserResponse.ok) {
+				const errorData = await registerUserResponse.text();
+				console.error("Registration failed:", errorData);
 				throw new Error("登録に失敗しました");
 			}
 
-			const { token: jwtToken } = (await response.json()) as RegisterResponse;
+			const { token: jwtToken } =
+				(await registerUserResponse.json()) as RegisterResponse;
 			await authCookie.serialize(jwtToken);
+
+			const userResponse = await fetch("/workers/auth/find-user", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ token: jwtToken }),
+			});
+
+			if (userResponse.ok) {
+				const json = await userResponse.json();
+				const result = UserSchema.safeParse(json);
+
+				if (!result.success) {
+					console.error("Invalid user data:", result.error);
+					throw new Error("Invalid user data received from server");
+				}
+
+				const userData = {
+					...result.data,
+					img: result.data.img ?? undefined,
+					speaker: result.data.speaker ?? undefined,
+				};
+				setUser(userData);
+			}
 
 			// 登録成功後はカード一覧ページへ
 			navigate("/cards");
@@ -130,41 +168,12 @@ const RegisterPage = () => {
 							aria-busy={isSubmitting}
 						>
 							<div className="flex items-center justify-center">
-								{isSubmitting && (
-									<svg
-										className="animate-spin absolute left-4 h-5 w-5 text-gray-600"
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-									>
-										<title>読み込み中</title>
-										<circle
-											className="opacity-25"
-											cx="12"
-											cy="12"
-											r="10"
-											stroke="currentColor"
-											strokeWidth="4"
-										/>
-										<path
-											className="opacity-75"
-											fill="currentColor"
-											d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-										/>
-									</svg>
-								)}
+								{isSubmitting && <ButtonLoadingSpinner />}
 								アカウントを作成
 							</div>
 						</Button>
 					</form>
 				</Form>
-
-				<div className="mt-6 text-center text-sm text-gray-500">
-					すでにアカウントをお持ちですか？{" "}
-					<Link to="/" className="font-medium text-blue-600 hover:underline">
-						ログイン
-					</Link>
-				</div>
 			</div>
 		</div>
 	);
