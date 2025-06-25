@@ -1,18 +1,18 @@
-import type { PagesFunction } from "@cloudflare/workers-types";
-import { Response } from "@cloudflare/workers-types";
 import { UserSchema } from "schema/user";
 import type { Env } from "types/workers";
 import { authCookie } from "~/utils/auth";
 
 export interface RequestBody {
 	name?: string;
+	language?: string;
+	purpose?: string;
 }
 
-export const onRequest: PagesFunction<Env> = async (context) => {
+export const onRequest = async (context: { request: Request; env: Env }) => {
 	const { request, env } = context;
 
 	if (request.method !== "POST") {
-		return new Response("許可されていないメソッドです", { status: 405 });
+		return new Response("Method not allowed", { status: 405 }) as Response;
 	}
 
 	const token = await authCookie.parse(request.headers.get("Cookie"));
@@ -22,10 +22,14 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 	}
 
 	try {
-		const { name } = (await request.json()) as RequestBody;
+		const { name, language, purpose } = (await request.json()) as RequestBody;
 
 		if (!name) {
 			return new Response("名前は必須です", { status: 400 });
+		}
+
+		if (!language) {
+			return new Response("言語は必須です", { status: 400 });
 		}
 
 		const response = await fetch(
@@ -36,7 +40,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${token}`,
 				},
-				body: JSON.stringify({ name }),
+				body: JSON.stringify({ name, language, purpose }),
 			},
 		);
 

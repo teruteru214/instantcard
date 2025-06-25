@@ -5,6 +5,7 @@ export const UserSchema = z.object({
 	name: z.string().max(20),
 	img: z.string().max(250).nullable(),
 	speaker: z.string().max(20).nullable(),
+	language: z.string().max(20).nullable(),
 });
 
 export type User = z.infer<typeof UserSchema>;
