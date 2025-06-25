@@ -39,8 +39,9 @@ const LoginContents = () => {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
 				},
-				body: JSON.stringify({ token }),
+				body: JSON.stringify({}),
 				signal: controller.signal,
 			});
 
@@ -59,6 +60,7 @@ const LoginContents = () => {
 					...result.data,
 					img: result.data.img ?? undefined,
 					speaker: result.data.speaker ?? undefined,
+					language: result.data.language ?? undefined,
 				};
 				setUser(userData);
 				navigate("/cards");

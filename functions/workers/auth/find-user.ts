@@ -1,11 +1,8 @@
-import type { PagesFunction } from "@cloudflare/workers-types";
-import { Response } from "@cloudflare/workers-types";
 import { UserSchema } from "schema/user";
 import type { Env } from "types/workers";
-
 import { authCookie } from "~/utils/auth";
 
-export const onRequest: PagesFunction<Env> = async (context) => {
+export const onRequest = async (context: { request: Request; env: Env }) => {
 	if (context.request.method !== "POST") {
 		return new Response("Method not allowed", { status: 405 });
 	}
@@ -27,8 +24,9 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
 				},
-				body: JSON.stringify({ token }),
+				body: JSON.stringify({}),
 			},
 		);
 
