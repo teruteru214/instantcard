@@ -28,7 +28,7 @@ export const languageDescriptions: Record<LanguageId, string> = {
 	ar: "🇸🇦 العربية",
 	nl: "🇳🇱 Nederlands",
 	no: "🇳🇴 Norsk",
-	sv: "🇸 Svenska",
+	sv: "🇸🇪 Svenska",
 	da: "🇩🇰 Dansk",
 };
 
