@@ -91,25 +91,15 @@ const RegisterForm = () => {
 				throw new Error("登録に失敗しました");
 			}
 
-			const existingUserResponse = await fetch("/workers/auth/find-user", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({}),
-				credentials: "include",
-			});
-
-			if (existingUserResponse.ok) {
-				const json = await existingUserResponse.json();
-				setUser(json as User);
-			}
+			// 登録成功時はレスポンスからユーザー情報を取得
+			const userData = await registerUserResponse.json();
+			setUser(userData as User);
 
 			// 登録成功後はカード一覧ページへ
 			navigate("/cards");
 		} catch (error) {
 			console.error("登録中にエラーが発生しました", error);
-			// TODO: エラー通知の実装
+			alert("登録中にエラーが発生しました。もう一度お試しください。");
 		} finally {
 			setIsSubmitting(false);
 		}

@@ -29,9 +29,7 @@ export const onRequest = async (context: { request: Request; env: Env }) => {
 			},
 		);
 
-		console.log("Backend response status:", response.status);
 		const json = await response.json();
-		console.log("Backend response JSON:", JSON.stringify(json, null, 2));
 
 		return new Response(JSON.stringify(json), {
 			status: response.status,

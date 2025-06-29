@@ -11,14 +11,14 @@ export const onRequest = async (context: { request: Request; env: Env }) => {
 	const { request, env } = context;
 
 	if (request.method !== "POST") {
-		return new Response("Method not allowed", { status: 405 }) as Response;
+		return new Response("Method not allowed", { status: 405 });
 	}
 
 	const cookieHeader = request.headers.get("Cookie");
 	const token = await authCookie.parse(cookieHeader);
 
 	if (!token) {
-		return new Response("認証が必要です", { status: 400 });
+		return new Response("認証が必要です", { status: 401 });
 	}
 
 	try {
@@ -44,14 +44,18 @@ export const onRequest = async (context: { request: Request; env: Env }) => {
 			},
 		);
 
-		console.log("Backend response status:", response.status);
 		const json = await response.json();
-		console.log("Backend response JSON:", JSON.stringify(json, null, 2));
+
+		if (!response.ok) {
+			return new Response("Backend API error", {
+				status: response.status,
+			});
+		}
 
 		return new Response(JSON.stringify(json), {
 			status: response.status,
 			headers: {
-				...response.headers,
+				"Content-Type": "application/json",
 				"X-Content-Type-Options": "nosniff",
 				"X-Frame-Options": "DENY",
 			},
