@@ -27,7 +27,7 @@ const RegisterPage = () => {
 	}, [navigate]);
 
 	return (
-		<div className="my-20 flex items-center justify-center min-h-[60vh]">
+		<div className="mt-20 mb-40 flex items-center justify-center min-h-[60vh]">
 			<div className="w-full max-w-md mx-auto p-8 rounded-xl bg-white shadow-sm border border-gray-100">
 				<div className="space-y-6 text-center mb-8">
 					<div className="flex items-center justify-center gap-2">
@@ -40,7 +40,9 @@ const RegisterPage = () => {
 						/>
 						<h1 className="text-3xl font-bold">Enlex</h1>
 					</div>
-					<p className="text-gray-600">アカウントを作成して始めましょう</p>
+					<h2 className="text-gray-600">
+						はじめるにはアカウント登録が必要です
+					</h2>
 				</div>
 
 				<RegisterForm />

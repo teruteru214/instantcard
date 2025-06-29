@@ -1,4 +1,3 @@
-import { UserSchema } from "schema/user";
 import type { Env } from "types/workers";
 import { authCookie } from "~/utils/auth";
 
@@ -15,10 +14,11 @@ export const onRequest = async (context: { request: Request; env: Env }) => {
 		return new Response("Method not allowed", { status: 405 }) as Response;
 	}
 
-	const token = await authCookie.parse(request.headers.get("Cookie"));
+	const cookieHeader = request.headers.get("Cookie");
+	const token = await authCookie.parse(cookieHeader);
 
 	if (!token) {
-		return new Response("認証が必要です", { status: 401 });
+		return new Response("認証が必要です", { status: 400 });
 	}
 
 	try {
@@ -33,7 +33,7 @@ export const onRequest = async (context: { request: Request; env: Env }) => {
 		}
 
 		const response = await fetch(
-			`${env.BACKEND_API_URL}/auth/create-google-user`,
+			`${env.BACKEND_API_URL}/workers/auth/create-user`,
 			{
 				method: "POST",
 				headers: {
@@ -44,21 +44,11 @@ export const onRequest = async (context: { request: Request; env: Env }) => {
 			},
 		);
 
+		console.log("Backend response status:", response.status);
 		const json = await response.json();
-		const result = UserSchema.safeParse(json);
+		console.log("Backend response JSON:", JSON.stringify(json, null, 2));
 
-		if (!result.success) {
-			console.error("Invalid user data:", result.error);
-			return new Response("Invalid user data", { status: 400 });
-		}
-
-		const userData = {
-			...result.data,
-			img: result.data.img ?? undefined,
-			speaker: result.data.speaker ?? undefined,
-		};
-
-		return new Response(JSON.stringify(userData), {
+		return new Response(JSON.stringify(json), {
 			status: response.status,
 			headers: {
 				...response.headers,
@@ -68,7 +58,7 @@ export const onRequest = async (context: { request: Request; env: Env }) => {
 		});
 	} catch (error) {
 		const requestId = crypto.randomUUID();
-		console.error(`Error in create-google-user [${requestId}]:`, error);
+		console.error(`Error in create-user [${requestId}]:`, error);
 		return new Response("Internal server error", { status: 500 });
 	}
 };

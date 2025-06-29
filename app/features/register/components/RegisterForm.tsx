@@ -23,17 +23,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "~/components/ui/select";
-import { userAtom } from "~/store/userAtom";
+import { type User, userAtom } from "~/store/userAtom";
 
-import { UserSchema } from "schema/user";
 import { LANGUAGE_IDS, languages } from "~/config/languageOption";
-import { authCookie } from "~/utils/auth";
 import { registerSchema } from "../schema/register";
 
 type FormValues = z.infer<typeof registerSchema>;
 
-interface RegisterResponse {
-	token: string;
+interface NameCheckResponse {
+	exists: boolean;
+	message: string;
 }
 
 const RegisterForm = () => {
@@ -53,28 +52,38 @@ const RegisterForm = () => {
 	const onSubmit = async (data: FormValues) => {
 		setIsSubmitting(true);
 		try {
-			// 既存のJWTトークンを取得
-			const existingToken = await authCookie.parse(document.cookie);
-			if (!existingToken) {
-				throw new Error("認証が必要です");
+			// 名前の重複チェック
+			const checkNameResponse = await fetch("/workers/user/find-same-name", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ name: data.name }),
+			});
+
+			if (checkNameResponse.ok) {
+				const checkResult =
+					(await checkNameResponse.json()) as NameCheckResponse;
+				if (checkResult.exists) {
+					form.setError("name", {
+						type: "manual",
+						message: "このユーザー名は既に登録されています",
+					});
+					return;
+				}
 			}
 
 			// ユーザー登録APIを呼び出し
-			const registerUserResponse = await fetch(
-				"/workers/auth/create-google-user",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${existingToken}`,
-					},
-					body: JSON.stringify({
-						name: data.name,
-						language: data.language,
-						purpose: data.purpose,
-					}),
+			const registerUserResponse = await fetch("/workers/auth/create-user", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
 				},
-			);
+				body: JSON.stringify({
+					name: data.name,
+					language: data.language,
+					purpose: data.purpose,
+				}),
+				credentials: "include",
+			});
 
 			if (!registerUserResponse.ok) {
 				const errorData = await registerUserResponse.text();
@@ -82,34 +91,18 @@ const RegisterForm = () => {
 				throw new Error("登録に失敗しました");
 			}
 
-			const { token: jwtToken } =
-				(await registerUserResponse.json()) as RegisterResponse;
-			await authCookie.serialize(jwtToken);
-
-			const userResponse = await fetch("/workers/auth/find-user", {
+			const existingUserResponse = await fetch("/workers/auth/find-user", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ token: jwtToken }),
+				body: JSON.stringify({}),
+				credentials: "include",
 			});
 
-			if (userResponse.ok) {
-				const json = await userResponse.json();
-				const result = UserSchema.safeParse(json);
-
-				if (!result.success) {
-					console.error("Invalid user data:", result.error);
-					throw new Error("Invalid user data received from server");
-				}
-
-				const userData = {
-					...result.data,
-					img: result.data.img ?? undefined,
-					speaker: result.data.speaker ?? undefined,
-					language: result.data.language ?? undefined,
-				};
-				setUser(userData);
+			if (existingUserResponse.ok) {
+				const json = await existingUserResponse.json();
+				setUser(json as User);
 			}
 
 			// 登録成功後はカード一覧ページへ
@@ -183,6 +176,9 @@ const RegisterForm = () => {
 								/>
 							</FormControl>
 							<FormMessage />
+							<p className="text-xs text-gray-500">
+								翻訳言語と英語学習の目的は、単語カードのAI生成に反映されます。
+							</p>
 						</FormItem>
 					)}
 				/>
@@ -195,7 +191,7 @@ const RegisterForm = () => {
 				>
 					<div className="flex items-center justify-center">
 						{isSubmitting && <ButtonLoadingSpinner />}
-						アカウントを作成
+						アカウントを作成する
 					</div>
 				</Button>
 			</form>

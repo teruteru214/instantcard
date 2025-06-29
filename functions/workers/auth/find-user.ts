@@ -1,21 +1,31 @@
-import { UserSchema } from "schema/user";
 import type { Env } from "types/workers";
 import { authCookie } from "~/utils/auth";
 
+interface BackendResponse {
+	exists: boolean;
+	user?: {
+		user_id: string;
+		name: string;
+		img?: string;
+		language?: string;
+		speaker?: string;
+	};
+	message?: string;
+}
+
 export const onRequest = async (context: { request: Request; env: Env }) => {
+	const { request } = context;
+
 	if (context.request.method !== "POST") {
 		return new Response("Method not allowed", { status: 405 });
 	}
 
 	try {
-		const token = await authCookie.parse(context.request.headers.get("Cookie"));
+		const cookieHeader = request.headers.get("Cookie");
+		const token = await authCookie.parse(cookieHeader);
 
 		if (!token) {
-			return new Response("Token is required", { status: 400 });
-		}
-
-		if (typeof token !== "string" || token.length < 10) {
-			return new Response("Invalid token format", { status: 400 });
+			return new Response("Token is required", { status: 401 });
 		}
 
 		const existingUserResponse = await fetch(
@@ -30,24 +40,22 @@ export const onRequest = async (context: { request: Request; env: Env }) => {
 			},
 		);
 
-		const json = await existingUserResponse.json();
-		const result = UserSchema.safeParse(json);
-
-		if (!result.success) {
-			console.error("Invalid user data:", result.error);
-			throw new Error("Invalid user data received from server");
+		if (!existingUserResponse.ok) {
+			return new Response("Backend API error", {
+				status: existingUserResponse.status,
+			});
 		}
 
-		const userData = {
-			...result.data,
-			img: result.data.img ?? undefined,
-			speaker: result.data.speaker ?? undefined,
-		};
+		const json = (await existingUserResponse.json()) as BackendResponse;
 
-		return new Response(JSON.stringify(userData), {
-			status: existingUserResponse.status,
+		if (!json.exists) {
+			return new Response("User not found", { status: 404 });
+		}
+
+		return new Response(JSON.stringify(json.user), {
+			status: 200,
 			headers: {
-				...existingUserResponse.headers,
+				"Content-Type": "application/json",
 				"X-Content-Type-Options": "nosniff",
 				"X-Frame-Options": "DENY",
 			},
