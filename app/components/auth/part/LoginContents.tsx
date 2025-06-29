@@ -1,15 +1,12 @@
 import { useNavigate } from "@remix-run/react";
-import { useSetAtom } from "jotai";
 import { useState } from "react";
-import { UserSchema } from "schema/user";
 import ButtonLoadingSpinner from "~/components/global/ButtonLoadingSpinner";
 
 import { Button } from "~/components/ui/button";
 import { DialogDescription, DialogHeader } from "~/components/ui/dialog";
 import { auth } from "~/config/initFirebase";
 
-import { userAtom } from "~/store/userAtom";
-import { authCookie, signInWithGoogle } from "~/utils/auth";
+import { signInWithGoogle } from "~/utils/auth";
 
 interface ViewState {
 	state: "default" | "email" | "magiclink";
@@ -19,18 +16,11 @@ const LoginContents = () => {
 	const [view, setView] = useState<ViewState>({ state: "default" });
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
-	const setUser = useSetAtom(userAtom);
 
 	const handleGoogleLogin = async () => {
 		try {
 			setIsLoading(true);
 			await signInWithGoogle(auth);
-
-			const token = await authCookie.parse(document.cookie);
-
-			if (!token) {
-				throw new Error("認証トークンが見つかりません");
-			}
 
 			const controller = new AbortController();
 			const timeoutId = setTimeout(() => controller.abort(), 10000);
@@ -40,27 +30,14 @@ const LoginContents = () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ token }),
+				body: JSON.stringify({}),
 				signal: controller.signal,
+				credentials: "include",
 			});
 
 			clearTimeout(timeoutId);
 
 			if (existingUserResponse.ok) {
-				const json = await existingUserResponse.json();
-				const result = UserSchema.safeParse(json);
-
-				if (!result.success) {
-					console.error("Invalid user data:", result.error);
-					throw new Error("Invalid user data received from server");
-				}
-
-				const userData = {
-					...result.data,
-					img: result.data.img ?? undefined,
-					speaker: result.data.speaker ?? undefined,
-				};
-				setUser(userData);
 				navigate("/cards");
 			} else {
 				if (existingUserResponse.status === 404) {

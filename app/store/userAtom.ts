@@ -5,6 +5,7 @@ export interface User {
 	name: string;
 	img?: string;
 	speaker?: string;
+	language?: string;
 }
 
 export const userAtom = atom<User | null>(null);

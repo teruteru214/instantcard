@@ -25,7 +25,7 @@ interface ExtendedUserCredential extends UserCredential {
 }
 
 export const authCookie = createCookie("firebase_token", {
-	secure: true,
+	// secure: true, 本番環境のみ
 	sameSite: "lax",
 	path: "/",
 	maxAge: 60 * 60 * 24 * 14,
@@ -42,8 +42,17 @@ export const signInWithGoogle = async (auth: Auth): Promise<void> => {
 		)) as ExtendedUserCredential;
 		const token = await result.user.getIdToken();
 
-		// Tokenをcookieに保存（14日間有効）
-		await authCookie.serialize(token);
+		// トークンをサーバーに送信
+		const response = await fetch("/cookie/set-token", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ token }),
+			credentials: "include",
+		});
+
+		if (!response.ok) {
+			throw new Error("Failed to set token cookie");
+		}
 	} catch (error) {
 		console.error("Googleログインエラー:", error);
 		throw error;
